@@ -6,12 +6,14 @@ public interface Renderer {
     void begin();
     void finish();
     
+    // get the number of draw commands that were issued last frame
     int drawCommands();
     
-    // dimensions
+    // virtual resolution dimensions
     int getWidth();
     int getHeight();
     
+    // real screen dimensions
     int getRealWidth();
     int getRealHeight();
     
