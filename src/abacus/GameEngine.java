@@ -8,6 +8,11 @@ import abacus.graphics.Renderer;
 import abacus.ui.Input;
 import abacus.ui.Window;
 
+/*
+ * This is the class that controls the game
+ * 
+ * You create a GameEngine with GameEngine.create(Type)
+ */
 public class GameEngine {
 
     // holds game states
@@ -73,6 +78,7 @@ public class GameEngine {
         }
     }
     
+    // creates the engine with Java2D rendering
     private static GameEngine createAwtEngine(boolean framebuffer) {
         AwtWindow window = new AwtWindow(framebuffer);
         window.setTitle("Abacus Demo Game");
@@ -82,38 +88,50 @@ public class GameEngine {
         return engine;
     }
     
+    // returns the renderer
     public Renderer getRenderer() {
         return renderer;
     }
     
+    // returns the resource loader
     public ResourceLoader getResourceLoader() {
         return loader;
     }
     
+    // sets what the update rate should be
     public void setUpdateGoal(int ups) {
         upsGoal = ups;
     }
     
+    // sets what the frame rate should be
     public void setRenderGoal(int fps) {
         fpsGoal = fps;
     }
     
+    // returns the window
     public Window getWindow() {
         return window;
     }
     
+    // returns the game state manager
+    // this is where you register your game states
     public GameStateManager getGameStateManager() {
         return gsManager;
     }
     
+    // returns the current frame rate
     public float getFps() {
         return fps;
     }
     
+    // returns the current update rate
     public float getUps() {
         return ups;
     }
     
+    // begins the game loop
+    // this also pushes the game state with id 
+    // in the game state manager
     public void start(int id) {
         if (running) {
             return;
@@ -127,26 +145,35 @@ public class GameEngine {
         gameThread.start();
     }
     
+    // stops the game at the end of the game loop
     public void stop() {
         running = false;
     }
     
+    // play the game loop
     private void gameLoop(int id) {
+        // keep track of update, render, and time
         long updateTimer = Time.getTime();
         long frameTimer = Time.getTime();
         long timer = Time.getTime();
         
+        // for use with frame and update rate handling
         long incrUpdate = Time.SECOND / upsGoal;
         long incrRender = Time.SECOND / fpsGoal;
         
+        // number of updates and frames
         int updates = 0;
         int frames = 0;
         
+        // initialize all game states
         init();
         
+        // push the first game state
         gsManager.pushState(id);
         
+        // the actual game loop
         while (running) {
+            // keep updating the current game state until updateTimer is not behind current time
             while (updateTimer < Time.getTime()) {
                 update();
                 
@@ -154,6 +181,7 @@ public class GameEngine {
                 updateTimer += incrUpdate;
             }
             
+            // render game states if frameTimer is behind the current time
             if (frameTimer < Time.getTime()) {
                 render();
                 
@@ -161,6 +189,7 @@ public class GameEngine {
                 frameTimer += incrRender;
             }
             
+            // this is for getting somewhat real time frame and update rate information
             float time = 0.1f;
             float lerp = 0.5f;
             if (Time.getTime() - timer >= time * Time.SECOND) {
@@ -170,16 +199,20 @@ public class GameEngine {
                 timer = Time.getTime();
             }
             
+            // if there is no active game state or the window is closed, end the game
             if (gsManager.noActiveStates() || !window.isVisible()) {
                 stop();
             }
             
+            // TODO have an option to sleep the thread
 //            Time.sleep(1);
         }
         
+        // ends the game, lets all game states know the game is ending
         end();
     }
     
+    // initialize all game states that are registered
     private void init() {
         GameState[] states = gsManager.getRegisteredStates();
         
@@ -189,12 +222,14 @@ public class GameEngine {
         }
     }
     
+    // updates the current game state
     private void update() {
         if (gsManager.noActiveStates() || input == null) {
             return;
         }
         gsManager.getCurrentState().update(input);
         
+        // checks if game should stop or if full screen should be toggled
         if (input.getJustDownKey("exit")) {
             stop();
         }
@@ -205,6 +240,8 @@ public class GameEngine {
         input.update();
     }
     
+    // renders all game states in the stack, 
+    // this allows the map to be shown underneath a pause state, etc.
     private void render() {
         if (renderer == null) {
             return;
@@ -221,6 +258,7 @@ public class GameEngine {
         renderer.finish();
     }
     
+    // tells all game states that the game is about the stop
     private void end() {
         while (!gsManager.noActiveStates()) {
             gsManager.popState();
