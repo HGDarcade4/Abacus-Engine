@@ -11,6 +11,8 @@ public final class Time {
 	/* Instance Variables */
     public static final long SECOND = 1000000000L;
     
+    private static long ticks = 0L;
+    
 	// Returns the current system time
     public static long getTime() {
         return System.nanoTime();
@@ -24,5 +26,13 @@ public final class Time {
         catch (Exception e) {
             // TODO should probably do something...
         }
+    }
+    
+    protected static void setTicks(long ticks) {
+        Time.ticks = ticks;
+    }
+    
+    public static long getTicks() {
+        return ticks;
     }
 }

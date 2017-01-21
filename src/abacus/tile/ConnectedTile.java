@@ -75,19 +75,14 @@ public class ConnectedTile extends Tile {
                     anim[i][j].addFrame(s, delay);
                 }
                 tiles[i][j] = new AnimationPlayer(anim[i][j]);
+                tiles[i][j].play();
             }
         }
     }
     
     @Override
     public void update() {
-        for (int i = 0; i < tiles.length; i++) {
-            for (int j = 0; j < tiles[UP_LEFT].length; j++) {
-                if (tiles[i][j] != null) {
-                    tiles[i][j].update();
-                }
-            }
-        }
+        
     }
     
     @Override

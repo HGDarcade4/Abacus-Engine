@@ -227,6 +227,8 @@ public class GameEngine {
         if (gsManager.noActiveStates() || input == null) {
             return;
         }
+        gsManager.getCurrentState().tick();
+        Time.setTicks(gsManager.getCurrentState().getTicks());
         gsManager.getCurrentState().update(input);
         
         // checks if game should stop or if full screen should be toggled

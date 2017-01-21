@@ -12,6 +12,8 @@ public class AnimationData {
     }
     
     public Sprite getFrame(int frame) {
+        frame = (frame % numFrames() + numFrames()) % numFrames();
+        
         return frames.get(frame);
     }
     

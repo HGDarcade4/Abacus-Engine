@@ -53,13 +53,20 @@ public abstract class Sprite implements Renderable {
         drawReal(x, y, w, h);
     }
     
-    // this method is just here because it implements Renderable
+    // ============================================================
+    // these methods are just here because it implements Renderable
+    // ============================================================
+    
     public Sprite getSprite() {
         return this;
     }
     
-    // this method is just here because it implements Renderable because
-    // some Renderable's need to update animations
-    public final void update() {}
+    public void play() {}
+    
+    public void pause() {}
+    
+    public void reset() {}
+    
+    public void pauseAndReset() {}
     
 }

@@ -36,17 +36,42 @@ public class AnimationRegistry implements Renderable {
         
         AnimationPlayer anim = anims[current];
         if (anim != null) {
-            anim.reset();
+            anim.pauseAndReset();
         }
         current = index;
     }
     
-    public void update() {
+    public void setCurrentAndPlay(int index) {
+        setCurrent(index);
+        play();
+    }
+    
+    public void play() {
         AnimationPlayer anim = anims[current];
-        if (anim == null) {
-            return;
+        if (anim != null) {
+            anim.play();
         }
-        anim.update();
+    }
+    
+    public void pause() {
+        AnimationPlayer anim = anims[current];
+        if (anim != null) {
+            anim.pause();
+        }
+    }
+    
+    public void pauseAndReset() {
+        AnimationPlayer anim = anims[current];
+        if (anim != null) {
+            anim.pauseAndReset();
+        }
+    }
+    
+    public void reset() {
+        AnimationPlayer anim = anims[current];
+        if (anim != null) {
+            anim.reset();
+        }
     }
     
     @Override

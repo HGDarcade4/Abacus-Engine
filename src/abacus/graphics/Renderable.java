@@ -4,7 +4,12 @@ public interface Renderable {
 
     Sprite getSprite();
     
-    // animations
-    void update();
+    void play();
+    
+    void pause();
+    
+    void reset();
+    
+    void pauseAndReset();
     
 }

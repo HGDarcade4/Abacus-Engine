@@ -16,6 +16,7 @@ public abstract class GameState {
 
 	/* Instance Variables */
     protected GameEngine engine;	
+    protected long time;
 
 	// Initializes the state when it is registered
     public abstract void init(ResourceLoader loader);
@@ -56,5 +57,15 @@ public abstract class GameState {
 	// Pops the current state so the previous one can be returned to
     public final void popState() {
         engine.getGameStateManager().popState();
+    }
+    
+    // Updates tick count
+    public final void tick() {
+        time++;
+    }
+    
+    // Returns the tick count
+    public final long getTicks() {
+        return time;
     }
 }

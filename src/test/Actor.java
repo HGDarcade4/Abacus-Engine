@@ -55,8 +55,7 @@ public class Actor {
             else {
                 dir = UP;
             }
-            animation.update();
-            animation.setCurrent(dir);
+            animation.setCurrentAndPlay(dir);
         }
         else if (dx != 0) {
             if (dx < 0) {
@@ -65,11 +64,10 @@ public class Actor {
             else {
                 dir = RIGHT;
             }
-            animation.update();
-            animation.setCurrent(dir);
+            animation.setCurrentAndPlay(dir);
         }
         else {
-            
+            animation.pause();
         }
         
         x += dx;

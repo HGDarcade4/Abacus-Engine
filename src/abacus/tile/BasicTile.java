@@ -9,11 +9,12 @@ public class BasicTile extends Tile {
     
     public BasicTile(Renderable sprite) {
         this.sprite = sprite;
+        sprite.play();
     }
     
     @Override
     public void update() {
-        sprite.update();
+        
     }
     
     @Override
