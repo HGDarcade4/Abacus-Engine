@@ -1,11 +1,18 @@
 package abacus.graphics;
 
+/*
+ * Mono-spaced font
+ */
 public class BasicFont extends GameFont {
 
+    // this is how all BasicFont's must be set up
     private static final String LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.!?,()[]+-*/: ";
     
+    // sprites for characters
     private Sprite[] regions;
     
+    // ctor, [sheet] should be a font sprite sheet
+    // defaults the size to the sprite height
     public BasicFont(SpriteSheet sheet) {
         regions = new Sprite[1024];
         
@@ -16,6 +23,7 @@ public class BasicFont extends GameFont {
         size = sheet.tileHeight();
     }
 
+    // returns the sprite for character [c]
     @Override
     public Sprite getSprite(char c) {
         if (c >= 0 && c < regions.length) {
@@ -24,11 +32,13 @@ public class BasicFont extends GameFont {
         return null;
     }
     
+    // returns the height that sprites will be drawn at
     @Override
     public float getHeight() {
-        return size; //getSprite(' ').getHeight();
+        return size; 
     }
     
+    // returns the width that [c] would be drawn at
     @Override
     public float getWidth(char c) {
         Sprite s = getSprite(c);

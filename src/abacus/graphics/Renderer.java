@@ -1,5 +1,8 @@
 package abacus.graphics;
 
+/*
+ * Base renderer for the game engine
+ */
 public interface Renderer {
     
     // don't touch these, they are used by the engine

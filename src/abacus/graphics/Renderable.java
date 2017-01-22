@@ -1,7 +1,7 @@
 package abacus.graphics;
 
 /*
- * Some renderer's (WorldRenderer) will take a Renderable argument.
+ * Some renderers (WorldRenderer) will take a Renderable argument.
  * This is so I don't have to create methods for Sprite, AnimationPlayer,
  * and AnimationRegistry. 
  */
