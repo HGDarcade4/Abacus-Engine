@@ -20,7 +20,7 @@ public class SplashState extends GameState {
     
     @Override
     public void init(ResourceLoader loader) {
-        fade = new FadeTimer(120, 120, 120, 120);
+        fade = new FadeTimer(120, 120, 120, 120, 120);
         
         splash = loader.loadTexture("res/splash.png").getSprite();
     }

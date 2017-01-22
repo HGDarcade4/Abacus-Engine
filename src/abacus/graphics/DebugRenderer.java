@@ -12,12 +12,18 @@ public class DebugRenderer {
     // reference to renderer
     private Renderer renderer;
     
+    private boolean debug;
+    
     // ctor
     public DebugRenderer(Renderer renderer, GameFont debugFont) {
         this.debugFont = debugFont;
         this.renderer = renderer;
         
         reset();
+    }
+    
+    public void setDebugMode(boolean debug) {
+        this.debug = debug;
     }
     
     // call this at the beginning of the render method
@@ -35,7 +41,7 @@ public class DebugRenderer {
         float drawX = 0;
         float drawY = debugY;
         
-        debugFont.drawReal(text, drawX, drawY);
+        if (debug) debugFont.drawReal(text, drawX, drawY);
     }
     
 }

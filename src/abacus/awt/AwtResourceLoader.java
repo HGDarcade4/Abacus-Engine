@@ -6,6 +6,7 @@ import java.io.File;
 import javax.imageio.ImageIO;
 
 import abacus.ResourceLoader;
+import abacus.graphics.FontCreator;
 import abacus.graphics.Texture;
 import abacus.sound.Sound;
 import abacus.sound.SoundManager;
@@ -17,6 +18,12 @@ import abacus.sound.SoundManager;
  */
 public class AwtResourceLoader implements ResourceLoader {
 
+    private FontCreator fontCreator;
+    
+    public AwtResourceLoader() {
+        fontCreator = new FontCreator(this);
+    }
+    
     // TODO keep track of previously loaded images
     // load a texture from a file
     @Override
@@ -44,6 +51,12 @@ public class AwtResourceLoader implements ResourceLoader {
     @Override
     public Sound loadSound(String file) {
         return SoundManager.loadSound(file, file);
+    }
+    
+    // return font creation class
+    @Override
+    public FontCreator getFontCreator() {
+        return fontCreator;
     }
     
 }

@@ -6,6 +6,10 @@ import abacus.ui.Window;
 
 public class Test {
 
+    public static final int ID_INTRO = 0;
+    public static final int ID_TITLE = 1;
+    public static final int ID_PLAY = 2;
+    
     public static void main(String[] args) {
         System.setProperty("sun.java2d.opengl", "True");
         System.out.println("Hardware Acceleration: " + System.getProperty("sun.java2d.opengl"));
@@ -17,17 +21,16 @@ public class Test {
         
         // register game states
         GameStateManager gsm = engine.getGameStateManager();
-        gsm.registerState(SplashState.ID, new SplashState(FadeState.ID));
-        gsm.registerState(FadeState.ID, new FadeState());
-        gsm.registerState(ScrollTextState.ID, new ScrollTextState());
-        gsm.registerState(JrpgPlayState.ID, new JrpgPlayState());
+        gsm.registerState(ID_INTRO, new FadeState("res/intro.txt", ID_TITLE));
+        gsm.registerState(ID_TITLE, new TitleState());
+        gsm.registerState(ID_PLAY, new JrpgPlayState());
         
         // start engine
         Window window = engine.getWindow();
-        window.setFullscreen(false);
+        window.setFullscreen(true);
         window.setVirtualResolution(480, 270);
         window.show();
-        engine.start(SplashState.ID);
+        engine.start(ID_INTRO);
     }
     
 }

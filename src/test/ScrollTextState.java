@@ -9,11 +9,9 @@ import java.util.Scanner;
 
 import abacus.GameState;
 import abacus.ResourceLoader;
-import abacus.graphics.BasicFont;
 import abacus.graphics.DebugRenderer;
 import abacus.graphics.GameFont;
 import abacus.graphics.Renderer;
-import abacus.graphics.SpriteSheet;
 import abacus.ui.Input;
 
 public class ScrollTextState extends GameState {
@@ -33,7 +31,7 @@ public class ScrollTextState extends GameState {
     
     @Override
     public void init(ResourceLoader loader) {
-        font = new BasicFont(new SpriteSheet(loader.loadTexture("res/font_white.png"), 10, 12));
+        font = loader.getFontCreator().createBasicFont("res/font.png", 10, 12, 0xFFFFFF);
         font.setSize(12f);
         
         lines = new ArrayList<>();

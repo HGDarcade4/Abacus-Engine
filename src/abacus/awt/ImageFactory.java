@@ -32,6 +32,15 @@ public final class ImageFactory {
         return create(w, h, BufferedImage.BITMASK);
     }
     
+    // create a buffered image
+    public static BufferedImage createBufferedImage(int w, int h) {
+        return GraphicsEnvironment
+                .getLocalGraphicsEnvironment()
+                .getDefaultScreenDevice()
+                .getDefaultConfiguration()
+                .createCompatibleImage(w, h, BufferedImage.TRANSLUCENT);
+    }
+    
     // create an image with a certain type of transparency
     private static Image create(int w, int h, int type) {
         return GraphicsEnvironment

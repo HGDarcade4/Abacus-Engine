@@ -2,13 +2,13 @@ package test;
 
 public class FadeTimer {
 
-    private int atFadeIn, atPause, atFadeOut, atWait;
-    private int fadeIn, fadeOut;
+    private long atFadeIn, atPause, atFadeOut, atWait, atDone;
+    private long fadeIn, fadeOut;
     
-    private int time;
+    private long time;
     private float alpha;
     
-    public FadeTimer(int wait, int fadeIn, int pause, int fadeOut) {
+    public FadeTimer(int wait, int fadeIn, int pause, int fadeOut, int done) {
         time = 0;
         
         time += wait;
@@ -23,6 +23,9 @@ public class FadeTimer {
         time += fadeOut;
         this.atFadeOut = time;
         
+        time += done;
+        this.atDone = time;
+        
         this.fadeIn = fadeIn;
         this.fadeOut = fadeOut;
     }
@@ -30,16 +33,16 @@ public class FadeTimer {
     public void update() {
         time++;
         
-        if (time < atWait) {
+        if (time <= atWait) {
             alpha = 0f;
         }
-        else if (time < atFadeIn) {
+        else if (time <= atFadeIn) {
             alpha = (float)(time - atWait) / fadeIn;
         }
-        else if (time < atPause) {
+        else if (time <= atPause) {
             alpha = 1f;
         }
-        else if (time < atFadeOut) {
+        else if (time <= atFadeOut) {
             alpha = 1f - (float)(time - atPause) / fadeOut;
         }
         else {
@@ -52,7 +55,7 @@ public class FadeTimer {
     }
     
     public boolean isDone() {
-        return time >= atFadeOut;
+        return time >= atDone;
     }
     
     public void reset() {

@@ -8,10 +8,8 @@ import java.util.Scanner;
 
 import abacus.GameState;
 import abacus.ResourceLoader;
-import abacus.graphics.BasicFont;
 import abacus.graphics.GameFont;
 import abacus.graphics.Renderer;
-import abacus.graphics.SpriteSheet;
 import abacus.ui.Input;
 
 public class FadeState extends GameState {
@@ -22,18 +20,25 @@ public class FadeState extends GameState {
     private int line;
     private FadeTimer fade;
     private GameFont font;
+    private String source;
+    private int nextId;
     
+    public FadeState(String src, int nextId) {
+        this.source = src;
+        this.nextId = nextId;
+    }
+
     @Override
     public void init(ResourceLoader loader) {
         lines = new ArrayList<>();
         line = 0;
-        fade = new FadeTimer(100, 100, 100, 100);
+        fade = new FadeTimer(120, 120, 120, 120, 120);
         
-        font = new BasicFont(new SpriteSheet(loader.loadTexture("res/font_white.png"), 10, 12));
-        font.setSize(12);
+        font = loader.getFontCreator().createBasicFont("res/font.png", 10, 12, 0xFFFFFF);
+        font.setSize(24f);
         
         try {
-            Scanner scan = new Scanner(new FileInputStream(new File("res/scroll_text.txt")));
+            Scanner scan = new Scanner(new FileInputStream(new File(source)));
             
             while (scan.hasNextLine()) {
                 lines.add(scan.nextLine().trim());
@@ -60,8 +65,8 @@ public class FadeState extends GameState {
             fade.reset();
         }
         
-        if (line >= lines.size() || input.anyKeyJustDown()) {
-            swapState(JrpgPlayState.ID);
+        if (line >= lines.size()) {
+            swapState(nextId);
         }
     }
 

@@ -4,6 +4,8 @@ import java.awt.event.KeyEvent;
 
 import abacus.awt.AwtResourceLoader;
 import abacus.awt.AwtWindow;
+import abacus.graphics.DebugRenderer;
+import abacus.graphics.GameFont;
 import abacus.graphics.Renderer;
 import abacus.ui.Input;
 import abacus.ui.Window;
@@ -32,6 +34,10 @@ public class GameEngine {
     private ResourceLoader loader;
     // game window
     private Window window;
+    // debug 
+    private boolean debug = true;
+    private GameFont debugFont;
+    private DebugRenderer debugRenderer;
     
     // type of engine
     public enum Type {
@@ -96,6 +102,11 @@ public class GameEngine {
     // returns the resource loader
     public ResourceLoader getResourceLoader() {
         return loader;
+    }
+    
+    // write a debug line
+    public void debugLine(String line) {
+        debugRenderer.debugLine(line);
     }
     
     // sets what the update rate should be
@@ -214,6 +225,11 @@ public class GameEngine {
     
     // initialize all game states that are registered
     private void init() {
+        debugFont = loader.getFontCreator().createBasicFont("res/font.png", 10, 12, 0xFFFFFF, 1.0f, 0x000000, 0.5f);
+        debugFont.setSize(12.0f);
+        debugRenderer = new DebugRenderer(renderer, debugFont);
+        debugRenderer.setDebugMode(debug);
+        
         GameState[] states = gsManager.getRegisteredStates();
         
         for (GameState state : states) {
@@ -250,6 +266,8 @@ public class GameEngine {
         }
         
         renderer.begin();
+        debugRenderer.reset();
+        debugText();
         
         GameState[] states = gsManager.getActiveStates();
         
@@ -273,6 +291,18 @@ public class GameEngine {
         }
         
         System.exit(0);
+    }
+    
+    private void debugText() {
+        // get various debug information
+        String fps = String.format("%1.2f", getFps());
+        String ups = String.format("%1.2f", getUps());
+        int drawCommands = renderer.drawCommands();
+        
+        // draw the information to the screen
+        debugLine("draw commands: " + drawCommands);
+        debugLine("updates per second: " + fps);
+        debugLine("frames per second: " + ups);
     }
     
 }

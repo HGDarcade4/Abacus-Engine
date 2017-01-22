@@ -1,5 +1,6 @@
 package abacus.awt;
 
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import abacus.graphics.Sprite;
@@ -34,6 +35,15 @@ public class ImageSprite extends Sprite implements Texture {
     // gets the buffered image
     public BufferedImage getImage() {
         return image;
+    }
+    
+    // creates a buffered image copy
+    public BufferedImage getBufferedImageCopy() {
+        BufferedImage copy = ImageFactory.createBufferedImage(getWidth(), getHeight());
+        Graphics2D g = copy.createGraphics();
+        g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
+        g.dispose();
+        return copy;
     }
     
     // width in pixels
