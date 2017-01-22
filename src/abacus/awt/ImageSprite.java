@@ -56,7 +56,7 @@ public class ImageSprite extends Sprite implements Texture {
 
     @Override
     public Sprite getSprite(int x, int y, int w, int h) {
-        return new ImageSprite(image.getSubimage(x, y, w, h));
+        return new ImageSprite(image.getSubimage(x, image.getHeight() - y - 1, w, h));
     }
 
     @Override
