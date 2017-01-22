@@ -16,8 +16,10 @@ public class JrpgPlayState extends GameState {
 
     public static final int ID = 0;
     
+    private DebugRenderer debug;
+    private WorldRenderer worldRender;
+    
     private TileMap map;
-    private GameFont font;
     private Actor player;
     
     private Sound soundEffect;
@@ -26,8 +28,15 @@ public class JrpgPlayState extends GameState {
     @Override
     public void init(ResourceLoader loader) {
         // load font for debug text
-        font = new BasicFont(new SpriteSheet(loader.loadTexture("res/font_debug.png"), 10, 12));
-        font.setSize(6f);
+        GameFont font = new BasicFont(new SpriteSheet(loader.loadTexture("res/font_debug.png"), 10, 12));
+        font.setSize(12f);
+        // create the debug renderer
+        debug = new DebugRenderer(engine.getRenderer(), font);
+        
+        // create a world renderer
+        worldRender = new WorldRenderer(engine.getRenderer());
+        worldRender.setTileSize(32);
+        worldRender.setCharOffset(0.25f);
         
         // create tile map, normally you would just load a file instead
         RandomTileMapGenerator mapGen = new RandomTileMapGenerator(loader);
@@ -58,22 +67,21 @@ public class JrpgPlayState extends GameState {
 
     @Override
     public void render(Renderer renderer) {
+        debug.reset();
+        worldRender.reset();
+        
         // clear the screen to a light blue
         renderer.clearScreen(0xCC, 0xEE, 0xFF);
         
-        // create a world renderer
-        WorldRenderer wr = new WorldRenderer(renderer);
-        wr.setTileSize(32);
         // center camera at the player
-        wr.setView(player.getX(), player.getY());
-        wr.setCharOffset(0.25f);
+        worldRender.setView(player.getX(), player.getY());
         
         // draw the map
-        map.render(wr);
+        map.render(worldRender);
         
         // player draw layer
-        wr.setLayer(2.5f);
-        player.render(wr);
+        worldRender.setLayer(2.5f);
+        player.render(worldRender);
         
         // render debug information
         debugText();
@@ -97,19 +105,16 @@ public class JrpgPlayState extends GameState {
     }
     
     private void debugText() {
-        DebugRenderer dr = new DebugRenderer(engine.getRenderer(), font);
-        
         // get various debug information
         String fps = String.format("%1.2f", engine.getFps());
         String ups = String.format("%1.2f", engine.getUps());
         int drawCommands = engine.getRenderer().drawCommands();
         
         // draw the information to the screen
-        font.setSize(12f);
-        dr.debugLine("(" + (int)Math.round(player.getX()) + ", " + (int)Math.round(player.getY()) + ")");
-        dr.debugLine("draw commands: " + drawCommands);
-        dr.debugLine("updates per second: " + fps);
-        dr.debugLine("frames per second: " + ups);
+        debug.debugLine("(" + (int)Math.round(player.getX()) + ", " + (int)Math.round(player.getY()) + ")");
+        debug.debugLine("draw commands: " + drawCommands);
+        debug.debugLine("updates per second: " + fps);
+        debug.debugLine("frames per second: " + ups);
     }
 
 }

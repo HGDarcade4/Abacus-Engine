@@ -15,16 +15,28 @@ import java.awt.image.BufferedImage;
 import abacus.ui.Input;
 import abacus.ui.Window;
 
+/*
+ * Java2D implementation of Window
+ * 
+ * You never work directly with this class.
+ */
 public class AwtWindow implements Window {
 
+    // the window
     private Frame frame;
+    // the display
     private Canvas canvas;
-    private boolean canRender;
+    private boolean isVisible;
+    // keyboard input
     private Input input;
+    // Java2D renderer
     private AwtCanvasRenderer renderer;
+    // is window full screen
     private boolean fullScreen;
+    // true resolution, NOT virtual resolution
     private int width, height;
     
+    // ctor, argument on whether to use canvas renderer or frame buffer renderer
     public AwtWindow(boolean frameBuffer) {
         input = new Input();
         
@@ -44,30 +56,37 @@ public class AwtWindow implements Window {
             renderer = new AwtCanvasRenderer(canvas, 320, 224);
         }
         
-        canRender = false;
+        isVisible = false;
         fullScreen = false;
         
+        // remove the cursor
         frame.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB), new Point(0, 0), "no pointer"));
     }
     
+    // returns reference to input
     public Input getInput() {
         return input;
     }
     
+    // returns reference to renderer
     public AwtCanvasRenderer getRenderer() {
         return renderer;
     }
     
+    // sets title of window
     @Override
     public void setTitle(String title) {
         frame.setTitle(title);
     }
     
+    // gets the title of the window
     @Override
     public String getTitle() {
         return frame.getTitle();
     }
     
+    // sets whether the window is full screen
+    // TODO should be correct, but probably should check this a bit more
     @Override
     public void setFullscreen(boolean fs) {
         fullScreen = fs;
@@ -90,17 +109,21 @@ public class AwtWindow implements Window {
             frame.setUndecorated(false);
             setResolution(width, height);
             
-            if (canRender) {
+            if (isVisible) {
                 show();
             }
         }
     }
     
+    // returns true if window is in full screen mode
     @Override
     public boolean isFullscreen() {
         return fullScreen;
     }
     
+    // sets dimensions of the display, NOT virtual resolution, 
+    // also NOT window size, since there can be extra border and title pixels
+    // you do that in the renderer
     @Override
     public void setResolution(int width, int height) {
         this.width = width;
@@ -110,99 +133,88 @@ public class AwtWindow implements Window {
         frame.setLocationRelativeTo(null);
     }
     
+    // width of the display
     @Override
     public int getWidth() {
         return canvas.getWidth();
     }
     
+    // height of the display
     @Override
     public int getHeight() {
         return canvas.getHeight();
     }
     
+    // sets the virtual resolution
     @Override
     public void setVirtualResolution(int width, int height) {
         renderer.setVirtualResolution(width, height);
     }
     
+    // displays the window
     @Override
     public void show() {
         frame.setVisible(true);
-        canRender = true;
+        isVisible = true;
         
         canvas.setFocusable(true);
         canvas.requestFocus();
     }
     
+    // hides the window
     @Override
     public void hide() {
         frame.setVisible(false);
-        canRender = false;
+        isVisible = false;
     }
     
+    // is the window shown
     @Override
     public boolean isVisible() {
-        return canRender;
+        return isVisible;
     }
     
+    // this class handles input events
     private class WindowEvents implements WindowListener, KeyListener {
 
         @Override
-        public void windowActivated(WindowEvent e) {
-            // TODO Auto-generated method stub
-            
-        }
+        public void windowActivated(WindowEvent e) {}
 
         @Override
-        public void windowClosed(WindowEvent e) {
-            // TODO Auto-generated method stub
-            
-        }
+        public void windowClosed(WindowEvent e) {}
 
+        // happens when you click the 'X'
         @Override
         public void windowClosing(WindowEvent e) {
             hide();
         }
 
         @Override
-        public void windowDeactivated(WindowEvent e) {
-            // TODO Auto-generated method stub
-            
-        }
+        public void windowDeactivated(WindowEvent e) {}
 
         @Override
-        public void windowDeiconified(WindowEvent e) {
-            // TODO Auto-generated method stub
-            
-        }
+        public void windowDeiconified(WindowEvent e) {}
 
         @Override
-        public void windowIconified(WindowEvent e) {
-            // TODO Auto-generated method stub
-            
-        }
+        public void windowIconified(WindowEvent e) {}
 
         @Override
-        public void windowOpened(WindowEvent e) {
-            // TODO Auto-generated method stub
-            
-        }
+        public void windowOpened(WindowEvent e) {}
 
+        // when you type a key
         @Override
         public void keyPressed(KeyEvent e) {
             input.setKey(e.getKeyCode(), true);
         }
 
+        // when you release a key
         @Override
         public void keyReleased(KeyEvent e) {
             input.setKey(e.getKeyCode(), false);
         }
 
         @Override
-        public void keyTyped(KeyEvent e) {
-            // TODO Auto-generated method stub
-            
-        }
+        public void keyTyped(KeyEvent e) {}
         
     }
 

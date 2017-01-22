@@ -13,18 +13,24 @@ import abacus.awt.command.AwtRenderCommand;
 import abacus.awt.command.SpriteCommand;
 
 /*
- * TODO needs a lot of work
+ * Basic Java2D implementation of Renderer which uses 
+ * the equivalent of a OpenGL frame buffer.
+ * 
+ * You never work directly with this class
  */
 public class AwtBufferRenderer extends AwtCanvasRenderer {
 
+    // frame buffer
     private Image screen;
     
+    // ctor arguments are the canvas to draw to and the virtual resolution
     public AwtBufferRenderer(Canvas c, int width, int height) {
         super(c, width, height);
         
         setVirtualResolution(width, height);
     }
     
+    // sets the virtual resolution
     @Override
     public void setVirtualResolution(int width, int height) {
         this.width = width;
@@ -32,15 +38,18 @@ public class AwtBufferRenderer extends AwtCanvasRenderer {
         screen = ImageFactory.create(width, height);
     }
     
+    // draws all draw commands that were accumulated to the frame buffer
+    // and then draws the frame buffer to the screen
     @Override
     public void finish() {
+        // sort commands by layer
         Collections.sort(commands, new Comparator<AwtRenderCommand>() {
             @Override
             public int compare(AwtRenderCommand a, AwtRenderCommand b) {
                 return a.getLayer() > b.getLayer() ? 1 : a.getLayer() < b.getLayer() ? -1 : 0;
             }
         });
-        
+        // sort commands that go directly to the canvas by layer
         Collections.sort(screenCommands, new Comparator<AwtRenderCommand>() {
             @Override
             public int compare(AwtRenderCommand a, AwtRenderCommand b) {
@@ -56,9 +65,14 @@ public class AwtBufferRenderer extends AwtCanvasRenderer {
             }
             graphics = (Graphics2D)bs.getDrawGraphics();
             
+            // set the screen to black
             graphics.setColor(Color.BLACK);
             graphics.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
             
+            // create the graphics for the screen. 
+            // for some stupid reason Image doesn't have
+            // a createGraphics() method, so you have to 
+            // check what type of image it is
             Graphics2D g = null;
             if (screen instanceof VolatileImage) {
                 g = ((VolatileImage)screen).createGraphics();
@@ -67,15 +81,21 @@ public class AwtBufferRenderer extends AwtCanvasRenderer {
                 g = ((BufferedImage)screen).createGraphics();
             }
             
+            // draw all commands to the frame buffer
             for (AwtRenderCommand c : commands) {
                 c.draw(g);
             }
             
+            // good practice is to dispose of graphics contexts
+            g.dispose();
+            
+            // this big mess centers the image on the canvas
+            // which creates black bars if the ratio of
+            // the frame buffer and the canvas aren't the same
             float ratio = (float)width / height;
             float sRatio = (float)canvas.getWidth() / canvas.getHeight();
             int dx = 0;
             int dy = 0;
-            
             graphics.setColor(Color.BLACK);
             if (ratio > sRatio) {
                 ratio = (float)canvas.getWidth() / width;
@@ -90,15 +110,16 @@ public class AwtBufferRenderer extends AwtCanvasRenderer {
                 graphics.drawImage(screen, dx, 0, canvas.getWidth() - dx * 2, canvas.getHeight(), canvas);
             }
             
-//            graphics.drawImage(screen, 0, 0, canvas.getWidth(), canvas.getHeight(), canvas);
-            
+            // draw commands that go directly to the canvas
             for (AwtRenderCommand c : screenCommands) {
                 c.draw(graphics);
             }
             
+            // dispose of the buffer stategy's graphics and swap buffers
             graphics.dispose();
             bs.show();
             
+            // keep track of number of commands
             drawCommands = commands.size() + screenCommands.size();
         }
         catch (Exception e) {
@@ -106,7 +127,8 @@ public class AwtBufferRenderer extends AwtCanvasRenderer {
         }
     }
 
-    public void drawImage(BufferedImage image, float x, float y, float w, float h, boolean flip) {
+    // creates and stores a command to draw an image to the frame buffer
+    public void drawImage(Image image, float x, float y, float w, float h, boolean flip) {
         if (image == null) return;
         
         commands.add(new SpriteCommand(image,
@@ -117,7 +139,8 @@ public class AwtBufferRenderer extends AwtCanvasRenderer {
                 alpha, layer, flip));
     }
     
-    public void drawImageReal(BufferedImage image, float x, float y, float w, float h, boolean flip) {
+    // creates and stores a command to draw an image to the canvas
+    public void drawImageReal(Image image, float x, float y, float w, float h, boolean flip) {
         if (image == null) return;
         
         screenCommands.add(new SpriteCommand(image,
