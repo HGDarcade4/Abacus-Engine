@@ -2,6 +2,9 @@ package abacus.tile;
 
 import abacus.graphics.WorldRenderer;
 
+/*
+ * Tile class
+ */
 public abstract class Tile {
 
     public abstract void update();
