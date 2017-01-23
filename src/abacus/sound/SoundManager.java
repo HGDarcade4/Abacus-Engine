@@ -11,12 +11,21 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+/*
+ * Manages sounds
+ * 
+ * I will probably be changing this a lot
+ * 
+ * Don't work with this class, work with the Sound class instead
+ */
 public final class SoundManager {
 
+    // hold audio clips
     private static final Map<String, Clip> clips = new HashMap<>();
     
     private SoundManager() {}
     
+    // load sounds and put them in the registry
     public static Sound loadSound(String name, String file) {
         try {
             AudioInputStream in = AudioSystem.getAudioInputStream(new File(file));
@@ -37,6 +46,7 @@ public final class SoundManager {
         return new Sound(name);
     }
     
+    // play sound with [name] id
     public static void playSound(String name, boolean loop) {
         Clip sound = clips.get(name);
         
@@ -55,6 +65,7 @@ public final class SoundManager {
         }
     }
     
+    // stop playing sound with [name] id
     public static void stopSound(String name) {
         Clip sound = clips.get(name);
         

@@ -1,13 +1,21 @@
-package test;
+package game;
 
+/*
+ * Keeps track of what alpha value something should be
+ * 
+ * TODO remove need for update() ?
+ */
 public class FadeTimer {
 
+    // time positions
     private long atFadeIn, atPause, atFadeOut, atWait, atDone;
     private long fadeIn, fadeOut;
     
+    // time and alpha value
     private long time;
     private float alpha;
     
+    // argument units are in updates
     public FadeTimer(int wait, int fadeIn, int pause, int fadeOut, int done) {
         time = 0;
         
@@ -28,8 +36,12 @@ public class FadeTimer {
         
         this.fadeIn = fadeIn;
         this.fadeOut = fadeOut;
+        
+        reset();
     }
     
+    // update time
+    // TODO make this like animations, not needing update() ? 
     public void update() {
         time++;
         
@@ -50,14 +62,17 @@ public class FadeTimer {
         }
     }
     
+    // get what the current alpha value should be
     public float getAlpha() {
         return alpha;
     }
     
+    // is the fade finished
     public boolean isDone() {
         return time >= atDone;
     }
     
+    // restart the fade
     public void reset() {
         time = 0;
         alpha = 0;

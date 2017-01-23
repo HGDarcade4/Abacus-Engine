@@ -1,4 +1,4 @@
-package test;
+package game;
 
 import abacus.GameState;
 import abacus.ResourceLoader;
@@ -8,16 +8,22 @@ import abacus.graphics.Sprite;
 import abacus.sound.Sound;
 import abacus.ui.Input;
 
+/*
+ * Screen before you reach the main menu
+ */
 public class TitleState extends GameState {
 
+    // text to display
     public static final String PRESS_ANY_KEY = "Press any key...";
     
+    // misc variables
     private GameFont font;
     private Sprite title;
     private FadeTimer fade, pressAnyKey;
-    
     private Sound music;
+    private Sound click;
     
+    // load resources
     @Override
     public void init(ResourceLoader loader) {
         font = loader.getFontCreator().createBasicFont("res/font.png", 10, 12, 0xFFFFFF);
@@ -28,15 +34,18 @@ public class TitleState extends GameState {
         pressAnyKey = new FadeTimer(10, 30, 10, 30, 0);
         
         music = loader.loadSound("res/song_idea1.wav");
+        click = loader.loadSound("res/button_select.wav");
     }
 
+    // play music and reset fading text
     @Override
     public void enter() {
-        music.play();
+        music.playAndLoop();
         fade.reset();
         pressAnyKey.reset();
     }
 
+    // update text fade
     @Override
     public void update(Input input) {
         fade.update();
@@ -49,10 +58,11 @@ public class TitleState extends GameState {
         }
         
         if (input.anyKeyJustDown()) {
-            swapState(Test.ID_PLAY);
+            swapState(Game.ID_PLAY);
         }
     }
 
+    // draw background and text
     @Override
     public void render(Renderer renderer) {
         renderer.clearScreen(0, 0, 0);
@@ -66,18 +76,16 @@ public class TitleState extends GameState {
     }
 
     @Override
-    public void pause() {
+    public void pause() {}
 
-    }
-
+    // stop music before leaving
     @Override
     public void exit() {
         music.stop();
+        click.play();
     }
 
     @Override
-    public void end() {
-
-    }
+    public void end() {}
 
 }

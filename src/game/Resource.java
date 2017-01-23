@@ -1,10 +1,15 @@
-package test;
+package game;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import abacus.graphics.AnimationRegistry;
 
+/*
+ * IGNORE THIS I'LL WORK ON IT LATER
+ * 
+ * although it might stay like this, not sure yet
+ */
 public final class Resource {
 
     private static final Map<String, AnimationRegistry> animations = new HashMap<>();

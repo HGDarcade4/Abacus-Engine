@@ -1,4 +1,4 @@
-package test;
+package game;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,10 +12,14 @@ import abacus.graphics.GameFont;
 import abacus.graphics.Renderer;
 import abacus.ui.Input;
 
+/*
+ * Fades text in and out
+ * 
+ * TODO allow more than one line at a time
+ */
 public class FadeState extends GameState {
 
-    public static final int ID = 2;
-    
+    // variables
     private ArrayList<String> lines;
     private int line;
     private FadeTimer fade;
@@ -23,11 +27,13 @@ public class FadeState extends GameState {
     private String source;
     private int nextId;
     
+    // arguments are source text file name and game state id to swap to
     public FadeState(String src, int nextId) {
         this.source = src;
         this.nextId = nextId;
     }
 
+    // put lines of text file into array
     @Override
     public void init(ResourceLoader loader) {
         lines = new ArrayList<>();
@@ -50,12 +56,14 @@ public class FadeState extends GameState {
         }
     }
 
+    // reset to beginning
     @Override
     public void enter() {
         line = 0;
         fade.reset();
     }
 
+    // update fade
     @Override
     public void update(Input input) {
         fade.update();
@@ -70,6 +78,8 @@ public class FadeState extends GameState {
         }
     }
 
+    // render text at center
+    // TODO make a helper class for rendering text
     @Override
     public void render(Renderer renderer) {
         renderer.clearScreen(0, 0, 0);
@@ -84,21 +94,12 @@ public class FadeState extends GameState {
     }
 
     @Override
-    public void pause() {
-        // TODO Auto-generated method stub
-
-    }
+    public void pause() {}
 
     @Override
-    public void exit() {
-        // TODO Auto-generated method stub
-
-    }
+    public void exit() {}
 
     @Override
-    public void end() {
-        // TODO Auto-generated method stub
-
-    }
+    public void end() {}
 
 }

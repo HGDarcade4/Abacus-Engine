@@ -6,6 +6,9 @@ import javax.swing.JPanel;
 
 import abacus.tile.TileMap;
 
+/*
+ * WORK IN PROGRESS DON'T MESS WITH THIS
+ */
 @SuppressWarnings("serial")
 public class TileMapDisplay extends JPanel {
 

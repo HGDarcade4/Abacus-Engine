@@ -1,27 +1,34 @@
-package test;
+package game;
 
 import abacus.GameState;
 import abacus.ResourceLoader;
-import abacus.graphics.DebugRenderer;
-import abacus.graphics.GameFont;
 import abacus.graphics.Renderer;
 import abacus.graphics.WorldRenderer;
 import abacus.sound.Sound;
 import abacus.tile.TileMap;
 import abacus.ui.Input;
 
-public class JrpgPlayState extends GameState {
+/*
+ * Main tile map play state. 
+ * 
+ * This is where you load a tile map and move character on it, etc. 
+ */
+public class TileMapState extends GameState {
 
-    public static final int ID = 0;
-    
+    // instance of world renderer
     private WorldRenderer worldRender;
     
+    // hold the map and player
+    // THIS WILL PROBABLY CHANGE A LOT
     private TileMap map;
     private Actor player;
     
+    // sounds
     private Sound soundEffect;
     private Sound music;
+    private Sound click;
     
+    // initialize a bunch of stuff
     @Override
     public void init(ResourceLoader loader) {
         // create a world renderer
@@ -40,22 +47,28 @@ public class JrpgPlayState extends GameState {
         // load sounds
         soundEffect = loader.loadSound("res/sound_effect.wav");
         music = loader.loadSound("res/song_idea1.wav");
+        click = loader.loadSound("res/sound_effect.wav");
     }
 
     @Override
     public void enter() {
-        // start sounds when the game state is entered
-//        soundEffect.playAndLoop();
-//        music.playAndLoop();
+        // start theme associated with map when the game state is entered
+        // we just don't have a theme for this yet
     }
 
+    // update logic
     @Override
     public void update(Input input) {
         // update game logic
         map.update();
         player.update(map, input);
+        
+        if (input.anyKeyJustDown()) {
+            click.play();
+        }
     }
 
+    // render map and player
     @Override
     public void render(Renderer renderer) {
         worldRender.reset();
@@ -78,20 +91,16 @@ public class JrpgPlayState extends GameState {
     }
 
     @Override
-    public void pause() {
+    public void pause() {}
 
-    }
-
+    // stop music when exiting the game state
     @Override
     public void exit() {
-        // stop music when exiting the game state
         soundEffect.stop();
         music.stop();
     }
 
     @Override
-    public void end() {
-
-    }
+    public void end() {}
     
 }

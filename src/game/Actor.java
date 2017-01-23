@@ -1,4 +1,4 @@
-package test;
+package game;
 
 import java.awt.event.KeyEvent;
 
@@ -11,6 +11,11 @@ import abacus.graphics.WorldRenderer;
 import abacus.tile.TileMap;
 import abacus.ui.Input;
 
+/*
+ * IGNORE THIS
+ * 
+ * I'M GOING TO CHANGE THIS A LOT
+ */
 public class Actor {
 
     private static AnimationRegistry actorAnimReg = new AnimationRegistry();

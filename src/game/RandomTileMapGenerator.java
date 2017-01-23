@@ -1,4 +1,4 @@
-package test;
+package game;
 
 import java.util.Random;
 
@@ -9,6 +9,9 @@ import abacus.tile.SpriteSheetTile;
 import abacus.tile.TileMap;
 import abacus.tile.TileRegistry;
 
+/*
+ * IGNORE THIS I'M GOING TO WORK ON TILES LATER
+ */
 public class RandomTileMapGenerator {
 
     SpriteSheet sheet, terrain;
@@ -26,8 +29,10 @@ public class RandomTileMapGenerator {
         tiles.register(3, new ConnectedTile(terrain, 10, 4, 0, 8, 0, 12, 0, 8, 0));
         tiles.register(4, new ConnectedTile(terrain, 4, 6));
         
+        // dirt
         map.fillLayer(0, 1, 16 * 4);
         
+        // grass
         for (int y = 0; y < map.getHeight(); y++) {
             for (int x = 0; x < map.getWidth(); x++) {
                 if (Math.random() < 0.9) {
