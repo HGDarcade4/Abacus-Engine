@@ -23,7 +23,7 @@ public class Game {
         // set up engine
         GameEngine engine = GameEngine.create(GameEngine.Type.JAVA2D_FRAMEBUFFER);
         engine.setUpdateGoal(60);
-        engine.setRenderGoal(60); 
+        engine.setRenderGoal(-1); 
         
         // register game states
         GameStateManager gsm = engine.getGameStateManager();
@@ -33,7 +33,8 @@ public class Game {
         
         // start engine
         Window window = engine.getWindow();
-        window.setFullscreen(true);
+        window.setFullscreen(false);
+        window.setResolution(480, 270);
         window.setVirtualResolution(480, 270);
         window.show();
         engine.start(ID_INTRO);

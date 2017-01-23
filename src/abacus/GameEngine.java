@@ -301,8 +301,8 @@ public class GameEngine {
         
         // draw the information to the screen
         debugLine("draw commands: " + drawCommands);
-        debugLine("updates per second: " + fps);
-        debugLine("frames per second: " + ups);
+        debugLine("updates per second: " + ups);
+        debugLine("frames per second: " + fps);
     }
     
 }
