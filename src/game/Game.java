@@ -21,9 +21,9 @@ public class Game {
         System.out.println("Hardware Acceleration: " + System.getProperty("sun.java2d.opengl"));
         
         // set up engine
-        GameEngine engine = GameEngine.create(GameEngine.Type.JAVA2D_FRAMEBUFFER);
+        GameEngine engine = GameEngine.create(GameEngine.Type.JAVA2D_CANVAS);
         engine.setUpdateGoal(60);
-        engine.setRenderGoal(-1); 
+        engine.setRenderGoal(60); 
         
         // register game states
         GameStateManager gsm = engine.getGameStateManager();
@@ -33,8 +33,8 @@ public class Game {
         
         // start engine
         Window window = engine.getWindow();
-        window.setFullscreen(false);
         window.setResolution(480, 270);
+        window.setFullscreen(true);
         window.setVirtualResolution(480, 270);
         window.show();
         engine.start(ID_INTRO);

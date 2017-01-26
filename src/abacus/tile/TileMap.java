@@ -49,7 +49,7 @@ public class TileMap {
     
     public void render(WorldRenderer r) {
         // TODO check camera bounds
-        int minY = (int)Math.floor(r.getMinY());
+        int minY = (int)Math.floor(r.getMinY()) - 4;
         int maxY = (int)Math.ceil(r.getMaxY()) + 1;
         int minX = (int)Math.floor(r.getMinX());
         int maxX = (int)Math.ceil(r.getMaxX()) + 1;
@@ -58,6 +58,7 @@ public class TileMap {
             // draw from the top down, although it shouldn't actually matter for tiles, just characters
             for (int y = maxY; y >= minY; y--) {
                 for (int x = minX; x < maxX; x++) {
+                    r.setLayer(layer);
                     getTile(x, y, layer).render(r, this, x, y, layer);
                 }
             }

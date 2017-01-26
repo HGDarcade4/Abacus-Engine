@@ -62,10 +62,6 @@ public class TileMapState extends GameState {
         // update game logic
         map.update();
         player.update(map, input);
-        
-        if (input.anyKeyJustDown()) {
-            click.play();
-        }
     }
 
     // render map and player

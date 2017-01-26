@@ -73,7 +73,7 @@ public class WorldRenderer {
     }
     
     // draws sprite 1 unit big centered at (x, y) in world space
-    public void drawTileSprite(Renderable image, int x, int y) {
+    public void drawTileSprite(Renderable image, float x, float y) {
         Sprite sprite = image.getSprite();
         
         int drawX = halfWidth + (int)Math.floor((x - camX - 0.5f) * tileSize);
@@ -83,7 +83,7 @@ public class WorldRenderer {
     }
     
     // draws a tile sprite, but cut into four corners
-    public void drawTileSprite(Renderable ul, Renderable ur, Renderable dl, Renderable dr, int x, int y) {
+    public void drawTileSprite(Renderable ul, Renderable ur, Renderable dl, Renderable dr, float x, float y) {
         int drawX = halfWidth + (int)Math.floor((x - camX - 0.5f) * tileSize);
         int drawY = halfHeight + (int)Math.floor((y - camY - 0.5f) * tileSize);
         

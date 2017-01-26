@@ -52,7 +52,10 @@ public class Actor {
         }
         
         if (dy != 0) {
-            dx = 0f;
+            if (dx != 0) {
+                dy *= 0.7f;
+                dx *= 0.7f;
+            }
             
             if (dy < 0) {
                 dir = DOWN;
