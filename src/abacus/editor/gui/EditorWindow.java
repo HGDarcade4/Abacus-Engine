@@ -36,8 +36,8 @@ public class EditorWindow implements LevelListener {
     private LevelEditor editor;
     
     public static void main(String[] args) {
-        System.setProperty("sun.java2d.opengl", "True");
-        System.out.println("Hardware Acceleration: " + System.getProperty("sun.java2d.opengl"));
+//        System.setProperty("sun.java2d.opengl", "True");
+//        System.out.println("Hardware Acceleration: " + System.getProperty("sun.java2d.opengl"));
         
         EditorWindow window = new EditorWindow();
         window.setTitle("untitled");

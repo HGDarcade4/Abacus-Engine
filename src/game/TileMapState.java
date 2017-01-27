@@ -33,7 +33,7 @@ public class TileMapState extends GameState {
     public void init(ResourceLoader loader) {
         // create a world renderer
         worldRender = new WorldRenderer(engine.getRenderer());
-        worldRender.setTileSize(32);
+        worldRender.setTileSize(64);
         worldRender.setCharOffset(0.25f);
         
         // create tile map, normally you would just load a file instead

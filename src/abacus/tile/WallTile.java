@@ -1,10 +1,6 @@
 package abacus.tile;
 
-import static abacus.tile.ConnectionTiles.DOWN_LEFT;
-import static abacus.tile.ConnectionTiles.DOWN_RIGHT;
-import static abacus.tile.ConnectionTiles.UP_LEFT;
-import static abacus.tile.ConnectionTiles.UP_RIGHT;
-import static abacus.tile.ConnectionTiles.getCode;
+import static abacus.tile.ConnectionTiles.*;
 
 import abacus.graphics.SpriteSheet;
 import abacus.graphics.WorldRenderer;
@@ -37,6 +33,14 @@ public class WallTile extends Tile {
                 wall.get(DOWN_LEFT, bl),
                 wall.get(DOWN_RIGHT, br),
                 x, y);
+        
+//        r.setLayer(layer);
+//        r.drawTileSprite(
+//                wall.get(UP_LEFT, tl), 
+//                wall.get(UP_RIGHT, tr),
+//                wall.get(DOWN_LEFT, bl & EDGE_HORIZ),
+//                wall.get(DOWN_RIGHT, br & EDGE_HORIZ),
+//                x, y + 1);
         
         r.setLayer(layer + 10);
         r.drawTileSprite(
