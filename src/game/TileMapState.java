@@ -6,6 +6,7 @@ import abacus.graphics.Renderer;
 import abacus.graphics.WorldRenderer;
 import abacus.sound.Sound;
 import abacus.tile.TileMap;
+import abacus.tile.TilePhysics;
 import abacus.ui.Input;
 
 /*
@@ -21,6 +22,7 @@ public class TileMapState extends GameState {
     // hold the map and player
     // THIS WILL PROBABLY CHANGE A LOT
     private TileMap map;
+    private TilePhysics physics;
     private Actor player;
     
     // sounds
@@ -34,11 +36,13 @@ public class TileMapState extends GameState {
         // create a world renderer
         worldRender = new WorldRenderer(engine.getRenderer());
         worldRender.setTileSize(64);
-        worldRender.setCharOffset(0.25f);
+        worldRender.setCharOffset(0.0f);
         
         // create tile map, normally you would just load a file instead
         RandomTileMapGenerator mapGen = new RandomTileMapGenerator(loader);
         map = mapGen.create(128, 128);
+        
+        physics = new TilePhysics(map);
         
         // create a temporary player
         Actor.loadAnimations(loader);
@@ -62,6 +66,7 @@ public class TileMapState extends GameState {
         // update game logic
         map.update();
         player.update(map, input);
+        physics.update(player.getBody());
     }
 
     // render map and player
@@ -73,7 +78,7 @@ public class TileMapState extends GameState {
         renderer.clearScreen(0xCC, 0xEE, 0xFF);
         
         // center camera at the player
-        worldRender.setView(player.getX(), player.getY());
+        worldRender.setView(player.getX() + 0.5f, player.getY());
         
         // draw the map
         map.render(worldRender);

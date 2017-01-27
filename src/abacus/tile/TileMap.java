@@ -59,7 +59,7 @@ public class TileMap {
             for (int y = maxY; y >= minY; y--) {
                 for (int x = minX; x < maxX; x++) {
                     r.setLayer(layer);
-                    getTile(x, y, layer).render(r, this, x, y, layer);
+                    if (getCollision(x, y)) getTile(x, y, layer).render(r, this, x, y, layer);
                 }
             }
         }
