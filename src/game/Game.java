@@ -17,8 +17,13 @@ public class Game {
     // main method
     public static void main(String[] args) {
         // enable hardware acceleration
-        System.setProperty("sun.java2d.opengl", "True");
+        System.setProperty("sun.java2d.opengl", "False");
         System.out.println("Hardware Acceleration: " + System.getProperty("sun.java2d.opengl"));
+        
+//        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+//        GraphicsDevice gd = ge.getDefaultScreenDevice();
+//        GraphicsConfiguration gc = gd.getDefaultConfiguration();
+//        BufferCapabilities bc = gc.getBufferCapabilities();
         
         // set up engine
         GameEngine engine = GameEngine.create(GameEngine.Type.JAVA2D_CANVAS);
@@ -34,10 +39,10 @@ public class Game {
         // start engine
         Window window = engine.getWindow();
         window.setResolution(480, 270);
-        window.setFullscreen(true);
-        window.setVirtualResolution(480, 270);
+        window.setFullscreen(false);
+        window.setVirtualResolution(480 * 2, 270 * 2);
         window.show();
-        engine.start(ID_INTRO);
+        engine.start(ID_PLAY);
     }
     
 }

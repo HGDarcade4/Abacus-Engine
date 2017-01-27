@@ -8,6 +8,7 @@ import abacus.graphics.AnimationPlayer;
 import abacus.graphics.AnimationRegistry;
 import abacus.graphics.SpriteSheet;
 import abacus.graphics.WorldRenderer;
+import abacus.tile.TileBody;
 import abacus.tile.TileMap;
 import abacus.ui.Input;
 
@@ -26,17 +27,17 @@ public class Actor {
     private static final int RIGHT = 3;
     
     private AnimationRegistry animation;
-    private float x, y;
+    private TileBody body;
     private int dir;
     
     public Actor() {
         animation = actorAnimReg.copy();
         
-        x = y = 64.0f;
+        body = new TileBody(64f, 64f, 0.8f, 0.8f);
     }
     
     public void update(TileMap map, Input input) {
-        float dx = 0f, dy = 0f, move = 1f / 32f;
+        float dx = 0f, dy = 0f, move = 1.5f / 32f;
         
         if (input.getKey(KeyEvent.VK_UP)) {
             dy += move;
@@ -51,47 +52,51 @@ public class Actor {
             dx += move;
         }
         
-        if (dy != 0) {
-            if (dx != 0) {
-                dy *= 0.7f;
-                dx *= 0.7f;
-            }
-            
+        animation.setCurrentAndPlay(dir);
+        
+        if (dy != 0 && dx == 0) {
             if (dy < 0) {
                 dir = DOWN;
             }
             else {
                 dir = UP;
             }
-            animation.setCurrentAndPlay(dir);
+            
         }
-        else if (dx != 0) {
+        else if (dx != 0 && dy == 0) {
             if (dx < 0) {
                 dir = LEFT;
             }
             else {
                 dir = RIGHT;
             }
-            animation.setCurrentAndPlay(dir);
         }
-        else {
+        else if (dx == 0 && dy == 0) {
             animation.pause();
         }
+        else {
+            dy *= 0.7f;
+            dx *= 0.7f;
+        }
         
-        x += dx;
-        y += dy;
+        body.setVelX(dx);
+        body.setVelY(dy);
     }
     
     public void render(WorldRenderer wr) {
-        wr.drawCharacterSprite(animation, x, y);
+        wr.drawCharacterSprite(animation, body.getCenterX(), body.getMinY(), body.getWidth(), body.getHeight());
     }
     
     public float getX() {
-        return x;
+        return body.getCenterX();
     }
     
     public float getY() {
-        return y;
+        return body.getCenterY();
+    }
+    
+    public TileBody getBody() {
+        return body;
     }
     
     public static void loadAnimations(ResourceLoader loader) {

@@ -76,16 +76,16 @@ public class WorldRenderer {
     public void drawTileSprite(Renderable image, float x, float y) {
         Sprite sprite = image.getSprite();
         
-        int drawX = halfWidth + (int)Math.floor((x - camX - 0.5f) * tileSize);
-        int drawY = halfHeight + (int)Math.floor((y - camY - 0.5f) * tileSize);
+        int drawX = halfWidth + (int)Math.floor((x - camX) * tileSize);
+        int drawY = halfHeight + (int)Math.floor((y - camY) * tileSize);
         
         sprite.draw(drawX, drawY, tileSize, tileSize, alpha, layer);
     }
     
     // draws a tile sprite, but cut into four corners
     public void drawTileSprite(Renderable ul, Renderable ur, Renderable dl, Renderable dr, float x, float y) {
-        int drawX = halfWidth + (int)Math.floor((x - camX - 0.5f) * tileSize);
-        int drawY = halfHeight + (int)Math.floor((y - camY - 0.5f) * tileSize);
+        int drawX = halfWidth + (int)Math.floor((x - camX) * tileSize);
+        int drawY = halfHeight + (int)Math.floor((y - camY) * tileSize);
         
         int half = tileSize / 2;
         
@@ -106,15 +106,15 @@ public class WorldRenderer {
      * 
      * this can be used to draw characters in the center of a tile
      */
-    public void drawCharacterSprite(Renderable image, float x, float y) {
+    public void drawCharacterSprite(Renderable image, float x, float y, float w, float h) {
         Sprite sprite = image.getSprite();
         
-        int drawX = halfWidth + (int)Math.floor((x - camX - 0.5f) * tileSize);
-        int drawY = halfHeight + (int)Math.floor((y - camY - 0.5f + charOffset) * tileSize);
+        int drawX = halfWidth + (int)Math.floor((x - camX - w/2) * tileSize);
+        int drawY = halfHeight + (int)Math.floor((y - camY + charOffset) * tileSize);
         
-        int height = (int)Math.ceil(tileSize * (float)sprite.getHeight() / sprite.getWidth());
+//        int height = (int)Math.ceil(tileSize * (float)sprite.getHeight() / sprite.getWidth());
         
-        sprite.draw(drawX, drawY, tileSize, height, alpha, layer);
+        sprite.draw(drawX, drawY, tileSize * w, tileSize * h, alpha, layer);
     }
     
     /*

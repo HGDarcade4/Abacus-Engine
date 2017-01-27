@@ -35,13 +35,13 @@ public class RandomTileMapGenerator {
         map.fillLayer(0, 1, 16 * 4);
         
         // cliff wall
-        for (int y = 0; y < map.getHeight(); y++) {
-            for (int x = 0; x < map.getWidth(); x++) {
-                if (Math.random() < 1.0) {
-                    map.setTile(x, y, 2, 5, 0);
-                }
-            }
-        }
+//        for (int y = 0; y < map.getHeight(); y++) {
+//            for (int x = 0; x < map.getWidth(); x++) {
+//                if (Math.random() < 1.0) {
+//                    map.setTile(x, y, 2, 5, 0);
+//                }
+//            }
+//        }
         
 //        // grass
 //        for (int y = 0; y < map.getHeight(); y++) {
@@ -52,38 +52,40 @@ public class RandomTileMapGenerator {
 //            }
 //        }
         
+//        Random r = new Random();
+//        int x = 64;
+//        int y = 64;
+//        for (int i = 0; i < map.getWidth() * map.getHeight() / 100; i++) {
+//            int size = 10 + r.nextInt(30);
+//            x = y = 64;
+//            for (int j = 0; j < size; j += 2) {
+//                map.setTile(x, y, 2, 0, 0);
+//                map.setCollision(x, y, false);
+//                x += r.nextInt(3) - 1;
+//                map.setTile(x, y, 2, 0, 0);
+//                map.setCollision(x, y, false);
+//                y += r.nextInt(3) - 1;
+//            }
+//        }
+//        
+//        x = 64;
+//        y = 64;
+//        for (int i = 0; i < map.getWidth() * map.getHeight() / 10; i++) {
+//            int size = 10 + r.nextInt(40);
+//            for (int j = 0; j < size; j += 2) {
+//                map.setTile(x, y, 1, 2, 0);
+//                map.setCollision(x, y, false);
+//                x += r.nextInt(3) - 1;
+//                map.setTile(x, y, 1, 2, 0);
+//                map.setCollision(x, y, false);
+//                y += r.nextInt(3) - 1;
+//            }
+//            x = r.nextInt(map.getWidth());
+//            y = r.nextInt(map.getHeight());
+//        }
+        
+        int x, y;
         Random r = new Random();
-        int x = 64;
-        int y = 64;
-        for (int i = 0; i < map.getWidth() * map.getHeight() / 100; i++) {
-            int size = 10 + r.nextInt(30);
-            x = y = 64;
-            for (int j = 0; j < size; j += 2) {
-                map.setTile(x, y, 2, 0, 0);
-                map.setCollision(x, y, false);
-                x += r.nextInt(3) - 1;
-                map.setTile(x, y, 2, 0, 0);
-                map.setCollision(x, y, false);
-                y += r.nextInt(3) - 1;
-            }
-        }
-        
-        x = 64;
-        y = 64;
-        for (int i = 0; i < map.getWidth() * map.getHeight() / 10; i++) {
-            int size = 10 + r.nextInt(40);
-            for (int j = 0; j < size; j += 2) {
-                map.setTile(x, y, 1, 2, 0);
-                map.setCollision(x, y, false);
-                x += r.nextInt(3) - 1;
-                map.setTile(x, y, 1, 2, 0);
-                map.setCollision(x, y, false);
-                y += r.nextInt(3) - 1;
-            }
-            x = r.nextInt(map.getWidth());
-            y = r.nextInt(map.getHeight());
-        }
-        
         // lakes
         for (int i = 0; i < map.getWidth() * map.getHeight() / 100; i++) {
             int size = r.nextInt(50);
