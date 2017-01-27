@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import abacus.awt.command.AwtRenderCommand;
+import abacus.awt.command.ClearCommand;
 import abacus.awt.command.SpriteCommand;
 
 /*
@@ -125,6 +126,12 @@ public class AwtBufferRenderer extends AwtCanvasRenderer {
         catch (Exception e) {
             // should do something...
         }
+    }
+    
+    // clears the screen to a specific color
+    @Override
+    public void clearScreen(int r, int g, int b) {
+        commands.add(new ClearCommand(new Color(r << 16 | g << 8 | b), width, height));
     }
 
     // creates and stores a command to draw an image to the frame buffer

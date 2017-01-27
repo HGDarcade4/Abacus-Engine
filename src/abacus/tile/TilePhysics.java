@@ -37,24 +37,35 @@ public class TilePhysics {
             return false;
         }
         
-        final int UP = 0;
-        final int DOWN = 1;
-        final int LEFT = 2;
-        final int RIGHT = 3;
-        
         float minX = (float)x;
         float minY = (float)y;
         float maxX = minX + 1f;
         float maxY = minY + 1f;
         
+        if (body.getMaxX() > minX &&
+            body.getMinX() < maxX &&
+            body.getMaxY() > minY &&
+            body.getMinY() < maxY) {
+            
+        }
+        else {
+            return false;
+        }
+        
+        final int NONE = 0;
+        final int UP = 1;
+        final int DOWN = 2;
+        final int LEFT = 3;
+        final int RIGHT = 4;
+        
         // tile sides
-        float[] depth = new float[4];
+        float[] depth = new float[5];
         for (int i = 0; i < depth.length; i++) {
             depth[i] = Float.MAX_VALUE;
         }
         
         if (!map.getCollision(x + 1, y)) depth[RIGHT] = maxX - body.getMinX();
-        if (!map.getCollision(x - 1, y)) depth[LEFT] = body.getMaxX() - minX;
+        if (!map.getCollision(x - 1, y)) depth[LEFT] = -minX + body.getMaxX();
         if (!map.getCollision(x, y - 1)) depth[DOWN] = body.getMaxY() - minY;
         if (!map.getCollision(x, y + 1)) depth[UP] = maxY - body.getMinY();
         
@@ -63,7 +74,7 @@ public class TilePhysics {
         }
         System.out.println();
         
-        int smallestDepth = min(depth);
+        int smallestDepth = minGTZero(depth);
         
         // no valid collision was found
         if (depth[smallestDepth] == Float.MAX_VALUE) {
@@ -73,30 +84,30 @@ public class TilePhysics {
         switch (smallestDepth) {
         case UP:
             System.out.println("up");
-            body.setMinY(maxY);
+            if (depth[smallestDepth] > 0) body.setMinY(maxY);
             break;
         case DOWN:
             System.out.println("down");
-            body.setMaxY(minY);
+            if (depth[smallestDepth] > 0) body.setMaxY(minY);
             break;
         case LEFT:
             System.out.println("left");
-            body.setMinX(maxX);
+            if (depth[smallestDepth] > 0) body.setMaxX(minX);
             break;
         case RIGHT:
             System.out.println("right");
-            body.setMaxX(minX);
+            if (depth[smallestDepth] > 0) body.setMinX(maxX);
             break;
         }
         
         return true;
     }
     
-    private int min(float... list) {
+    private int minGTZero(float... list) {
         int min = 0;
         
         for (int i = 0; i < list.length; i++) {
-            if (list[i] < list[min]) {
+            if (list[i] < list[min] && list[i] > 0) {
                 min = i;
             }
         }

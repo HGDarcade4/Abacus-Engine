@@ -28,7 +28,6 @@ public class TileMapState extends GameState {
     // sounds
     private Sound soundEffect;
     private Sound music;
-    private Sound click;
     
     // initialize a bunch of stuff
     @Override
@@ -51,7 +50,6 @@ public class TileMapState extends GameState {
         // load sounds
         soundEffect = loader.loadSound("res/sound_effect.wav");
         music = loader.loadSound("res/song_idea1.wav");
-        click = loader.loadSound("res/sound_effect.wav");
     }
 
     @Override

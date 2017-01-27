@@ -17,7 +17,7 @@ public class Game {
     // main method
     public static void main(String[] args) {
         // enable hardware acceleration
-        System.setProperty("sun.java2d.opengl", "False");
+        System.setProperty("sun.java2d.opengl", "True");
         System.out.println("Hardware Acceleration: " + System.getProperty("sun.java2d.opengl"));
         
 //        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
