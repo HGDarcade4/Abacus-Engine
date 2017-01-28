@@ -1,4 +1,4 @@
-package game;
+package qfta;
 
 import abacus.GameState;
 import abacus.ResourceLoader;

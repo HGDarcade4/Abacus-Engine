@@ -1,4 +1,4 @@
-package game;
+package qfta;
 
 import java.util.HashMap;
 import java.util.Map;

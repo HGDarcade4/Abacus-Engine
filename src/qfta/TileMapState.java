@@ -1,4 +1,4 @@
-package game;
+package qfta;
 
 import abacus.GameState;
 import abacus.ResourceLoader;
@@ -37,7 +37,7 @@ public class TileMapState extends GameState {
         worldRender.setScale(4);
         
         // create tile map, normally you would just load a file instead
-        RandomTileMapGenerator mapGen = new RandomTileMapGenerator(loader, Game.TILE_SIZE);
+        RandomTileMapGenerator mapGen = new RandomTileMapGenerator(loader, QuestForTheAbacus.TILE_SIZE);
         map = mapGen.create(128, 128);
         
         physics = new TilePhysics(map);

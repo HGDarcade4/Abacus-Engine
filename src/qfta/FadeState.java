@@ -1,4 +1,4 @@
-package game;
+package qfta;
 
 import java.io.File;
 import java.io.FileInputStream;

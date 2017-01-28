@@ -1,4 +1,4 @@
-package game;
+package qfta;
 
 import abacus.GameEngine;
 import abacus.GameStateManager;
@@ -8,7 +8,7 @@ import abacus.ui.Window;
 /*
  * Main class that starts the game
  */
-public class Game {
+public class QuestForTheAbacus {
 
     public static final int TILE_SIZE = 16;
     

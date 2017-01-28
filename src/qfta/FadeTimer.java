@@ -1,4 +1,4 @@
-package game;
+package qfta;
 
 /*
  * Keeps track of what alpha value something should be

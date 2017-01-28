@@ -1,4 +1,4 @@
-package game;
+package qfta;
 
 import abacus.GameState;
 import abacus.ResourceLoader;
@@ -58,7 +58,7 @@ public class TitleState extends GameState {
         }
         
         if (input.anyKeyJustDown()) {
-            swapState(Game.ID_PLAY);
+            swapState(QuestForTheAbacus.ID_PLAY);
         }
     }
 
