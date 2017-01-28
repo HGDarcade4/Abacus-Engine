@@ -84,7 +84,7 @@ public class Actor {
     }
     
     public void render(WorldRenderer wr) {
-        wr.drawCharacterSprite(animation, body.getCenterX(), body.getMinY(), 16f, 22f);
+        wr.drawCharacterSprite(animation, body.getCenterX(), body.getMinY(), 16f, 24f);
         wr.drawDebugRect(0xFF0000, body.getMinX(), body.getMinY(), body.getWidth(), body.getHeight());
     }
     
