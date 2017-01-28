@@ -12,6 +12,7 @@ import java.util.List;
 
 import abacus.awt.command.AwtRenderCommand;
 import abacus.awt.command.ClearCommand;
+import abacus.awt.command.RectCommand;
 import abacus.awt.command.SpriteCommand;
 import abacus.graphics.Renderer;
 
@@ -237,6 +238,18 @@ public class AwtCanvasRenderer implements Renderer {
                 (int)Math.ceil(w), 
                 (int)Math.ceil(h), 
                 alpha, layer, flip));
+    }
+
+    @Override
+    public void drawRect(int col, float x, float y, float w, float h, float layer) {
+        commands.add(new RectCommand(
+                false, col, 
+                (int)Math.floor(x), 
+                height - (int)Math.floor(y + h), 
+                (int)Math.ceil(w), 
+                (int)Math.ceil(h), 
+                layer
+                ));
     }
 
 }

@@ -24,11 +24,6 @@ public class ConnectedTile extends Tile {
     }
     
     @Override
-    public void update() {
-        
-    }
-    
-    @Override
     public void render(WorldRenderer r, TileMap map, int x, int y, int layer) {
         int tl = getCode(this, map, x, y, layer, -1, 1);
         int tr = getCode(this, map, x, y, layer, 1, 1);
@@ -40,6 +35,7 @@ public class ConnectedTile extends Tile {
                 tiles.get(UP_RIGHT, tr),
                 tiles.get(DOWN_LEFT, bl),
                 tiles.get(DOWN_RIGHT, br),
+                map.getTileSize(),
                 x, y);
     }
     

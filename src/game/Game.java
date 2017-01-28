@@ -2,6 +2,7 @@ package game;
 
 import abacus.GameEngine;
 import abacus.GameStateManager;
+import abacus.awt.ImageFactory;
 import abacus.ui.Window;
 
 /*
@@ -9,6 +10,8 @@ import abacus.ui.Window;
  */
 public class Game {
 
+    public static final int TILE_SIZE = 16;
+    
     // game state IDs
     public static final int ID_INTRO = 0;
     public static final int ID_TITLE = 1;
@@ -17,8 +20,9 @@ public class Game {
     // main method
     public static void main(String[] args) {
         // enable hardware acceleration
-        System.setProperty("sun.java2d.opengl", "True");
+        System.setProperty("sun.java2d.opengl", "False");
         System.out.println("Hardware Acceleration: " + System.getProperty("sun.java2d.opengl"));
+        ImageFactory.volatileImages = false;
         
 //        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 //        GraphicsDevice gd = ge.getDefaultScreenDevice();
@@ -38,11 +42,11 @@ public class Game {
         
         // start engine
         Window window = engine.getWindow();
-        window.setResolution(480, 270);
+        window.setResolution(480 * 2, 270 * 2);
         window.setFullscreen(false);
         window.setVirtualResolution(480 * 2, 270 * 2);
         window.show();
-        engine.start(ID_PLAY);
+        engine.start(ID_INTRO);
     }
     
 }

@@ -13,9 +13,12 @@ public class TileMap {
     
     private TileRegistry tiles;
     
-    public TileMap(int width, int height, int layers) {
+    private int tileSize;
+    
+    public TileMap(int width, int height, int layers, int tileSize) {
         this.width = width;
         this.height = height;
+        this.tileSize = tileSize;
         this.layers = new ArrayList<>();
         for (int i = 0; i < layers; i++) {
             TileMapLayer layer = new TileMapLayer(width, height, i);
@@ -23,6 +26,10 @@ public class TileMap {
         }
         collision = new boolean[width * height];
         tiles = new TileRegistry();
+    }
+    
+    public int getTileSize() {
+        return tileSize;
     }
     
     public int getWidth() {
@@ -33,12 +40,8 @@ public class TileMap {
         return height;
     }
     
-    // animation updating
-    public void update() {
-        for (int i = 0; i < tiles.numTiles(); i++) {
-            tiles.getTile(i).update();
-        }
-    }
+    // logic updating, might not need these, not sure yet
+    public void update() {}
     
     public TileMapLayer getTileMapLayer(int layer) {
         if (layer >= 0 && layer < layers.size()) {
@@ -48,18 +51,21 @@ public class TileMap {
     }
     
     public void render(WorldRenderer r) {
-        // TODO check camera bounds
-        int minY = (int)Math.floor(r.getMinY()) - 4;
-        int maxY = (int)Math.ceil(r.getMaxY()) + 1;
-        int minX = (int)Math.floor(r.getMinX());
-        int maxX = (int)Math.ceil(r.getMaxX()) + 1;
+        // check camera bounds
+        int minY = (int)Math.floor(r.getMinY() / tileSize) - 4;
+        int maxY = (int)Math.ceil(r.getMaxY() / tileSize) + 1;
+        int minX = (int)Math.floor(r.getMinX() / tileSize);
+        int maxX = (int)Math.ceil(r.getMaxX() / tileSize) + 1;
         
         for (int layer = 0; layer < layers.size(); layer++) {
-            // draw from the top down, although it shouldn't actually matter for tiles, just characters
+            // draw from the top down
             for (int y = maxY; y >= minY; y--) {
                 for (int x = minX; x < maxX; x++) {
                     r.setLayer(layer);
-                    if (!getCollision(x, y)) getTile(x, y, layer).render(r, this, x, y, layer);
+                    getTile(x, y, layer).render(r, this, x, y, layer);
+                    if (getCollision(x, y)) {
+                        r.drawDebugRect(0xFF0000, x * tileSize, y * tileSize, tileSize, tileSize);
+                    }
                 }
             }
         }

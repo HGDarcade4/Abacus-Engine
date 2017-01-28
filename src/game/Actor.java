@@ -33,11 +33,11 @@ public class Actor {
     public Actor() {
         animation = actorAnimReg.copy();
         
-        body = new TileBody(64f, 64f, 0.8f, 0.8f);
+        body = new TileBody(64f * 16, 64f * 16, 10f, 5f);
     }
     
     public void update(TileMap map, Input input) {
-        float dx = 0f, dy = 0f, move = 1.5f / 32f;
+        float dx = 0f, dy = 0f, move = 1.0f;
         
         if (input.getKey(KeyEvent.VK_UP)) {
             dy += move;
@@ -72,7 +72,7 @@ public class Actor {
             }
         }
         else if (dx == 0 && dy == 0) {
-            animation.pause();
+            animation.pauseAndReset();
         }
         else {
             dy *= 0.7f;
@@ -84,7 +84,8 @@ public class Actor {
     }
     
     public void render(WorldRenderer wr) {
-        wr.drawCharacterSprite(animation, body.getCenterX(), body.getMinY(), body.getWidth(), body.getHeight());
+        wr.drawCharacterSprite(animation, body.getCenterX(), body.getMinY(), 16f, 22f);
+        wr.drawDebugRect(0xFF0000, body.getMinX(), body.getMinY(), body.getWidth(), body.getHeight());
     }
     
     public float getX() {

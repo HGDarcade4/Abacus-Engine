@@ -35,7 +35,7 @@ public class GameEngine {
     // game window
     private Window window;
     // debug 
-    private boolean debug = true;
+    private boolean debug = false;
     private GameFont debugFont;
     private DebugRenderer debugRenderer;
     
@@ -69,6 +69,7 @@ public class GameEngine {
         
         // register default keys
         input.registerKey(KeyEvent.VK_F11, "fullscreen");
+        input.registerKey(KeyEvent.VK_F3, "debug");
         input.registerKey(KeyEvent.VK_ESCAPE, "exit");
     }
     
@@ -92,6 +93,17 @@ public class GameEngine {
         
         GameEngine engine = new GameEngine(window, window.getInput(), window.getRenderer(), new AwtResourceLoader());
         return engine;
+    }
+    
+    // whether debug info is on
+    public void setDebug(boolean debug) {
+        this.debug = debug;
+        debugRenderer.setDebugMode(debug);
+    }
+    
+    // is debug on 
+    public boolean getDebug() {
+        return debug;
     }
     
     // returns the renderer
@@ -251,8 +263,13 @@ public class GameEngine {
         if (input.getJustDownKey("exit")) {
             stop();
         }
-        else if (input.getJustDownKey("fullscreen")) {
-            window.setFullscreen(!window.isFullscreen());
+        else {
+            if (input.getJustDownKey("debug")) {
+                setDebug(!debug);
+            }
+            if (input.getJustDownKey("fullscreen")) {
+                window.setFullscreen(!window.isFullscreen());
+            }
         }
         
         input.update();

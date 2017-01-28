@@ -34,11 +34,10 @@ public class TileMapState extends GameState {
     public void init(ResourceLoader loader) {
         // create a world renderer
         worldRender = new WorldRenderer(engine.getRenderer());
-        worldRender.setTileSize(64);
-        worldRender.setCharOffset(0.0f);
+        worldRender.setScale(4);
         
         // create tile map, normally you would just load a file instead
-        RandomTileMapGenerator mapGen = new RandomTileMapGenerator(loader);
+        RandomTileMapGenerator mapGen = new RandomTileMapGenerator(loader, Game.TILE_SIZE);
         map = mapGen.create(128, 128);
         
         physics = new TilePhysics(map);
@@ -71,6 +70,7 @@ public class TileMapState extends GameState {
     @Override
     public void render(Renderer renderer) {
         worldRender.reset();
+        worldRender.setDebug(engine.getDebug());
         
         // clear the screen to a light blue
         renderer.clearScreen(0xCC, 0xEE, 0xFF);
@@ -78,12 +78,12 @@ public class TileMapState extends GameState {
         // center camera at the player
         worldRender.setView(player.getX() + 0.5f, player.getY());
         
+        // player draw layer
+        worldRender.setLayer(1);
+        player.render(worldRender);
+        
         // draw the map
         map.render(worldRender);
-        
-        // player draw layer
-        worldRender.setLayer(2.5f);
-        player.render(worldRender);
         
         engine.debugLine("");
         engine.debugLine("(" + player.getX() + ", " + player.getY() + ")");

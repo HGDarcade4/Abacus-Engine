@@ -5,24 +5,31 @@ package abacus.graphics;
  */
 public class WorldRenderer {
 
+    private static final float Y_LAYER = 1f / 131072f;
+    
     // reference to renderer
     private Renderer renderer;
-    // size of a tile (the base unit of the game) in pixels
-    private int tileSize;
+    // how much to scale sprites by
+    private int scale;
     // position of the camera
     private float camX, camY;
     // center of the screen
     private int halfWidth, halfHeight;
-    // offset for displaying characters: NPCs, enemies, etc. 
-    // explained in more detail at drawCharacterSprite()
-    private float charOffset;
     // layer and transparency to draw at
     private float layer, alpha = 1f;
+    
+    private boolean debug = false;
     
     // ctor
     public WorldRenderer(Renderer r) {
         this.renderer = r;
         reset();
+        scale = 1;
+    }
+    
+    // whether debug drawings should be displayed
+    public void setDebug(boolean db) {
+        debug = db;
     }
     
     // call this at the beginning of render method
@@ -31,20 +38,15 @@ public class WorldRenderer {
         halfHeight = renderer.getHeight() / 2;
     }
     
-    // sets the size of a tile in pixels, 32 for example
-    public void setTileSize(int size) {
-        tileSize = size;
+    // sets the scale of the sprites, 2 for example
+    public void setScale(int size) {
+        scale = size;
     }
     
     // sets the location of the camera
     public void setView(float x, float y) {
         camX = x;
         camY = y;
-    }
-    
-    // sets the offset of character sprites
-    public void setCharOffset(float off) {
-        charOffset = off;
     }
     
     // sets the layer to draw at
@@ -54,40 +56,50 @@ public class WorldRenderer {
     
     // returns the x value at the left-hand side of the virtual screen
     public float getMinX() {
-        return camX - (float)halfWidth / tileSize;
+        return camX - (float)halfWidth / scale;
     }
     
     // returns the x value at the right-hand side of the virtual screen
     public float getMaxX() {
-        return camX + (float)halfWidth / tileSize;
+        return camX + (float)halfWidth / scale;
     }
     
     // returns the y value at the bottom of the virtual screen
     public float getMinY() {
-        return camY - (float)halfHeight / tileSize;
+        return camY - (float)halfHeight / scale;
     }
     
     // returns the y value at the top of the virtual screen
     public float getMaxY() {
-        return camY + (float)halfHeight / tileSize;
+        return camY + (float)halfHeight / scale;
     }
     
-    // draws sprite 1 unit big centered at (x, y) in world space
-    public void drawTileSprite(Renderable image, float x, float y) {
+    // draws sprite using camera offset
+    public void drawTileSprite(Renderable image, float tileSize, float x, float y) {
         Sprite sprite = image.getSprite();
         
-        int drawX = halfWidth + (int)Math.floor((x - camX) * tileSize);
-        int drawY = halfHeight + (int)Math.floor((y - camY) * tileSize);
+        x *= tileSize;
+        y *= tileSize;
         
-        sprite.draw(drawX, drawY, tileSize, tileSize, alpha, layer);
+        int drawX = halfWidth + (int)Math.floor((x - camX) * scale);
+        int drawY = halfHeight + (int)Math.floor((y - camY) * scale);
+        
+        float layer = this.layer + yAmt(y);
+        
+        sprite.draw(drawX, drawY, tileSize * scale, tileSize * scale, alpha, layer);
     }
     
     // draws a tile sprite, but cut into four corners
-    public void drawTileSprite(Renderable ul, Renderable ur, Renderable dl, Renderable dr, float x, float y) {
-        int drawX = halfWidth + (int)Math.floor((x - camX) * tileSize);
-        int drawY = halfHeight + (int)Math.floor((y - camY) * tileSize);
+    public void drawTileSprite(Renderable ul, Renderable ur, Renderable dl, Renderable dr, float tileSize, float x, float y) {
+        x *= tileSize;
+        y *= tileSize;
         
-        int half = tileSize / 2;
+        int drawX = halfWidth + (int)Math.floor((x - camX) * scale);
+        int drawY = halfHeight + (int)Math.floor((y - camY) * scale);
+        
+        int half = (int) (tileSize * scale / 2);
+        
+        float layer = this.layer + yAmt(y);
         
         ul.getSprite().draw(drawX, drawY + half, half, half, alpha, layer);
         ur.getSprite().draw(drawX + half, drawY + half, half, half, alpha, layer);
@@ -95,26 +107,31 @@ public class WorldRenderer {
         dr.getSprite().draw(drawX + half, drawY, half, half, alpha, layer);
     }
     
+    public void drawDebugRect(int col, float x, float y, float w, float h) {
+        int drawX = halfWidth + (int)Math.floor((x - camX) * scale);
+        int drawY = halfHeight + (int)Math.floor((y - camY) * scale);
+        int drawW = (int)(w * scale);
+        int drawH = (int)(h * scale);
+        
+        if (debug) renderer.drawRect(col, drawX, drawY, drawW, drawH, Float.MAX_VALUE);
+    }
+    
     /*
      * draws a character, such as a NPC, enemy, etc. at the location (x, y) in world space
      * 
      * the center of the character's feet (bottom of the sprite) will be drawn at that position. 
-     * that position is offset by [charOffset].
-     * 
-     * charOffset is the fraction of tile size upwards the character will be drawn, 
-     * so an offset of 0.25f will draw the character a quarter of a tileSize higher up. 
      * 
      * this can be used to draw characters in the center of a tile
      */
     public void drawCharacterSprite(Renderable image, float x, float y, float w, float h) {
         Sprite sprite = image.getSprite();
         
-        int drawX = halfWidth + (int)Math.floor((x - camX - w/2) * tileSize);
-        int drawY = halfHeight + (int)Math.floor((y - camY + charOffset) * tileSize);
+        int drawX = halfWidth + (int)Math.floor((x - camX - w/2) * scale);
+        int drawY = halfHeight + (int)Math.floor((y - camY) * scale);
         
-//        int height = (int)Math.ceil(tileSize * (float)sprite.getHeight() / sprite.getWidth());
+        float layer = this.layer + yAmt(y);
         
-        sprite.draw(drawX, drawY, tileSize * w, tileSize * h, alpha, layer);
+        sprite.draw(drawX, drawY, scale * w, scale * h, alpha, layer);
     }
     
     /*
@@ -126,12 +143,16 @@ public class WorldRenderer {
     public void drawText(GameFont font, String text, float x, float y) {
         float width = font.getWidth(text);
         
-        float drawX = halfWidth + (float)Math.floor((x - camX) * tileSize);
-        float drawY = halfHeight + (float)Math.floor((y - camY + charOffset) * tileSize);
+        float drawX = halfWidth + (float)Math.floor((x - camX) * scale);
+        float drawY = halfHeight + (float)Math.floor((y - camY) * scale);
         
         drawX -= width/2;
         
         font.draw(text, drawX, drawY);
+    }
+    
+    private float yAmt(float y) {
+        return 1f - y * Y_LAYER;
     }
     
 }

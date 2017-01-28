@@ -13,14 +13,9 @@ public class BasicTile extends Tile {
     }
     
     @Override
-    public void update() {
-        
-    }
-    
-    @Override
     public void render(WorldRenderer r, TileMap map, int x, int y, int layer) {
         r.setLayer(layer);
-        r.drawTileSprite(sprite, x, y);
+        r.drawTileSprite(sprite, map.getTileSize(), x, y);
     }
 
 }

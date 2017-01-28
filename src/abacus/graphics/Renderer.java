@@ -23,4 +23,5 @@ public interface Renderer {
     // screen clear color
     void clearScreen(int r, int g, int b);
     
+    void drawRect(int col, float x, float y, float w, float h, float layer);
 }

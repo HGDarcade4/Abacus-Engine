@@ -18,16 +18,14 @@ public class TilePhysics {
             return;
         }
         
-        int minX = (int)Math.floor(body.getMinX());
-        int maxX = (int)Math.ceil(body.getMaxX());
-        int minY = (int)Math.floor(body.getMinY());
-        int maxY = (int)Math.ceil(body.getMaxY());
+        int minX = (int)Math.floor(body.getMinX() / map.getTileSize());
+        int maxX = (int)Math.ceil(body.getMaxX() / map.getTileSize());
+        int minY = (int)Math.floor(body.getMinY() / map.getTileSize());
+        int maxY = (int)Math.ceil(body.getMaxY() / map.getTileSize());
         
         for (int y = minY; y <= maxY; y++) {
             for (int x = minX; x <= maxX; x++) {
-                if (handleTileCollision(body, x, y)) {
-//                    return;
-                }
+                handleTileCollision(body, x, y);
             }
         }
     }
@@ -37,10 +35,10 @@ public class TilePhysics {
             return false;
         }
         
-        float minX = (float)x;
-        float minY = (float)y;
-        float maxX = minX + 1f;
-        float maxY = minY + 1f;
+        float minX = (float)x * map.getTileSize();
+        float minY = (float)y * map.getTileSize();
+        float maxX = minX + map.getTileSize();
+        float maxY = minY + map.getTileSize();
         
         if (body.getMaxX() > minX &&
             body.getMinX() < maxX &&
@@ -52,7 +50,6 @@ public class TilePhysics {
             return false;
         }
         
-        final int NONE = 0;
         final int UP = 1;
         final int DOWN = 2;
         final int LEFT = 3;
@@ -69,11 +66,6 @@ public class TilePhysics {
         if (!map.getCollision(x, y - 1)) depth[DOWN] = body.getMaxY() - minY;
         if (!map.getCollision(x, y + 1)) depth[UP] = maxY - body.getMinY();
         
-        for (int i = 0; i < 4; i++) {
-            System.out.print(depth[i] + " ");
-        }
-        System.out.println();
-        
         int smallestDepth = minGTZero(depth);
         
         // no valid collision was found
@@ -81,23 +73,21 @@ public class TilePhysics {
             return false;
         }
         
-        switch (smallestDepth) {
-        case UP:
-            System.out.println("up");
-            if (depth[smallestDepth] > 0) body.setMinY(maxY);
-            break;
-        case DOWN:
-            System.out.println("down");
-            if (depth[smallestDepth] > 0) body.setMaxY(minY);
-            break;
-        case LEFT:
-            System.out.println("left");
-            if (depth[smallestDepth] > 0) body.setMaxX(minX);
-            break;
-        case RIGHT:
-            System.out.println("right");
-            if (depth[smallestDepth] > 0) body.setMinX(maxX);
-            break;
+        if (depth[smallestDepth] > 0 && depth[smallestDepth] < map.getTileSize()) {
+            switch (smallestDepth) {
+            case UP:
+                 body.setMinY(maxY);
+                break;
+            case DOWN:
+                body.setMaxY(minY);
+                break;
+            case LEFT:
+                body.setMaxX(minX);
+                break;
+            case RIGHT:
+                body.setMinX(maxX);
+                break;
+            }
         }
         
         return true;

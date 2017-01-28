@@ -13,14 +13,9 @@ public class SpriteSheetTile extends Tile {
     }
     
     @Override
-    public void update() {
-        
-    }
-
-    @Override
     public void render(WorldRenderer r, TileMap map, int x, int y, int layer) {
         Sprite tile = sheet.getSprite(map.getTileMetaData(x, y, layer));
-        r.drawTileSprite(tile, x, y);
+        r.drawTileSprite(tile, map.getTileSize(), x, y);
     }
 
 }
