@@ -2,12 +2,16 @@ package qfta;
 
 import abacus.GameState;
 import abacus.ResourceLoader;
+import abacus.gameobject.GameObject;
+import abacus.gameobject.Scene;
 import abacus.graphics.Renderer;
 import abacus.graphics.WorldRenderer;
 import abacus.sound.Sound;
 import abacus.tile.TileMap;
-import abacus.tile.TilePhysics;
 import abacus.ui.Input;
+import qfta.component.HumanoidRenderer;
+import qfta.component.InputController;
+import qfta.component.Movement;
 
 /*
  * Main tile map play state. 
@@ -22,8 +26,8 @@ public class TileMapState extends GameState {
     // hold the map and player
     // THIS WILL PROBABLY CHANGE A LOT
     private TileMap map;
-    private TilePhysics physics;
-    private Actor player;
+    private Scene scene;
+    private GameObject player;
     
     // sounds
     private Sound soundEffect;
@@ -40,11 +44,18 @@ public class TileMapState extends GameState {
         RandomTileMapGenerator mapGen = new RandomTileMapGenerator(loader, QuestForTheAbacus.TILE_SIZE);
         map = mapGen.create(128, 128);
         
-        physics = new TilePhysics(map);
+        scene = new Scene(map);
         
         // create a temporary player
-        Actor.loadAnimations(loader);
-        player = new Actor();
+        HumanoidRenderer.loadAnimations(loader);
+        player = new GameObject();
+        player.getBody().setSize(10f, 5f);
+        player.getBody().setMinX(64 * 16);
+        player.getBody().setMinY(64 * 16);
+        player.attach(new Movement(1f));
+        player.attach(new HumanoidRenderer());
+        player.attach(new InputController());
+        scene.addGameObject(player);
         
         // load sounds
         soundEffect = loader.loadSound("res/sound_effect.wav");
@@ -62,8 +73,7 @@ public class TileMapState extends GameState {
     public void update(Input input) {
         // update game logic
         map.update();
-        player.update(map, input);
-        physics.update(player.getBody());
+        scene.update(input);
     }
 
     // render map and player
@@ -76,17 +86,17 @@ public class TileMapState extends GameState {
         renderer.clearScreen(0xCC, 0xEE, 0xFF);
         
         // center camera at the player
-        worldRender.setView(player.getX() + 0.5f, player.getY());
+        worldRender.setView(player.getBody().getCenterX() + 0.5f, player.getBody().getCenterY());
         
         // player draw layer
         worldRender.setLayer(1);
-        player.render(worldRender);
+        scene.render(worldRender);
         
         // draw the map
         map.render(worldRender);
         
         engine.debugLine("");
-        engine.debugLine("(" + player.getX() + ", " + player.getY() + ")");
+        engine.debugLine("(" + player.getBody().getCenterX() + ", " + player.getBody().getCenterY() + ")");
     }
 
     @Override
