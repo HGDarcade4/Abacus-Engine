@@ -22,6 +22,7 @@ public class FadeState extends GameState {
     // variables
     private ArrayList<String> lines;
     private int line;
+    private int currentSection;
     private FadeTimer fade;
     private GameFont font;
     private String source;
@@ -38,7 +39,8 @@ public class FadeState extends GameState {
     public void init(ResourceLoader loader) {
         lines = new ArrayList<>();
         line = 0;
-        fade = new FadeTimer(120, 120, 120, 120, 120);
+        currentSection = 0;
+        fade = new FadeTimer(80, 120, 360, 120, 120);
         
         font = loader.getFontCreator().createBasicFont("res/font.png", 10, 12, 0xFFFFFF);
         font.setSize(24f);
@@ -69,7 +71,18 @@ public class FadeState extends GameState {
         fade.update();
         
         if (fade.isDone()) {
-            line++;
+        	switch (currentSection) {
+        		case 0: case 2: case 3:
+        			line += 3;
+        			break;
+        		case 1:
+        			line += 4;
+        			break;
+        		case 4:
+        			line += 1;
+        			break;
+        	}
+        	currentSection++;
             fade.reset();
         }
         
@@ -82,15 +95,39 @@ public class FadeState extends GameState {
     // TODO make a helper class for rendering text
     @Override
     public void render(Renderer renderer) {
+    	float width;
+    	float height;
+    	int padding = 40;
+    	int numLines = 0;
+    	
+    	System.out.println("Current Section: " + currentSection);
+    	
+    	switch (currentSection) {
+    		case 0: case 2: case 3:
+    			numLines = 3;
+    			break;
+    		case 1:
+    			numLines = 4;
+    			break;
+    		case 4:
+    			numLines = 1;
+    			break;
+    	}
+    	
+    	System.out.println("numLines: " + numLines);
+    	
         renderer.clearScreen(0, 0, 0);
         
         font.setSize(12f);
         font.setAlpha(fade.getAlpha());
         
-        float width = font.getWidth(lines.get(line));
-        float height = font.getHeight();
+        for (int index = 0; index < numLines; index++) {
+        	width = font.getWidth(lines.get(line + index));
+        	height = font.getHeight();
         
-        font.draw(lines.get(line), renderer.getWidth()/2 - width/2, renderer.getHeight()/2 - height/2);
+        	font.draw(lines.get(line + index), renderer.getWidth()/2 - width/2, renderer.getHeight()/2 - height/2 + padding);
+        	padding -= 14;
+        }
     }
 
     @Override
