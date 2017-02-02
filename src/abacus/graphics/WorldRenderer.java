@@ -81,8 +81,8 @@ public class WorldRenderer {
         x *= tileSize;
         y *= tileSize;
         
-        int drawX = halfWidth + (int)Math.floor((x - camX) * scale);
-        int drawY = halfHeight + (int)Math.floor((y - camY) * scale);
+        int drawX = halfWidth + (int)Math.floor((x) * scale) - (int)(camX * scale);
+        int drawY = halfHeight + (int)Math.floor((y) * scale) - (int)(camY * scale);
         
         float layer = this.layer + yAmt(y);
         
@@ -94,8 +94,8 @@ public class WorldRenderer {
         x *= tileSize;
         y *= tileSize;
         
-        int drawX = halfWidth + (int)Math.floor((x - camX) * scale);
-        int drawY = halfHeight + (int)Math.floor((y - camY) * scale);
+        int drawX = halfWidth + (int)Math.floor((x) * scale) - (int)(camX * scale);
+        int drawY = halfHeight + (int)Math.floor((y) * scale) - (int)(camY * scale);
         
         int half = (int) (tileSize * scale / 2);
         
@@ -108,8 +108,8 @@ public class WorldRenderer {
     }
     
     public void drawDebugRect(int col, float x, float y, float w, float h) {
-        int drawX = halfWidth + (int)Math.floor((x - camX) * scale);
-        int drawY = halfHeight + (int)Math.floor((y - camY) * scale);
+        int drawX = halfWidth + (int)Math.floor((x) * scale) - (int)(camX * scale);
+        int drawY = halfHeight + (int)Math.floor((y) * scale) - (int)(camY * scale);
         int drawW = (int)(w * scale);
         int drawH = (int)(h * scale);
         
@@ -126,8 +126,8 @@ public class WorldRenderer {
     public void drawCharacterSprite(Renderable image, float x, float y, float w, float h) {
         Sprite sprite = image.getSprite();
         
-        int drawX = halfWidth + (int)Math.floor((x - camX - w/2) * scale);
-        int drawY = halfHeight + (int)Math.floor((y - camY) * scale);
+        int drawX = halfWidth + (int)Math.floor((x - w/2) * scale) - (int)(camX * scale);
+        int drawY = halfHeight + (int)Math.floor((y) * scale) - (int)(camY * scale);
         
         float layer = this.layer + yAmt(y);
         

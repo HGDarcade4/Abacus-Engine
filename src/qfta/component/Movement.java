@@ -1,7 +1,9 @@
 package qfta.component;
 
+import abacus.gameobject.Collider;
 import abacus.gameobject.GameComponent;
 import abacus.gameobject.Scene;
+import abacus.tile.TileBody;
 import abacus.ui.Input;
 
 public class Movement extends GameComponent {
@@ -23,6 +25,10 @@ public class Movement extends GameComponent {
     
     @Override
     public void update(Scene scene, Input input) {
+        if (!gameObject.has(Collider.class)) return;
+        
+        TileBody body = gameObject.get(Collider.class).tileBody;
+        
         moving = true;
         
         if (dy != 0 && dx == 0) {
@@ -50,8 +56,8 @@ public class Movement extends GameComponent {
             dx *= 0.7f;
         }
         
-        gameObject.getBody().setVelX(dx);
-        gameObject.getBody().setVelY(dy);
+        body.setVelX(dx);
+        body.setVelY(dy);
     }
     
     public void move(boolean up, boolean down, boolean left, boolean right) {

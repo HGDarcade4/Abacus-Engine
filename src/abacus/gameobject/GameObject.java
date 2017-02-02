@@ -3,7 +3,6 @@ package abacus.gameobject;
 import java.util.HashMap;
 
 import abacus.graphics.WorldRenderer;
-import abacus.tile.TileBody;
 import abacus.ui.Input;
 
 public class GameObject {
@@ -14,11 +13,11 @@ public class GameObject {
     private static int nextId = 0;
     
     private boolean remove;
-    private TileBody body;
+    private Transform transform;
     private GameComponent[] comps;
     
     public GameObject() {
-        body = new TileBody(0f, 0f, 1f, 1f);
+        transform = new Transform();
         remove = false;
         
         comps = new GameComponent[MAX_COMPONENTS];
@@ -65,7 +64,15 @@ public class GameObject {
     
     public void update(Scene scene, Input input) {
         for (GameComponent gc : comps) {
+            if (gc != null) gc.preUpdate(scene, input);
+        }
+        
+        for (GameComponent gc : comps) {
             if (gc != null) gc.update(scene, input);
+        }
+        
+        for (GameComponent gc : comps) {
+            if (gc != null) gc.postUpdate(scene, input);
         }
     }
     
@@ -81,8 +88,8 @@ public class GameObject {
         }
     }
     
-    public TileBody getBody() {
-        return body;
+    public Transform getTransform() {
+        return transform;
     }
     
     public void flagForRemoval() {

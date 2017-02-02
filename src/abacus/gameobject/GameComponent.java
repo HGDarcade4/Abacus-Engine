@@ -9,7 +9,11 @@ public abstract class GameComponent {
     
     public void attach() {}
     
+    public void preUpdate(Scene scene, Input input) {}
+    
     public void update(Scene scene, Input input) {}
+    
+    public void postUpdate(Scene scene, Input input) {}
     
     public void render(WorldRenderer wr) {}
     

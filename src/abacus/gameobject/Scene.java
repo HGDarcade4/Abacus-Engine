@@ -30,12 +30,15 @@ public class Scene {
         return map;
     }
     
+    public TilePhysics getTilePhysics() {
+        return physics;
+    }
+    
     public void update(Input input) {
         map.update();
         
         for (GameObject go : gameObjects) {
             go.update(this, input);
-            physics.update(go.getBody());
         }
         
         Iterator<GameObject> it = gameObjects.iterator();

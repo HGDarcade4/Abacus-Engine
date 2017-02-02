@@ -4,6 +4,7 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.VolatileImage;
 import java.util.Collections;
@@ -11,6 +12,7 @@ import java.util.Comparator;
 
 import abacus.awt.command.AwtRenderCommand;
 import abacus.awt.command.ClearCommand;
+import abacus.awt.command.RectCommand;
 import abacus.awt.command.SpriteCommand;
 
 /*
@@ -59,12 +61,12 @@ public class AwtBufferRenderer extends AwtCanvasRenderer {
         });
         
         try {
-            bs = canvas.getBufferStrategy();
-            if (bs == null) {
+            BufferStrategy bs = canvas.getBufferStrategy();
+            if (bs == null || bs.contentsLost()) {
                 canvas.createBufferStrategy(2);
                 return;
             }
-            graphics = (Graphics2D)bs.getDrawGraphics();
+            Graphics2D graphics = (Graphics2D)bs.getDrawGraphics();
             
             // set the screen to black
             graphics.setColor(Color.BLACK);
@@ -76,7 +78,9 @@ public class AwtBufferRenderer extends AwtCanvasRenderer {
             // check what type of image it is
             Graphics2D g = null;
             if (screen instanceof VolatileImage) {
-                g = ((VolatileImage)screen).createGraphics();
+                VolatileImage scn = (VolatileImage)screen;
+                scn.validate(AwtWindow.frame.getGraphicsConfiguration());
+                g = scn.createGraphics();
             }
             else {
                 g = ((BufferedImage)screen).createGraphics();
@@ -125,6 +129,7 @@ public class AwtBufferRenderer extends AwtCanvasRenderer {
         }
         catch (Exception e) {
             // should do something...
+            e.printStackTrace();
         }
     }
     
@@ -156,6 +161,18 @@ public class AwtBufferRenderer extends AwtCanvasRenderer {
                 (int)Math.ceil(w), 
                 (int)Math.ceil(h), 
                 alpha, layer, flip));
+    }
+    
+    @Override
+    public void drawRect(int col, float x, float y, float w, float h, float layer) {
+        commands.add(new RectCommand(
+                false, col, 
+                (int)Math.floor(x), 
+                height - (int)Math.floor(y + h), 
+                (int)Math.ceil(w), 
+                (int)Math.ceil(h), 
+                layer
+                ));
     }
 
 }

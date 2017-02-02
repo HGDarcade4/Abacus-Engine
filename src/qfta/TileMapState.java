@@ -2,6 +2,7 @@ package qfta;
 
 import abacus.GameState;
 import abacus.ResourceLoader;
+import abacus.gameobject.Collider;
 import abacus.gameobject.GameObject;
 import abacus.gameobject.Scene;
 import abacus.graphics.Renderer;
@@ -48,10 +49,27 @@ public class TileMapState extends GameState {
         
         // create a temporary player
         HumanoidRenderer.loadAnimations(loader);
+        for (int i = 0; i < 30; i++) {
+            player = new GameObject();
+            
+            int x = -1, y = -1;
+            while (map.getCollision(x, y)) {
+                x = (int)(Math.random() * 128);
+                y = (int)(Math.random() * 128);
+            }
+            
+            float xpos = (float)(x + Math.random()) * 16;
+            float ypos = (float)(y + Math.random()) * 16;
+            
+            player.attach(new Collider(xpos, ypos, 10f, 5f));
+            player.attach(new Movement(1f));
+            player.get(Movement.class).dir = (int)(Math.random() * 4);
+            player.attach(new HumanoidRenderer());
+            scene.addGameObject(player);
+        }
+        
         player = new GameObject();
-        player.getBody().setSize(10f, 5f);
-        player.getBody().setMinX(64 * 16);
-        player.getBody().setMinY(64 * 16);
+        player.attach(new Collider(64 * 16, 64 * 16, 10f, 5f));
         player.attach(new Movement(1f));
         player.attach(new HumanoidRenderer());
         player.attach(new InputController());
@@ -86,7 +104,7 @@ public class TileMapState extends GameState {
         renderer.clearScreen(0xCC, 0xEE, 0xFF);
         
         // center camera at the player
-        worldRender.setView(player.getBody().getCenterX() + 0.5f, player.getBody().getCenterY());
+        worldRender.setView(player.getTransform().x, player.getTransform().y);
         
         // player draw layer
         worldRender.setLayer(1);
@@ -96,7 +114,7 @@ public class TileMapState extends GameState {
         map.render(worldRender);
         
         engine.debugLine("");
-        engine.debugLine("(" + player.getBody().getCenterX() + ", " + player.getBody().getCenterY() + ")");
+        engine.debugLine("(" + player.getTransform().x + ", " + player.getTransform().y + ")");
     }
 
     @Override

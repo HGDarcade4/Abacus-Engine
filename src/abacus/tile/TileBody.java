@@ -50,6 +50,9 @@ public class TileBody {
     public void setMinX(float x) { this.x = x; }
     public void setMinY(float y) { this.y = y; }
     
+    public void setCenterX(float x) { this.x = x - width / 2; }
+    public void setCenterY(float y) { this.y = y - height / 2; }
+    
     public void setMaxX(float x) { this.x = x - width; }
     public void setMaxY(float y) { this.y = y - height; }
     

@@ -1,6 +1,7 @@
 package qfta.component;
 
 import abacus.ResourceLoader;
+import abacus.gameobject.Collider;
 import abacus.gameobject.GameComponent;
 import abacus.graphics.AnimationData;
 import abacus.graphics.AnimationPlayer;
@@ -45,14 +46,11 @@ public class HumanoidRenderer extends GameComponent {
     
     @Override
     public void render(WorldRenderer r) {
-        System.out.println("render");
-        
         if (!gameObject.has(Movement.class)) return;
-        
-        System.out.println("continue");
+        if (!gameObject.has(Collider.class)) return;
         
         Movement movement = gameObject.get(Movement.class);
-        TileBody body = gameObject.getBody();
+        TileBody body = gameObject.get(Collider.class).tileBody;
         
         animation.setCurrent(movement.dir);
         clothes.setCurrent(movement.dir);
