@@ -1,14 +1,13 @@
 package qfta.component;
 
 import abacus.ResourceLoader;
-import abacus.gameobject.Collider;
 import abacus.gameobject.GameComponent;
+import abacus.gameobject.Transform;
 import abacus.graphics.AnimationData;
 import abacus.graphics.AnimationPlayer;
 import abacus.graphics.AnimationRegistry;
 import abacus.graphics.SpriteSheet;
 import abacus.graphics.WorldRenderer;
-import abacus.tile.TileBody;
 
 public class HumanoidRenderer extends GameComponent {
 
@@ -56,10 +55,9 @@ public class HumanoidRenderer extends GameComponent {
     @Override
     public void render(WorldRenderer r) {
         if (!gameObject.has(Movement.class)) return;
-        if (!gameObject.has(Collider.class)) return;
         
         Movement movement = gameObject.get(Movement.class);
-        TileBody body = gameObject.get(Collider.class).tileBody;
+        Transform tfm = gameObject.getTransform();
         
         animation.setCurrent(movement.dir);
         clothes.setCurrent(movement.dir);
@@ -73,9 +71,8 @@ public class HumanoidRenderer extends GameComponent {
             clothes.pauseAndReset();
         }
         
-        r.drawCharacterSprite(animation, body.getCenterX(), body.getMinY(), 16f, 24f);
-        r.drawCharacterSprite(clothes, body.getCenterX(), body.getMinY(), 16f, 24f);
-        r.drawDebugRect(0xFF0000, body.getMinX(), body.getMinY(), body.getWidth(), body.getHeight());
+        r.drawCharacterSprite(animation, tfm.x, tfm.y, 16f, 24f);
+        r.drawCharacterSprite(clothes, tfm.x, tfm.y, 16f, 24f);
     }
     
 }

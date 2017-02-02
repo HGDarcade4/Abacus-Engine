@@ -23,7 +23,7 @@ public class GameObject {
         comps = new GameComponent[MAX_COMPONENTS];
     }
     
-    public void copy(float x, float y) {
+    public GameObject copy(float x, float y) {
     	GameObject go = new GameObject();
     	
     	go.transform.x = x;
@@ -34,6 +34,8 @@ public class GameObject {
     			go.attach(comps[i].copy());
     		}
     	}
+    	
+    	return go;
     }
     
     public void attach(GameComponent c) {

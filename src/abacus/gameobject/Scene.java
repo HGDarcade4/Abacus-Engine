@@ -1,6 +1,7 @@
 package abacus.gameobject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -15,11 +16,15 @@ public class Scene {
     private TilePhysics physics;
     private List<GameObject> gameObjects;
     
+    private HashMap<String, GameObject> archetypes;
+    
     public Scene(TileMap map) {
         this.map = map;
         physics = new TilePhysics(map);
         
         gameObjects = new ArrayList<>();
+        
+        archetypes = new HashMap<>();
     }
     
     public void addGameObject(GameObject go) {
@@ -32,6 +37,23 @@ public class Scene {
     
     public TilePhysics getTilePhysics() {
         return physics;
+    }
+    
+    public void registerArchetype(String name, GameObject go) {
+        archetypes.put(name, go);
+    }
+    
+    public GameObject spawnArchetype(String name, float x, float y) {
+        GameObject arch = archetypes.get(name);
+        
+        if (arch != null) {
+            GameObject spawned = arch.copy(x, y);
+            addGameObject(spawned);
+            return spawned;
+        }
+        else {
+            return null;
+        }
     }
     
     public void update(Input input) {

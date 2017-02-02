@@ -45,13 +45,25 @@ public class TileMapState extends GameState {
         RandomTileMapGenerator mapGen = new RandomTileMapGenerator(loader, QuestForTheAbacus.TILE_SIZE);
         map = mapGen.create(128, 128);
         
+        HumanoidRenderer.loadAnimations(loader);
+        
         scene = new Scene(map);
         
-        // create a temporary player
-        HumanoidRenderer.loadAnimations(loader);
+        player = new GameObject();
+        player.attach(new Collider(10f, 5f));
+        player.attach(new Movement(1f));
+        player.get(Movement.class).dir = (int)(Math.random() * 4);
+        player.attach(new HumanoidRenderer());
+        scene.registerArchetype("villager", player);
+        
+        player = new GameObject();
+        player.attach(new Collider(10f, 5f));
+        player.attach(new Movement(1f));
+        player.attach(new HumanoidRenderer());
+        player.attach(new InputController());
+        scene.registerArchetype("player", player);
+        
         for (int i = 0; i < 30; i++) {
-            player = new GameObject();
-            
             int x = -1, y = -1;
             while (map.getCollision(x, y)) {
                 x = (int)(Math.random() * 128);
@@ -61,19 +73,11 @@ public class TileMapState extends GameState {
             float xpos = (float)(x + Math.random()) * 16;
             float ypos = (float)(y + Math.random()) * 16;
             
-            player.attach(new Collider(xpos, ypos, 10f, 5f));
-            player.attach(new Movement(1f));
-            player.get(Movement.class).dir = (int)(Math.random() * 4);
-            player.attach(new HumanoidRenderer());
-            scene.addGameObject(player);
+            GameObject go = scene.spawnArchetype("villager", xpos, ypos);
+            go.get(Movement.class).dir = (int)(Math.random() * 4);
         }
         
-        player = new GameObject();
-        player.attach(new Collider(64 * 16, 64 * 16, 10f, 5f));
-        player.attach(new Movement(1f));
-        player.attach(new HumanoidRenderer());
-        player.attach(new InputController());
-        scene.addGameObject(player);
+        player = scene.spawnArchetype("player", 64 * 16, 64 * 16);
         
         // load sounds
         soundEffect = loader.loadSound("res/sound_effect.wav");
