@@ -8,6 +8,10 @@ import abacus.ui.Input;
 
 public class InputController extends GameComponent {
 
+	public InputController copy() {
+		return new InputController();
+	}
+	
     @Override
     public void update(Scene scene, Input input) {
         if (!gameObject.has(Movement.class)) return;

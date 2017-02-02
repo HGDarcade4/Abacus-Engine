@@ -7,6 +7,8 @@ public abstract class GameComponent {
 
     protected GameObject gameObject = null;
     
+    public abstract GameComponent copy();
+    
     public void attach() {}
     
     public void preUpdate(Scene scene, Input input) {}

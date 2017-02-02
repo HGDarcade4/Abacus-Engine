@@ -23,6 +23,19 @@ public class GameObject {
         comps = new GameComponent[MAX_COMPONENTS];
     }
     
+    public void copy(float x, float y) {
+    	GameObject go = new GameObject();
+    	
+    	go.transform.x = x;
+    	go.transform.y = y;
+    	
+    	for (int i = 0; i < comps.length; i++) {
+    		if (comps[i] != null) {
+    			go.attach(comps[i].copy());
+    		}
+    	}
+    }
+    
     public void attach(GameComponent c) {
         int id = getId(c.getClass());
         

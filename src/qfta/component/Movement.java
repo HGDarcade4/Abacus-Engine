@@ -23,6 +23,17 @@ public class Movement extends GameComponent {
         moveSpeed = speed;
     }
     
+    public Movement copy() {
+    	Movement m = new Movement(moveSpeed);
+    	
+    	m.dir = dir;
+    	m.moving = moving;
+    	m.dx = dx;
+    	m.dy = dy;
+    	
+    	return m;
+    }
+    
     @Override
     public void update(Scene scene, Input input) {
         if (!gameObject.has(Collider.class)) return;

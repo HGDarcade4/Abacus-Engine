@@ -17,6 +17,10 @@ public class Collider extends GameComponent {
         this(0f, 0f, w, h);
     }
     
+    public Collider copy() {
+    	return new Collider(tileBody.getCenterX(), tileBody.getMinY(), tileBody.getWidth(), tileBody.getHeight());
+    }
+    
     public void update(Scene scene, Input input) {
         scene.getTilePhysics().update(tileBody);
     }

@@ -44,6 +44,15 @@ public class HumanoidRenderer extends GameComponent {
         clothes = clothesAnimReg.copy();
     }
     
+    public HumanoidRenderer copy() {
+    	HumanoidRenderer hr = new HumanoidRenderer();
+    	
+    	hr.animation = animation.copy();
+    	hr.clothes = clothes.copy();
+    	
+    	return hr;
+    }
+    
     @Override
     public void render(WorldRenderer r) {
         if (!gameObject.has(Movement.class)) return;
