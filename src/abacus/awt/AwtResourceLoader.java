@@ -2,6 +2,7 @@ package abacus.awt;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
@@ -20,15 +21,21 @@ import abacus.sound.SoundManager;
 public class AwtResourceLoader implements ResourceLoader {
 
     private FontCreator fontCreator;
+    private HashMap<String, Texture> textures;
     
     public AwtResourceLoader() {
         fontCreator = new FontCreator(this);
+        textures = new HashMap<>();
     }
     
-    // TODO keep track of previously loaded images
     // load a texture from a file
     @Override
     public Texture loadTexture(String filename) {
+        Texture tex = textures.get(filename);
+        if (tex != null) {
+            return tex;
+        }
+        
         BufferedImage image = null;
         
         try {
@@ -38,7 +45,10 @@ public class AwtResourceLoader implements ResourceLoader {
             System.out.println("Could not load image from " + filename);
         }
         
-        return createTexture(image);
+        tex = createTexture(image);
+        textures.put(filename, tex);
+        
+        return tex;
     }
     
     @Override
