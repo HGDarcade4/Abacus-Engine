@@ -45,8 +45,6 @@ public class TileMapState extends GameState {
         RandomTileMapGenerator mapGen = new RandomTileMapGenerator(loader, QuestForTheAbacus.TILE_SIZE);
         map = mapGen.create(128, 128);
         
-        HumanoidRenderer.loadAnimations(loader);
-        
         scene = new Scene(map);
         
         player = new GameObject();

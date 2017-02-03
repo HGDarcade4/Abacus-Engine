@@ -1,9 +1,11 @@
 package qfta;
 
+import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 
-import abacus.graphics.AnimationRegistry;
+import abacus.ResourceLoader;
+import abacus.graphics.Texture;
 
 /*
  * IGNORE THIS I'LL WORK ON IT LATER
@@ -12,22 +14,32 @@ import abacus.graphics.AnimationRegistry;
  */
 public final class Resource {
 
-    private static final Map<String, AnimationRegistry> animations = new HashMap<>();
+    private static final Map<String, Texture> textures = new HashMap<>();
+    private static ResourceLoader loader;
     
     private Resource() {}
     
-    public static void register(String name, AnimationRegistry reg) {
-        animations.put(name, reg);
+    public static void setLoader(ResourceLoader loader) {
+        Resource.loader = loader;
     }
     
-    public static AnimationRegistry getAnimationRegistry(String name) {
-        AnimationRegistry reg = animations.get(name);
+    public static Texture loadTexture(String file) {
+        Texture tex = textures.get(file);
         
-        if (reg != null) {
-            reg = reg.copy();
+        if (tex == null) {
+            tex = loader.loadTexture(file);
+            registerTexture(file, tex);
         }
         
-        return reg;
+        return tex;
+    }
+    
+    public static Texture loadTexture(BufferedImage image) {
+        return loader.createTexture(image);
+    }
+    
+    private static void registerTexture(String file, Texture tex) {
+        textures.put(file, tex);
     }
     
 }

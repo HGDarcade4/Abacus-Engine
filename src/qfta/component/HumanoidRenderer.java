@@ -1,54 +1,32 @@
 package qfta.component;
 
-import abacus.ResourceLoader;
 import abacus.gameobject.GameComponent;
 import abacus.gameobject.Transform;
 import abacus.graphics.AnimationData;
 import abacus.graphics.AnimationPlayer;
 import abacus.graphics.AnimationRegistry;
 import abacus.graphics.SpriteSheet;
+import abacus.graphics.Texture;
 import abacus.graphics.WorldRenderer;
+import qfta.Resource;
 
 public class HumanoidRenderer extends GameComponent {
 
-    private static AnimationRegistry actorAnimReg = new AnimationRegistry();
-    private static AnimationRegistry clothesAnimReg = new AnimationRegistry();
-    
+    private Texture texture;
     private AnimationRegistry animation, clothes;
     
-    public static void loadAnimations(ResourceLoader loader) {
-        SpriteSheet player = new SpriteSheet(loader.loadTexture("res/rpg_male.png"), 16, 24);
-        
-        AnimationData data, clothes;
-        for (int i = 0; i < 4; i++) {
-            data = new AnimationData();
-            clothes = new AnimationData();
-            int speed = 6;
-            data.addFrame(player.getSprite(0 + 0, i), speed);
-            data.addFrame(player.getSprite(0 + 1, i), speed);
-            data.addFrame(player.getSprite(0 + 0, i), speed);
-            data.addFrame(player.getSprite(0 + 2, i), speed);
-            actorAnimReg.register(i, new AnimationPlayer(data));
-            
-            clothes.addFrame(player.getSprite(3 + 0, i), speed);
-            clothes.addFrame(player.getSprite(3 + 1, i), speed);
-            clothes.addFrame(player.getSprite(3 + 0, i), speed);
-            clothes.addFrame(player.getSprite(3 + 2, i), speed);
-            clothesAnimReg.register(i, new AnimationPlayer(clothes));
-        }
+    public HumanoidRenderer() {
+        texture = Resource.loadTexture("res/rpg_male.png");
+        buildAnimations();
     }
     
-    public HumanoidRenderer() {
-        animation = actorAnimReg.copy();
-        clothes = clothesAnimReg.copy();
+    private HumanoidRenderer(Texture tex) {
+        texture = tex;
+        buildAnimations();
     }
     
     public HumanoidRenderer copy() {
-    	HumanoidRenderer hr = new HumanoidRenderer();
-    	
-    	hr.animation = animation.copy();
-    	hr.clothes = clothes.copy();
-    	
+    	HumanoidRenderer hr = new HumanoidRenderer(texture);
     	return hr;
     }
     
@@ -73,6 +51,31 @@ public class HumanoidRenderer extends GameComponent {
         
         r.drawCharacterSprite(animation, tfm.x, tfm.y, 16f, 24f);
         r.drawCharacterSprite(clothes, tfm.x, tfm.y, 16f, 24f);
+    }
+    
+    private void buildAnimations() {
+        SpriteSheet player = new SpriteSheet(texture, 16, 24);
+        
+        animation = new AnimationRegistry();
+        clothes = new AnimationRegistry();
+        
+        AnimationData data, cloth;
+        for (int i = 0; i < 4; i++) {
+            data = new AnimationData();
+            cloth = new AnimationData();
+            int speed = 6;
+            data.addFrame(player.getSprite(0 + 0, i), speed);
+            data.addFrame(player.getSprite(0 + 1, i), speed);
+            data.addFrame(player.getSprite(0 + 0, i), speed);
+            data.addFrame(player.getSprite(0 + 2, i), speed);
+            animation.register(i, new AnimationPlayer(data));
+            
+            cloth.addFrame(player.getSprite(3 + 0, i), speed);
+            cloth.addFrame(player.getSprite(3 + 1, i), speed);
+            cloth.addFrame(player.getSprite(3 + 0, i), speed);
+            cloth.addFrame(player.getSprite(3 + 2, i), speed);
+            clothes.register(i, new AnimationPlayer(cloth));
+        }
     }
     
 }
