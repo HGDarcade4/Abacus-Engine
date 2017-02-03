@@ -22,6 +22,7 @@ public class TitleState extends GameState {
     private FadeTimer fade, pressAnyKey;
     private Sound music;
     private Sound click;
+    private boolean canExit = false;
     
     // load resources
     @Override
@@ -43,6 +44,7 @@ public class TitleState extends GameState {
         music.playAndLoop();
         fade.reset();
         pressAnyKey.reset();
+        canExit = false;
     }
 
     // update text fade
@@ -50,6 +52,7 @@ public class TitleState extends GameState {
     public void update(Input input) {
         fade.update();
         if (fade.getAlpha() == 1f) {
+            canExit = true;
             pressAnyKey.update();
         }
         
@@ -57,7 +60,7 @@ public class TitleState extends GameState {
             pressAnyKey.reset();
         }
         
-        if (input.anyKeyJustDown()) {
+        if (input.anyKeyJustDown() && canExit) {
             swapState(QuestForTheAbacus.ID_PLAY);
         }
     }

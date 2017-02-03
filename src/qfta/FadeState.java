@@ -70,7 +70,7 @@ public class FadeState extends GameState {
     public void update(Input input) {
         fade.update();
         
-        if (fade.isDone()) {
+        if (fade.isDone() || input.anyKeyJustDown()) {
         	switch (currentSection) {
         		case 0: case 2: case 3:
         			line += 3;
