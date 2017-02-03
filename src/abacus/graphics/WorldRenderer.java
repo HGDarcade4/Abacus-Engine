@@ -131,7 +131,13 @@ public class WorldRenderer {
         
         float layer = this.layer + yAmt(y);
         
-        sprite.draw(drawX, drawY, scale * w, scale * h, alpha, layer);
+        if (drawX < renderer.getWidth() &&
+            drawX + scale * w > 0 &&
+            drawY < renderer.getHeight() &&
+            drawY + scale * h > 0) {
+        
+            sprite.draw(drawX, drawY, scale * w, scale * h, alpha, layer);
+        }
     }
     
     /*

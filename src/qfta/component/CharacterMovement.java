@@ -13,6 +13,7 @@ public class CharacterMovement extends GameComponent {
     private static final int DIR_LEFT = 2;
     private static final int DIR_RIGHT = 3;
     
+    public boolean randomDir = false;
     public float moveSpeed = 1f;
     public int dir = DIR_DOWN;
     public boolean moving = false;
@@ -30,8 +31,14 @@ public class CharacterMovement extends GameComponent {
     	m.moving = moving;
     	m.dx = dx;
     	m.dy = dy;
+    	m.randomDir = randomDir;
     	
     	return m;
+    }
+    
+    @Override
+    public void attach() {
+        dir = (int)(Math.random() * 4);
     }
     
     @Override

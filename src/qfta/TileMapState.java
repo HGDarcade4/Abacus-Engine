@@ -51,31 +51,30 @@ public class TileMapState extends GameState {
         player = new GameObject();
         player.attach(new Collider(10f, 5f));
         player.attach(new CharacterMovement(0.5f));
-        player.get(CharacterMovement.class).dir = (int)(Math.random() * 4);
+        player.get(CharacterMovement.class).randomDir = true;
         player.attach(new HumanoidRenderer(loader));
         player.get(HumanoidRenderer.class).randomColor = true;
         player.attach(new SimpleAI());
-        scene.registerArchetype("villager", player);
+        GameObject.registerArchetype("villager", player);
         
         player = new GameObject();
         player.attach(new Collider(10f, 5f));
         player.attach(new CharacterMovement(1f));
         player.attach(new HumanoidRenderer(loader));
         player.attach(new InputController());
-        scene.registerArchetype("player", player);
+        GameObject.registerArchetype("player", player);
         
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 1000; i++) {
             int x = -1, y = -1;
             while (map.getCollision(x, y)) {
-                x = (int)(Math.random() * 128);
-                y = (int)(Math.random() * 128);
+                x = (int)(Math.random() * map.getWidth());
+                y = (int)(Math.random() * map.getHeight());
             }
             
             float xpos = (float)(x + Math.random()) * 16;
             float ypos = (float)(y + Math.random()) * 16;
             
-            GameObject go = scene.spawnArchetype("villager", xpos, ypos);
-            go.get(CharacterMovement.class).dir = (int)(Math.random() * 4);
+            scene.spawnArchetype("villager", xpos, ypos);
         }
         
         player = scene.spawnArchetype("player", 64 * 16, 64 * 16);

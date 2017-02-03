@@ -11,6 +11,7 @@ public class GameObject {
     
     private static final HashMap<Class<?>, Integer> compIds = new HashMap<>();
     private static int nextId = 0;
+    private static final HashMap<String, GameObject> archetypes = new HashMap<>();
     
     private boolean remove;
     private Transform transform;
@@ -21,6 +22,22 @@ public class GameObject {
         remove = false;
         
         comps = new GameComponent[MAX_COMPONENTS];
+    }
+    
+    public static void registerArchetype(String name, GameObject go) {
+        archetypes.put(name, go);
+    }
+    
+    public static GameObject spawnArchetype(String name, float x, float y) {
+        GameObject arch = archetypes.get(name);
+        
+        if (arch != null) {
+            GameObject spawned = arch.copy(x, y);
+            return spawned;
+        }
+        else {
+            return null;
+        }
     }
     
     public GameObject copy(float x, float y) {
