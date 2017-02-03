@@ -34,8 +34,6 @@ public class QuestForTheAbacus {
         engine.setUpdateGoal(60);
         engine.setRenderGoal(60); 
         
-        Resource.setLoader(engine.getResourceLoader());
-        
         // register game states
         GameStateManager gsm = engine.getGameStateManager();
         gsm.registerState(ID_INTRO, new FadeState("res/intro.txt", ID_TITLE));

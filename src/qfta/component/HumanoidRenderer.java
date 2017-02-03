@@ -1,5 +1,8 @@
 package qfta.component;
 
+import java.awt.Color;
+
+import abacus.ResourceLoader;
 import abacus.gameobject.GameComponent;
 import abacus.gameobject.Transform;
 import abacus.graphics.AnimationData;
@@ -8,33 +11,56 @@ import abacus.graphics.AnimationRegistry;
 import abacus.graphics.SpriteSheet;
 import abacus.graphics.Texture;
 import abacus.graphics.WorldRenderer;
-import qfta.Resource;
 
 public class HumanoidRenderer extends GameComponent {
 
+    public static final int CLOTH = 0xA4A2A5;
+    public static final int CLOTH_SHADOW = 0x818082;
+    public static final int CLOTH_OUTLINE = 0x343035;
+    
+    public boolean randomColor = false;
+    
+    private ResourceLoader loader;
     private Texture texture;
     private AnimationRegistry animation, clothes;
     
-    public HumanoidRenderer() {
-        texture = Resource.loadTexture("res/rpg_male.png");
-        buildAnimations();
-    }
-    
-    private HumanoidRenderer(Texture tex) {
-        texture = tex;
+    public HumanoidRenderer(ResourceLoader loader) {
+        this.loader = loader;
+        texture = loader.loadTexture("res/rpg_male.png");
         buildAnimations();
     }
     
     public HumanoidRenderer copy() {
-    	HumanoidRenderer hr = new HumanoidRenderer(texture);
+    	HumanoidRenderer hr = new HumanoidRenderer(loader);
+    	hr.randomColor = randomColor;
     	return hr;
+    }
+    
+    public void setClothingColor(int col) {
+        Color color = new Color(col);
+        
+        int[] replace = new int[] {
+                CLOTH, color.getRGB(),
+                CLOTH_SHADOW, color.darker().getRGB(),
+                CLOTH_OUTLINE, Color.BLACK.getRGB(),
+        };
+        
+        texture = loader.colorize(texture, replace);
+        buildAnimations();
+    }
+    
+    @Override
+    public void attach() {
+        if (randomColor) {
+            setClothingColor((int)(Math.random() * 0x1000000));
+        }
     }
     
     @Override
     public void render(WorldRenderer r) {
-        if (!gameObject.has(Movement.class)) return;
+        if (!gameObject.has(CharacterMovement.class)) return;
         
-        Movement movement = gameObject.get(Movement.class);
+        CharacterMovement movement = gameObject.get(CharacterMovement.class);
         Transform tfm = gameObject.getTransform();
         
         animation.setCurrent(movement.dir);

@@ -12,7 +12,8 @@ import abacus.tile.TileMap;
 import abacus.ui.Input;
 import qfta.component.HumanoidRenderer;
 import qfta.component.InputController;
-import qfta.component.Movement;
+import qfta.component.CharacterMovement;
+import qfta.component.SimpleAI;
 
 /*
  * Main tile map play state. 
@@ -49,15 +50,17 @@ public class TileMapState extends GameState {
         
         player = new GameObject();
         player.attach(new Collider(10f, 5f));
-        player.attach(new Movement(1f));
-        player.get(Movement.class).dir = (int)(Math.random() * 4);
-        player.attach(new HumanoidRenderer());
+        player.attach(new CharacterMovement(0.5f));
+        player.get(CharacterMovement.class).dir = (int)(Math.random() * 4);
+        player.attach(new HumanoidRenderer(loader));
+        player.get(HumanoidRenderer.class).randomColor = true;
+        player.attach(new SimpleAI());
         scene.registerArchetype("villager", player);
         
         player = new GameObject();
         player.attach(new Collider(10f, 5f));
-        player.attach(new Movement(1f));
-        player.attach(new HumanoidRenderer());
+        player.attach(new CharacterMovement(1f));
+        player.attach(new HumanoidRenderer(loader));
         player.attach(new InputController());
         scene.registerArchetype("player", player);
         
@@ -72,7 +75,7 @@ public class TileMapState extends GameState {
             float ypos = (float)(y + Math.random()) * 16;
             
             GameObject go = scene.spawnArchetype("villager", xpos, ypos);
-            go.get(Movement.class).dir = (int)(Math.random() * 4);
+            go.get(CharacterMovement.class).dir = (int)(Math.random() * 4);
         }
         
         player = scene.spawnArchetype("player", 64 * 16, 64 * 16);

@@ -6,7 +6,7 @@ import abacus.gameobject.Scene;
 import abacus.tile.TileBody;
 import abacus.ui.Input;
 
-public class Movement extends GameComponent {
+public class CharacterMovement extends GameComponent {
 
     private static final int DIR_UP = 1;
     private static final int DIR_DOWN = 0;
@@ -19,12 +19,12 @@ public class Movement extends GameComponent {
     
     private float dx, dy;
     
-    public Movement(float speed) {
+    public CharacterMovement(float speed) {
         moveSpeed = speed;
     }
     
-    public Movement copy() {
-    	Movement m = new Movement(moveSpeed);
+    public CharacterMovement copy() {
+    	CharacterMovement m = new CharacterMovement(moveSpeed);
     	
     	m.dir = dir;
     	m.moving = moving;
@@ -69,6 +69,8 @@ public class Movement extends GameComponent {
         
         body.setVelX(dx);
         body.setVelY(dy);
+        
+        move(false, false, false, false);
     }
     
     public void move(boolean up, boolean down, boolean left, boolean right) {

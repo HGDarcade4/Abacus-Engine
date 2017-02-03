@@ -7,6 +7,7 @@ import javax.imageio.ImageIO;
 
 import abacus.ResourceLoader;
 import abacus.graphics.FontCreator;
+import abacus.graphics.ImageColorer;
 import abacus.graphics.Texture;
 import abacus.sound.Sound;
 import abacus.sound.SoundManager;
@@ -38,6 +39,17 @@ public class AwtResourceLoader implements ResourceLoader {
         }
         
         return createTexture(image);
+    }
+    
+    @Override
+    public Texture colorize(Texture texture, int[] replace) {
+        ImageColorer imgcol = new ImageColorer(texture.getBufferedImageCopy());
+        
+        for (int i = 0; i < replace.length - 1; i += 2) {
+            imgcol.replace(replace[i], replace[i + 1]);
+        }
+        
+        return createTexture(imgcol.recolorBufferedImage());
     }
     
     // creates a texture from a buffered image

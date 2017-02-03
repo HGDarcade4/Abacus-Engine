@@ -27,10 +27,10 @@ public class ImageColorer {
             for (int x = 0; x < image.getHeight(); x++) {
                 int col = image.getRGB(x, y);
                 
-                Integer repl = replace.get(col);
+                Integer repl = replace.get(col & 0xFFFFFF);
                 
                 if (repl != null) {
-                    image.setRGB(x, y, repl.intValue());
+                    image.setRGB(x, y, col & 0xFF000000 | (repl.intValue() & 0xFFFFFF));
                 }
             }
         }

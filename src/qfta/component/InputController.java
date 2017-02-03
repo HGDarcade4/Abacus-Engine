@@ -14,9 +14,9 @@ public class InputController extends GameComponent {
 	
     @Override
     public void update(Scene scene, Input input) {
-        if (!gameObject.has(Movement.class)) return;
+        if (!gameObject.has(CharacterMovement.class)) return;
         
-        gameObject.get(Movement.class).move(
+        gameObject.get(CharacterMovement.class).move(
                 input.getKey(KeyEvent.VK_UP),
                 input.getKey(KeyEvent.VK_DOWN),
                 input.getKey(KeyEvent.VK_LEFT),
