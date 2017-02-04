@@ -13,15 +13,18 @@ import abacus.ui.Input;
  */
 public class TitleState extends GameState {
 
-    // text to display
-    public static final String PRESS_ANY_KEY = "Press any key...";
-    
     // misc variables
     private GameFont font;
     private Sprite title;
-    private FadeTimer fade, pressAnyKey;
+    private FadeTimer fade;
     private Sound music;
     private Sound click;
+    private FadePressKey pressAnyKey;
+    private int nextId;
+    
+    public TitleState(int nextStateId) {
+    	this.nextId = nextStateId;
+    }
     
     // load resources
     @Override
@@ -31,7 +34,7 @@ public class TitleState extends GameState {
         title = loader.loadTexture("res/title.png").getSprite();
         
         fade = new FadeTimer(60, 6 * 60, Integer.MAX_VALUE, 0, 0);
-        pressAnyKey = new FadeTimer(10, 30, 10, 30, 0);
+        pressAnyKey = new FadePressKey("Press any key...");
         
         music = loader.loadSound("res/song_idea1.wav");
         click = loader.loadSound("res/button_select.wav");
@@ -42,7 +45,7 @@ public class TitleState extends GameState {
     public void enter() {
         music.playAndLoop();
         fade.reset();
-        pressAnyKey.reset();
+        pressAnyKey.resetFadeTimer();
     }
 
     // update text fade
@@ -50,15 +53,15 @@ public class TitleState extends GameState {
     public void update(Input input) {
         fade.update();
         if (fade.getAlpha() == 1f) {
-            pressAnyKey.update();
+            pressAnyKey.updateFadeTimer();
         }
         
-        if (pressAnyKey.isDone()) {
-            pressAnyKey.reset();
+        if (pressAnyKey.isDoneFadeTimer()) {
+            pressAnyKey.resetFadeTimer();
         }
         
         if (input.anyKeyJustDown()) {
-            swapState(QuestForTheAbacus.ID_PLAY);
+            swapState(this.nextId);
         }
     }
 
@@ -70,9 +73,7 @@ public class TitleState extends GameState {
         title.setAlpha(fade.getAlpha());
         title.draw(0, 0, renderer.getWidth(), renderer.getHeight());
         
-        int x = (int) (renderer.getWidth()/2 - font.getWidth(PRESS_ANY_KEY)/2);
-        font.setAlpha(pressAnyKey.getAlpha());
-        font.draw(PRESS_ANY_KEY, x, 24);
+        pressAnyKey.render(renderer, font);
     }
 
     @Override

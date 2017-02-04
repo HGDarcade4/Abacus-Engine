@@ -18,4 +18,16 @@ public class FadePressKey {
         font.setAlpha(this.fade.getAlpha());
         font.draw(this.message, x, 24);
 	}
+	
+	public void updateFadeTimer() {
+		this.fade.update();
+	}
+	
+	public void resetFadeTimer() {
+		this.fade.reset();
+	}
+	
+	public boolean isDoneFadeTimer() {
+		return this.fade.isDone();
+	}
 }

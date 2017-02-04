@@ -13,8 +13,8 @@ public class QuestForTheAbacus {
     public static final int TILE_SIZE = 16;
     
     // game state IDs
-    public static final int ID_INTRO = 0;
-    public static final int ID_TITLE = 1;
+    public static final int ID_TITLE = 0;
+    public static final int ID_INTRO = 1;
     public static final int ID_PLAY = 2;
     
     // main method
@@ -36,8 +36,8 @@ public class QuestForTheAbacus {
         
         // register game states
         GameStateManager gsm = engine.getGameStateManager();
-        gsm.registerState(ID_INTRO, new FadeState("res/intro.txt", ID_TITLE));
-        gsm.registerState(ID_TITLE, new TitleState());
+        gsm.registerState(ID_TITLE, new TitleState(ID_INTRO));
+        gsm.registerState(ID_INTRO, new FadeState("res/intro.txt", ID_PLAY));
         gsm.registerState(ID_PLAY, new TileMapState());
         
         // start engine
@@ -46,7 +46,7 @@ public class QuestForTheAbacus {
         window.setFullscreen(false);
         window.setVirtualResolution(480 * 2, 270 * 2);
         window.show();
-        engine.start(ID_INTRO);
+        engine.start(ID_TITLE);
     }
     
 }
