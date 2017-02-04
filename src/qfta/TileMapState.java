@@ -81,13 +81,14 @@ public class TileMapState extends GameState {
         
         // load sounds
         soundEffect = loader.loadSound("res/sound_effect.wav");
-        music = loader.loadSound("res/song_idea1.wav");
+        music = loader.loadSound("res/town idea 2.1.wav");
     }
 
     @Override
     public void enter() {
         // start theme associated with map when the game state is entered
         // we just don't have a theme for this yet
+        music.playAndLoop();
     }
 
     // update logic
