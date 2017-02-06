@@ -115,9 +115,11 @@ public class TitleState extends GameState {
         title.draw(0, 0, renderer.getWidth(), renderer.getHeight());
         
         if (displayMainMenu) {
+        	font.setSize(20);
         	mainMenu.render(renderer, font);
         }
         else {
+        	font.setSize(12);
         	pressAnyKey.render(renderer, font);
         }
     }

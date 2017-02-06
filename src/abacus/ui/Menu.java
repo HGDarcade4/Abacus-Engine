@@ -30,7 +30,10 @@ public class Menu {
 			if (this.currentSelectionIndex == index) {
 				font.setAlpha(this.currentSelectionFader.getAlpha());
 			}
-			font.draw(this.options.get(index).getLabel(), x, 0 + (index * 5));
+			else {
+				font.setAlpha(1f);
+			}
+			font.draw(this.options.get(index).getLabel(), x, 115 - (index * 30));
 		}
 	}
 	
