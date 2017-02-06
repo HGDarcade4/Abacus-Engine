@@ -17,7 +17,7 @@ public class Input {
     private Set<Integer> downKeys;
     private Map<String, Integer> defKeys;
     
-	// Constrctor for the class
+	// Constructor for the class
     public Input() {
         downKeys = new HashSet<>();
         justDown = new HashSet<>();
