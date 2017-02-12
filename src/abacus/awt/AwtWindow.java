@@ -61,7 +61,7 @@ public class AwtWindow implements Window {
         fullScreen = false;
         
         // remove the cursor
-        frame.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB), new Point(0, 0), "no pointer"));
+//        frame.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB), new Point(0, 0), "no pointer"));
     }
     
     // returns reference to input

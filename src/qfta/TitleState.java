@@ -7,22 +7,47 @@ import abacus.graphics.Renderer;
 import abacus.graphics.Sprite;
 import abacus.sound.Sound;
 import abacus.ui.Input;
+import abacus.ui.Menu;
 
 /*
  * Screen before you reach the main menu
  */
 public class TitleState extends GameState {
 
-    // text to display
-    public static final String PRESS_ANY_KEY = "Press any key...";
-    
     // misc variables
     private GameFont font;
     private Sprite title;
-    private FadeTimer fade, pressAnyKey;
+    private FadeTimer fade;
     private Sound music;
     private Sound click;
-    private boolean canExit = false;
+    private FadePressKey pressAnyKey;
+    private int nextId;
+    private boolean displayMainMenu;
+    private boolean displayQuitMenu;
+    private Menu mainMenu;
+    private Menu quitMenu;
+    private int newGame, loadGame, settings, quit, quitYes, quitNo;
+    
+    public TitleState(int nextStateId) {
+    	this.nextId = nextStateId;
+        fade = new FadeTimer(60, 6 * 60, Integer.MAX_VALUE, 0, 0);
+        pressAnyKey = new FadePressKey("Press any key...");
+        
+        // create the main menu
+        mainMenu = new Menu(115, 30);
+        newGame = mainMenu.addOption("New Game");
+        loadGame = mainMenu.addOption("Load Game");
+        settings = mainMenu.addOption("Settings");
+        quit = mainMenu.addOption("Quit");
+        
+        // create the quit menu
+        quitMenu = new Menu(100, 30);
+        quitYes = quitMenu.addOption("Yes");
+        quitNo = quitMenu.addOption("No");
+        
+        displayMainMenu = false;
+        displayQuitMenu = false;
+    }
     
     // load resources
     @Override
@@ -31,8 +56,6 @@ public class TitleState extends GameState {
 
         title = loader.loadTexture("res/title.png").getSprite();
         
-        fade = new FadeTimer(60, 6 * 60, Integer.MAX_VALUE, 0, 0);
-        pressAnyKey = new FadeTimer(10, 30, 10, 30, 0);
         
         music = loader.loadSound("res/song_idea1.wav");
         click = loader.loadSound("res/button_select.wav");
@@ -43,26 +66,86 @@ public class TitleState extends GameState {
     public void enter() {
         music.playAndLoop();
         fade.reset();
-        pressAnyKey.reset();
-        canExit = false;
+        pressAnyKey.resetFadeTimer();
     }
 
     // update text fade
     @Override
     public void update(Input input) {
         fade.update();
-        if (fade.getAlpha() == 1f) {
-            canExit = true;
-            pressAnyKey.update();
+        
+        // handle main menu
+        if (displayMainMenu) {
+        	mainMenu.updateFadeTimer();
+        	
+        	if (mainMenu.isDoneFadeTimer()) {
+        		mainMenu.resetFadeTimer();
+        	}
+        	
+        	if (input.getJustDownKey("up_arrow")) {
+        		mainMenu.moveSelectionUp();
+        	}
+        	if (input.getJustDownKey("down_arrow")) {
+        		mainMenu.moveSelectionDown();
+        	}
+        	if (input.getJustDownKey("spacebar")) {
+        		int selection = mainMenu.getCurrentSelection();
+        		
+        		// start a new game
+        		if (selection == this.newGame) {
+        			swapState(nextId);
+        		}
+        		// switch to quit menu
+        		if (selection == this.quit) {
+        			displayMainMenu = false;
+        			displayQuitMenu = true;
+        		}
+        	}
+        }
+        // handle quit menu
+        else if (displayQuitMenu) {
+        	quitMenu.updateFadeTimer();
+        	
+        	if (quitMenu.isDoneFadeTimer()) {
+        		quitMenu.resetFadeTimer();
+        	}
+        	
+        	if (input.getJustDownKey("up_arrow")) {
+        		quitMenu.moveSelectionUp();
+        	}
+        	if (input.getJustDownKey("down_arrow")) {
+        		quitMenu.moveSelectionDown();
+        	}
+        	if (input.getJustDownKey("spacebar")) {
+        		int selection = quitMenu.getCurrentSelection();
+        		
+        		if (selection == this.quitYes) {
+        			engine.stop();
+        		}
+        		else {
+        			quitMenu.resetCurrentSelection();
+        			displayMainMenu = true;
+        			displayQuitMenu = false;
+        		}
+        	}
+        }
+        // handle press any key to start before main menu
+        else {
+        	if (fade.getAlpha() == 1f) {
+        		pressAnyKey.updateFadeTimer();
+
+        		if (pressAnyKey.isDoneFadeTimer()) {
+        			pressAnyKey.resetFadeTimer();
+        		}
+
+        		if (input.anyKeyJustDown()) {
+        			displayMainMenu = true;
+        			displayQuitMenu = false;
+        		}
+        	}
+        
         }
         
-        if (pressAnyKey.isDone()) {
-            pressAnyKey.reset();
-        }
-        
-        if (input.anyKeyJustDown() && canExit) {
-            swapState(QuestForTheAbacus.ID_PLAY);
-        }
     }
 
     // draw background and text
@@ -73,9 +156,21 @@ public class TitleState extends GameState {
         title.setAlpha(fade.getAlpha());
         title.draw(0, 0, renderer.getWidth(), renderer.getHeight());
         
-        int x = (int) (renderer.getWidth()/2 - font.getWidth(PRESS_ANY_KEY)/2);
-        font.setAlpha(pressAnyKey.getAlpha());
-        font.draw(PRESS_ANY_KEY, x, 24);
+        if (displayMainMenu) {
+        	font.setSize(20);
+        	mainMenu.render(renderer, font);
+        }
+        else if (displayQuitMenu) {
+        	font.setSize(20);
+        	font.setAlpha(1f);
+        	int x = (int) (renderer.getWidth()/2 - font.getWidth("Are you sure?")/2);
+        	font.draw("Are you sure?", x, 145);
+        	quitMenu.render(renderer, font);
+        }
+        else {
+        	font.setSize(12);
+        	pressAnyKey.render(renderer, font);
+        }
     }
 
     @Override

@@ -30,7 +30,7 @@ public final class SoundManager {
         try {
             AudioInputStream in = AudioSystem.getAudioInputStream(new File(file));
             
-            Clip sound = AudioSystem.getClip();
+            Clip sound = AudioSystem.getClip(null);
             
             sound.open(in);
             

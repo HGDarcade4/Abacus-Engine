@@ -27,6 +27,7 @@ public class FadeState extends GameState {
     private GameFont font;
     private String source;
     private int nextId;
+    private FadePressKey pressSkipKey;
     
     // arguments are source text file name and game state id to swap to
     public FadeState(String src, int nextId) {
@@ -41,6 +42,8 @@ public class FadeState extends GameState {
     	int wait, fadeIn, fadeOut, pause, done;
         lines = new ArrayList<>();
         line = 0;
+        
+        pressSkipKey = new FadePressKey("Press any key to skip...");
         
         // set font for text
         font = loader.getFontCreator().createBasicFont("res/font.png", 10, 12, 0xFFFFFF);
@@ -67,7 +70,7 @@ public class FadeState extends GameState {
         done = Integer.parseInt(lines.get(line++));
 
         fade = new FadeTimer(wait, fadeIn, pause, fadeOut, done);
-        
+
         // set how many lines to print for first block of text
         numLines = Integer.parseInt(lines.get(line++));
     }
@@ -76,12 +79,22 @@ public class FadeState extends GameState {
     @Override
     public void enter() {
         fade.reset();
+        pressSkipKey.resetFadeTimer();
     }
 
     // update fade
     @Override
     public void update(Input input) {
         fade.update();
+        pressSkipKey.updateFadeTimer();
+        
+        if (pressSkipKey.isDoneFadeTimer()) {
+        	pressSkipKey.resetFadeTimer();
+        }
+        
+        if (input.anyKeyJustDown()) {
+            swapState(nextId);
+        }
         
         // once a block is done fading, move to the next block
         if (fade.isDone() || input.anyKeyJustDown()) {
@@ -120,6 +133,8 @@ public class FadeState extends GameState {
         	font.draw(lines.get(line + index), renderer.getWidth()/2 - width/2, renderer.getHeight()/2 - height/2 + padding);
         	padding -= 14;
         }
+        
+        pressSkipKey.render(renderer, font);
     }
 
     @Override
