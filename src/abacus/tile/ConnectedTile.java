@@ -9,9 +9,9 @@ public class ConnectedTile extends Tile {
 
     private ConnectionTiles tiles;
     
-    public ConnectedTile(SpriteSheet tileset, int x, int y) {
-        this(tileset, 1, x, y);
-    }
+//    public ConnectedTile(SpriteSheet tileset, int x, int y) {
+//        this(tileset, 1, x, y);
+//    }
     
     public ConnectedTile(SpriteSheet sheet, int delay, int... coords) {
         tiles = new ConnectionTiles();

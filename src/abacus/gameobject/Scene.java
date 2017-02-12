@@ -22,6 +22,10 @@ public class Scene {
         gameObjects = new ArrayList<>();
     }
     
+    protected Scene() {
+        this(null);
+    }
+    
     public void addGameObject(GameObject go) {
         if (go != null) gameObjects.add(go);
     }

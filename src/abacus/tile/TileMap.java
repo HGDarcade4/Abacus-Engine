@@ -87,6 +87,10 @@ public class TileMap {
         return tiles;
     }
     
+    public void setTileRegistry(TileRegistry tiles) {
+        this.tiles = tiles;
+    }
+    
     public Tile getTile(int x, int y, int layer) {
         if (inBounds(x, y, layer)) {
             return tiles.getTile(layers.get(layer).getTileId(x, y));

@@ -5,6 +5,7 @@ import abacus.ResourceLoader;
 import abacus.gameobject.Collider;
 import abacus.gameobject.GameObject;
 import abacus.gameobject.Scene;
+import abacus.gameobject.SceneLoader;
 import abacus.graphics.Renderer;
 import abacus.graphics.WorldRenderer;
 import abacus.sound.Sound;
@@ -43,10 +44,12 @@ public class TileMapState extends GameState {
         worldRender.setScale(4);
         
         // create tile map, normally you would just load a file instead
-        RandomTileMapGenerator mapGen = new RandomTileMapGenerator(loader, QuestForTheAbacus.TILE_SIZE);
-        map = mapGen.create(128, 128);
+//        RandomTileMapGenerator mapGen = new RandomTileMapGenerator(loader, QuestForTheAbacus.TILE_SIZE);
+//        map = mapGen.create(128, 128);
         
-        scene = new Scene(map);
+        scene = SceneLoader.read("res/sample.scene", loader, QuestForTheAbacus.TILE_SIZE);//new Scene(map);
+        
+        map = scene.getTileMap();
         
         player = new GameObject();
         player.attach(new Collider(10f, 5f));
@@ -74,10 +77,10 @@ public class TileMapState extends GameState {
             float xpos = (float)(x + Math.random()) * 16;
             float ypos = (float)(y + Math.random()) * 16;
             
-            scene.spawnArchetype("villager", xpos, ypos);
+//            scene.spawnArchetype("villager", xpos, ypos);
         }
         
-        player = scene.spawnArchetype("player", 64 * 16, 64 * 16);
+        player = scene.spawnArchetype("player", 5 * 16, 5 * 16);
         
         // load sounds
         soundEffect = loader.loadSound("res/sound_effect.wav");
