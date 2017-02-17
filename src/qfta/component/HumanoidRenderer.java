@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import abacus.ResourceLoader;
 import abacus.gameobject.GameComponent;
+import abacus.gameobject.GameComponentProperties;
 import abacus.gameobject.Transform;
 import abacus.graphics.AnimationData;
 import abacus.graphics.AnimationPlayer;
@@ -34,6 +35,16 @@ public class HumanoidRenderer extends GameComponent {
     	HumanoidRenderer hr = new HumanoidRenderer(loader);
     	hr.randomColor = randomColor;
     	return hr;
+    }
+    
+    public HumanoidRenderer load(GameComponentProperties props) {
+        HumanoidRenderer c = copy();
+        
+        if (props.containsBoolean("randomColor")) {
+            randomColor = props.getBoolean("randomColor");
+        }
+        
+        return c;
     }
     
     public void setClothingColor(int col) {

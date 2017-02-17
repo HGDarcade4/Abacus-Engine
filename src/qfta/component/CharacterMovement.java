@@ -2,6 +2,7 @@ package qfta.component;
 
 import abacus.gameobject.Collider;
 import abacus.gameobject.GameComponent;
+import abacus.gameobject.GameComponentProperties;
 import abacus.gameobject.Scene;
 import abacus.tile.TileBody;
 import abacus.ui.Input;
@@ -34,6 +35,17 @@ public class CharacterMovement extends GameComponent {
     	m.randomDir = randomDir;
     	
     	return m;
+    }
+    
+    public CharacterMovement load(GameComponentProperties props) {
+        CharacterMovement c = copy();
+        if (props.containsNumber("moveSpeed")) {
+            c.moveSpeed = props.getNumber("moveSpeed");
+        }
+        if (props.containsBoolean("randomDir")) {
+            c.randomDir = props.getBoolean("randomDir");
+        }
+        return c;
     }
     
     @Override

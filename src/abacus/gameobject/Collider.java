@@ -18,6 +18,17 @@ public class Collider extends GameComponent {
     	return new Collider(tileBody.getWidth(), tileBody.getHeight());
     }
     
+    public Collider load(GameComponentProperties props) {
+        Collider c = copy();
+        if (props.containsNumber("width")) {
+            c.tileBody.setWidth((float)props.getNumber("width"));
+        }
+        if (props.containsNumber("height")) {
+            c.tileBody.setWidth((float)props.getNumber("height"));
+        }
+        return c;
+    }
+    
     public void attach() {
         transform = gameObject.getTransform();
     }

@@ -4,6 +4,7 @@ import abacus.GameState;
 import abacus.ResourceLoader;
 import abacus.gameobject.Collider;
 import abacus.gameobject.GameObject;
+import abacus.gameobject.GameObjectLoader;
 import abacus.gameobject.Scene;
 import abacus.gameobject.SceneLoader;
 import abacus.graphics.Renderer;
@@ -11,9 +12,9 @@ import abacus.graphics.WorldRenderer;
 import abacus.sound.Sound;
 import abacus.tile.TileMap;
 import abacus.ui.Input;
+import qfta.component.CharacterMovement;
 import qfta.component.HumanoidRenderer;
 import qfta.component.InputController;
-import qfta.component.CharacterMovement;
 import qfta.component.SimpleAI;
 
 /*
@@ -51,21 +52,30 @@ public class TileMapState extends GameState {
         
         map = scene.getTileMap();
         
-        player = new GameObject();
-        player.attach(new Collider(10f, 5f));
-        player.attach(new CharacterMovement(0.5f));
-        player.get(CharacterMovement.class).randomDir = true;
-        player.attach(new HumanoidRenderer(loader));
-        player.get(HumanoidRenderer.class).randomColor = true;
-        player.attach(new SimpleAI());
-        GameObject.registerArchetype("villager", player);
+//        player = new GameObject();
+//        player.attach(new Collider(10f, 5f));
+//        player.attach(new CharacterMovement(0.5f));
+//        player.get(CharacterMovement.class).randomDir = true;
+//        player.attach(new HumanoidRenderer(loader));
+//        player.get(HumanoidRenderer.class).randomColor = true;
+//        player.attach(new SimpleAI());
+//        GameObject.registerArchetype("villager", player);
+//        
+//        player = new GameObject();
+//        player.attach(new Collider(10f, 5f));
+//        player.attach(new CharacterMovement(1f));
+//        player.attach(new HumanoidRenderer(loader));
+//        player.attach(new InputController());
+//        GameObject.registerArchetype("player", player);
         
-        player = new GameObject();
-        player.attach(new Collider(10f, 5f));
-        player.attach(new CharacterMovement(1f));
-        player.attach(new HumanoidRenderer(loader));
-        player.attach(new InputController());
-        GameObject.registerArchetype("player", player);
+        GameObjectLoader gol = new GameObjectLoader();
+        gol.registerComponentType("Collider", new Collider(1f, 1f));
+        gol.registerComponentType("CharacterMovement", new CharacterMovement(1f));
+        gol.registerComponentType("HumanoidRenderer", new HumanoidRenderer(loader));
+        gol.registerComponentType("SimpleAI", new SimpleAI());
+        gol.registerComponentType("InputController", new InputController());
+        
+        gol.loadArchetypes("res/game_object_list.gameobject");
         
         for (int i = 0; i < 1000; i++) {
             int x = -1, y = -1;
@@ -77,7 +87,7 @@ public class TileMapState extends GameState {
             float xpos = (float)(x + Math.random()) * 16;
             float ypos = (float)(y + Math.random()) * 16;
             
-//            scene.spawnArchetype("villager", xpos, ypos);
+            scene.spawnArchetype("villager", xpos, ypos);
         }
         
         player = scene.spawnArchetype("player", 5 * 16, 5 * 16);

@@ -1,6 +1,7 @@
 package qfta.component;
 
 import abacus.gameobject.GameComponent;
+import abacus.gameobject.GameComponentProperties;
 import abacus.gameobject.Scene;
 import abacus.ui.Input;
 
@@ -20,6 +21,10 @@ public class SimpleAI extends GameComponent {
         SimpleAI ai = new SimpleAI();
         ai.dir = dir;
         return ai;
+    }
+    
+    public SimpleAI load(GameComponentProperties props) {
+        return copy();
     }
     
     @Override

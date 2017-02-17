@@ -9,6 +9,8 @@ public abstract class GameComponent {
     
     public abstract GameComponent copy();
     
+    public abstract GameComponent load(GameComponentProperties props);
+    
     public void attach() {}
     
     public void preUpdate(Scene scene, Input input) {}
