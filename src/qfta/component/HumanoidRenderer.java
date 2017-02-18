@@ -63,7 +63,6 @@ public class HumanoidRenderer extends GameComponent {
     @Override
     public void attach() {
         if (randomColor) {
-            System.out.println("random attach");
             setClothingColor((int)(Math.random() * 0x1000000));
         }
     }
