@@ -44,29 +44,9 @@ public class TileMapState extends GameState {
         worldRender = new WorldRenderer(engine.getRenderer());
         worldRender.setScale(4);
         
-        // create tile map, normally you would just load a file instead
-//        RandomTileMapGenerator mapGen = new RandomTileMapGenerator(loader, QuestForTheAbacus.TILE_SIZE);
-//        map = mapGen.create(128, 128);
-        
         scene = SceneLoader.read("res/sample.scene", loader, QuestForTheAbacus.TILE_SIZE);//new Scene(map);
         
         map = scene.getTileMap();
-        
-//        player = new GameObject();
-//        player.attach(new Collider(10f, 5f));
-//        player.attach(new CharacterMovement(0.5f));
-//        player.get(CharacterMovement.class).randomDir = true;
-//        player.attach(new HumanoidRenderer(loader));
-//        player.get(HumanoidRenderer.class).randomColor = true;
-//        player.attach(new SimpleAI());
-//        GameObject.registerArchetype("villager", player);
-//        
-//        player = new GameObject();
-//        player.attach(new Collider(10f, 5f));
-//        player.attach(new CharacterMovement(1f));
-//        player.attach(new HumanoidRenderer(loader));
-//        player.attach(new InputController());
-//        GameObject.registerArchetype("player", player);
         
         GameObjectLoader gol = new GameObjectLoader();
         gol.registerComponentType("Collider", new Collider(1f, 1f));
@@ -77,7 +57,7 @@ public class TileMapState extends GameState {
         
         gol.loadArchetypes("res/game_object_list.gameobject");
         
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 10; i++) {
             int x = -1, y = -1;
             while (map.getCollision(x, y)) {
                 x = (int)(Math.random() * map.getWidth());

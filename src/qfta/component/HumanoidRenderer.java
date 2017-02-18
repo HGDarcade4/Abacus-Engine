@@ -41,7 +41,7 @@ public class HumanoidRenderer extends GameComponent {
         HumanoidRenderer c = copy();
         
         if (props.containsBoolean("randomColor")) {
-            randomColor = props.getBoolean("randomColor");
+            c.randomColor = props.getBoolean("randomColor");
         }
         
         return c;
@@ -63,6 +63,7 @@ public class HumanoidRenderer extends GameComponent {
     @Override
     public void attach() {
         if (randomColor) {
+            System.out.println("random attach");
             setClothingColor((int)(Math.random() * 0x1000000));
         }
     }

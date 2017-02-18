@@ -1,7 +1,6 @@
 package abacus.gameobject;
 
 import java.io.FileInputStream;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -15,6 +14,7 @@ import abacus.tile.TileMap;
 import abacus.tile.TileRegistry;
 import abacus.tile.WallTile;
 
+// TODO shouldn't be singleton
 public final class SceneLoader {
 
     private SceneLoader() {}
@@ -26,23 +26,23 @@ public final class SceneLoader {
             TileRegistry tiles = new TileRegistry();
             
             int numSets = in.nextInt();
-            System.out.println("# Tilesets: " + numSets);
+//            System.out.println("# Tilesets: " + numSets);
             in.nextLine();
             for (int i = 0; i < numSets; i++) {
                 loadTileset(tilesets, in, loader);
             }
             
             int numTiles = in.nextInt();
-            System.out.print("# Tiletypes: " + numTiles);
+//            System.out.print("# Tiletypes: " + numTiles);
             in.nextLine();
             for (int i = 0; i < numTiles; i++) {
                 loadTile(tiles, tilesets, in, loader);
             }
             
-            System.out.println("Loading TileMap");
+//            System.out.println("Loading TileMap");
             TileMap map = loadTileMap(tiles, in, tileSize);
             
-            System.out.println("Done with map: " + map);
+//            System.out.println("Done with map: " + map);
             
             Scene scene = new Scene(map);
             
@@ -60,7 +60,7 @@ public final class SceneLoader {
         int layers = in.nextInt();
         in.nextLine();
         
-        System.out.println(width + " " + height + " " + layers);
+//        System.out.println(width + " " + height + " " + layers);
         
         TileMap map = new TileMap(width, height, layers, tileSize);
         map.setTileRegistry(tiles);
@@ -103,7 +103,7 @@ public final class SceneLoader {
         int id = in.nextInt();
         String type = in.next();
         
-        System.out.println(id + " " + type);
+//        System.out.println(id + " " + type);
         
         int tileset;
         SpriteSheet sheet;
@@ -130,7 +130,7 @@ public final class SceneLoader {
                 anim[i] = in.nextInt();
             }
             
-            System.out.println(anim.length + " " + delay + " " + Arrays.toString(anim));
+//            System.out.println(anim.length + " " + delay + " " + Arrays.toString(anim));
             
             tiles.register(id, new ConnectedTile(sheet, delay, anim));
             break;
@@ -141,13 +141,13 @@ public final class SceneLoader {
             
             anim = new int[in.nextInt() * 2];
             delay = in.nextInt();
-            System.out.println(anim.length + " " + delay + " start");
+//            System.out.println(anim.length + " " + delay + " start");
             
             for (int i = 0; i < anim.length; i++) {
                 anim[i] = in.nextInt();
             }
             
-            System.out.println(anim.length + " " + delay + " " + Arrays.toString(anim));
+//            System.out.println(anim.length + " " + delay + " " + Arrays.toString(anim));
             
             tiles.register(id, new WallTile(sheet, anim[0] + 4, anim[1], anim[0], anim[1]));
             break;

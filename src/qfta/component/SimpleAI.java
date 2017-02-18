@@ -30,7 +30,7 @@ public class SimpleAI extends GameComponent {
     @Override
     public void update(Scene scene, Input input) {
         if (Math.random() < changeMove) {
-            dir = (int)(Math.random() * 5);
+            dir = (int)(Math.random() * 8);
         }
         
         CharacterMovement move = gameObject.get(CharacterMovement.class);

@@ -36,6 +36,8 @@ public class GameObjectLoader {
         name = token.next();
         go = new GameObject();
         
+        System.out.println("Loading GO " + name);
+        
         while (token.peek().equals("attach")) {
             loadComponents(token, go);
         }
@@ -61,16 +63,22 @@ public class GameObjectLoader {
         while (token.peek().equals("set")) {
             token.next();
             String word = token.next();
+            System.out.print(word + " ");
             switch (word) {
             case "number":
                 word = token.next();
-                props.setNumber(word, Double.parseDouble(token.next()));
+                double num = Double.parseDouble(token.next());
+                System.out.print(num);
+                props.setNumber(word, num);
                 break;
             case "bool":
                 word = token.next();
-                props.setBoolean(word, Boolean.parseBoolean(token.next()));
+                boolean b = Boolean.parseBoolean(token.next());
+                System.out.print(b);
+                props.setBoolean(word, b);
                 break;
             }
+            System.out.println(" " + word);
         }
         
         GameComponent comp = loader.load(props);
