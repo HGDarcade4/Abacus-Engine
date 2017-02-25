@@ -68,5 +68,10 @@ public class Scene {
         
         map.render(renderer);
     }
+
+    public void setTileMap(TileMap map) {
+        this.map = map;
+        physics = new TilePhysics(map);
+    }
     
 }

@@ -44,7 +44,11 @@ public class TileMapState extends GameState {
         worldRender = new WorldRenderer(engine.getRenderer());
         worldRender.setScale(4);
         
-        scene = SceneLoader.read("res/sample.scene", loader, QuestForTheAbacus.TILE_SIZE);//new Scene(map);
+//        scene = SceneLoader.read("res/sample.scene", loader, QuestForTheAbacus.TILE_SIZE);//new Scene(map);
+        
+        map = new RandomTileMapGenerator(loader, 16).create(128, 128);//scene.getTileMap();
+        //scene.setTileMap(map);
+        scene = new Scene(map);
         
         map = scene.getTileMap();
         
@@ -57,7 +61,7 @@ public class TileMapState extends GameState {
         
         gol.loadArchetypes("res/game_object_list.gameobject");
         
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 500; i++) {
             int x = -1, y = -1;
             while (map.getCollision(x, y)) {
                 x = (int)(Math.random() * map.getWidth());
@@ -70,7 +74,7 @@ public class TileMapState extends GameState {
             scene.spawnArchetype("villager", xpos, ypos);
         }
         
-        player = scene.spawnArchetype("player", 5 * 16, 5 * 16);
+        player = scene.spawnArchetype("player", 64 * 16, 64 * 16);
         
         // load sounds
         soundEffect = loader.loadSound("res/sound_effect.wav");

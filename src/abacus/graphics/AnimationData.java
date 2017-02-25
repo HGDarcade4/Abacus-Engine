@@ -23,7 +23,12 @@ public class AnimationData {
     // returns the sprite during the current frame
     // makes sure frame is within the frame range
     public Sprite getFrame(int frame) {
-        frame = (frame % numFrames() + numFrames()) % numFrames();
+        if (numFrames() != 0) {
+            frame = (frame % numFrames() + numFrames()) % numFrames();
+        }
+        else {
+            frame = 0;
+        }
         
         return frames.get(frame);
     }

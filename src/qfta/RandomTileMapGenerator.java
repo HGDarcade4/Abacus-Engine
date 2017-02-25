@@ -39,9 +39,9 @@ public class RandomTileMapGenerator {
         TileMap map = new TileMap(width, height, 3, tileSize);
         TileRegistry tiles = map.getTileRegistry();
         tiles.register(TILESET, new SpriteSheetTile(sheet));
-        tiles.register(GRASS, new ConnectedTile(terrain, 0, 0));
+        tiles.register(GRASS, new ConnectedTile(terrain, 1, 0, 0));
         tiles.register(WATER, new ConnectedTile(terrain, 10, 4, 0, 8, 0, 12, 0, 8, 0));
-        tiles.register(CARPET, new ConnectedTile(terrain, 4, 6));
+        tiles.register(CARPET, new ConnectedTile(terrain, 1, 4, 6));
         tiles.register(CAVE_WALL, new WallTile(terrain, 20, 0, 16, 0));
         
         // dirt
