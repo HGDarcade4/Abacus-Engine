@@ -7,11 +7,25 @@ import abacus.graphics.WorldRenderer;
 
 public class WallTile extends Tile {
 
-    private ConnectionTiles wall, top;
+    private ConnectionTiles wall[], top[];
     
-    public WallTile(SpriteSheet terrain, int xwall, int ywall, int xtop, int ytop) {
-        wall = new ConnectionTiles(terrain, xwall, ywall);
-        top = new ConnectionTiles(terrain, xtop, ytop);
+    public WallTile(SpriteSheet sheet, int delay, int frames) {
+        int w = sheet.tilesWide() / (8 * frames);
+        int h = sheet.tilesHigh() / 6;
+        
+        wall = new ConnectionTiles[w * h];//(terrain, xwall, ywall);
+        top = new ConnectionTiles[w * h];//(terrain, xtop, ytop);
+        
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                wall[x + y * w] = new ConnectionTiles();
+                top[x + y * w] = new ConnectionTiles();
+                for (int i = 0; i < frames; i++) {
+                    wall[x + y * w].addFrame(sheet, (x * 8) * frames + i * 8 + 4, y * 6, delay);
+                    top[x + y * w].addFrame(sheet, (x * 8) * frames + i * 8, y * 6, delay);
+                }
+            }
+        }
     }
 
     @Override
@@ -21,11 +35,13 @@ public class WallTile extends Tile {
         int bl = getCode(this, map, x, y, layer, -1, -1);
         int br = getCode(this, map, x, y, layer, 1, -1);
         
+        int tileId = map.getTileMetaData(x, y, layer);
+        
         r.drawTileSprite(
-                wall.get(UP_LEFT, tl), 
-                wall.get(UP_RIGHT, tr),
-                wall.get(DOWN_LEFT, bl),
-                wall.get(DOWN_RIGHT, br),
+                wall[tileId].get(UP_LEFT, tl), 
+                wall[tileId].get(UP_RIGHT, tr),
+                wall[tileId].get(DOWN_LEFT, bl),
+                wall[tileId].get(DOWN_RIGHT, br),
                 map.getTileSize(),
                 x, y);
         
@@ -40,10 +56,10 @@ public class WallTile extends Tile {
 //                x, y + 1);
         
         r.drawTileSprite(
-                top.get(UP_LEFT, tl), 
-                top.get(UP_RIGHT, tr),
-                top.get(DOWN_LEFT, bl),
-                top.get(DOWN_RIGHT, br),
+                top[tileId].get(UP_LEFT, tl), 
+                top[tileId].get(UP_RIGHT, tr),
+                top[tileId].get(DOWN_LEFT, bl),
+                top[tileId].get(DOWN_RIGHT, br),
                 map.getTileSize(), 
                 x, y + 1);//y + 2);
 

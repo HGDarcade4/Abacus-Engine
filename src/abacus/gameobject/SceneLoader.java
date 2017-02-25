@@ -1,13 +1,13 @@
 package abacus.gameobject;
 
 import java.io.FileInputStream;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
 import abacus.ResourceLoader;
 import abacus.graphics.SpriteSheet;
-import abacus.tile.ConnectedTile;
 import abacus.tile.NullTile;
 import abacus.tile.SpriteSheetTile;
 import abacus.tile.TileMap;
@@ -130,9 +130,9 @@ public final class SceneLoader {
                 anim[i] = in.nextInt();
             }
             
-//            System.out.println(anim.length + " " + delay + " " + Arrays.toString(anim));
+            System.out.println(anim.length + " " + delay + " " + Arrays.toString(anim));
             
-            tiles.register(id, new ConnectedTile(sheet, delay, anim));
+//            tiles.register(id, new ConnectedTile(sheet, delay, anim));
             break;
         case "Wall":
             // TODO animated wall tiles
@@ -147,9 +147,9 @@ public final class SceneLoader {
                 anim[i] = in.nextInt();
             }
             
-//            System.out.println(anim.length + " " + delay + " " + Arrays.toString(anim));
+            System.out.println(anim.length + " " + delay + " " + Arrays.toString(anim));
             
-            tiles.register(id, new WallTile(sheet, anim[0] + 4, anim[1], anim[0], anim[1]));
+//            tiles.register(id, new WallTile(sheet, anim[0] + 4, anim[1], anim[0], anim[1]));
             break;
         }
         

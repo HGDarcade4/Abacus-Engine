@@ -2,8 +2,8 @@
 ; basic villager archetype 
 object villager
     attach Collider
-        set number width 5
-        set number height 10
+        set number width 10
+        set number height 5
     attach CharacterMovement
         set number moveSpeed 0.5
         set bool randomDir true
@@ -14,8 +14,8 @@ object villager
 ; basic player archetype 
 object player
     attach Collider
-        set number width 5
-        set number height 10
+        set number width 10
+        set number height 5
     attach CharacterMovement
         set number moveSpeed 1
         set bool randomDir false

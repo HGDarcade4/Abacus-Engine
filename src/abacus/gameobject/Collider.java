@@ -24,7 +24,7 @@ public class Collider extends GameComponent {
             c.tileBody.setWidth((float)props.getNumber("width"));
         }
         if (props.containsNumber("height")) {
-            c.tileBody.setWidth((float)props.getNumber("height"));
+            c.tileBody.setHeight((float)props.getNumber("height"));
         }
         return c;
     }
