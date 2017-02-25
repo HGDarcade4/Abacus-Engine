@@ -38,10 +38,10 @@ public class RandomTileMapGenerator {
 //        final int CAVE_WALL = 5;
         
         final int NULL = 0;
-        final int STATIC = 1;
-        final int STATIC_CONNECT = 2;
-        final int ANIM_CONNECT = 3;
-        final int STATIC_WALL = 4;
+        final int SET_STATIC = 1;
+        final int SET_STATIC_CONNECT = 2;
+        final int SET_ANIM_CONNECT = 3;
+        final int SET_STATIC_WALL = 4;
         
         final int TILE_CAVE_WALL = 2;
         final int TILE_WATER = 0;
@@ -56,19 +56,19 @@ public class RandomTileMapGenerator {
 //        tiles.register(CARPET, new ConnectedTile(terrain, 1, 4, 6));
 //        tiles.register(CAVE_WALL, new WallTile(terrain, 20, 0, 16, 0));
         
-        tiles.register(STATIC, new SpriteSheetTile(tileset1));
-        tiles.register(STATIC_CONNECT, new ConnectedTile(tileset2, 1, 1));
-        tiles.register(ANIM_CONNECT, new ConnectedTile(tileset3, 10, 4));
-        tiles.register(STATIC_WALL, new WallTile(tileset4, 1, 1));
+        tiles.register(SET_STATIC, new SpriteSheetTile(tileset1));
+        tiles.register(SET_STATIC_CONNECT, new ConnectedTile(tileset2, 1, 1));
+        tiles.register(SET_ANIM_CONNECT, new ConnectedTile(tileset3, 10, 4));
+        tiles.register(SET_STATIC_WALL, new WallTile(tileset4, 1, 1));
         
         // dirt
-        map.fillLayer(GROUND_LAYER, STATIC, TILE_DIRT);
+        map.fillLayer(GROUND_LAYER, SET_STATIC, TILE_DIRT);
         
         // cliff wall
         for (int y = 0; y < map.getHeight(); y++) {
             for (int x = 0; x < map.getWidth(); x++) {
                 if (Math.random() < 1.0) {
-                    map.setTile(x, y, WALL_LAYER, STATIC_WALL, TILE_CAVE_WALL);
+                    map.setTile(x, y, WALL_LAYER, SET_STATIC_WALL, TILE_CAVE_WALL);
                     map.setCollision(x, y, true);
                 }
             }
@@ -110,9 +110,9 @@ public class RandomTileMapGenerator {
         for (int i = 0; i < map.getWidth() * map.getHeight() / 10; i++) {
             int size = 10 + r.nextInt(40);
             for (int j = 0; j < size; j += 2) {
-                map.setTile(x, y, GROUND_LAYER, STATIC_CONNECT, TILE_GRASS);
+                map.setTile(x, y, GROUND_LAYER, SET_STATIC_CONNECT, TILE_GRASS);
                 x += r.nextInt(3) - 1;
-                map.setTile(x, y, GROUND_LAYER, STATIC_CONNECT, TILE_GRASS);
+                map.setTile(x, y, GROUND_LAYER, SET_STATIC_CONNECT, TILE_GRASS);
                 y += r.nextInt(3) - 1;
             }
             x = r.nextInt(map.getWidth());
@@ -131,11 +131,11 @@ public class RandomTileMapGenerator {
                     continue;
                 }
                 map.setTile(x, y, WALL_LAYER, NULL, 0);
-                map.setTile(x, y, GROUND_LAYER, ANIM_CONNECT, TILE_WATER);
+                map.setTile(x, y, GROUND_LAYER, SET_ANIM_CONNECT, TILE_WATER);
                 map.setCollision(x, y, true);
                 x += r.nextInt(3) - 1;
                 map.setTile(x, y, WALL_LAYER, NULL, 0);
-                map.setTile(x, y, GROUND_LAYER, ANIM_CONNECT, TILE_WATER);
+                map.setTile(x, y, GROUND_LAYER, SET_ANIM_CONNECT, TILE_WATER);
                 map.setCollision(x, y, true);
                 y += r.nextInt(3) - 1;
             }
