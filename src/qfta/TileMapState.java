@@ -6,7 +6,6 @@ import abacus.gameobject.Collider;
 import abacus.gameobject.GameObject;
 import abacus.gameobject.GameObjectLoader;
 import abacus.gameobject.Scene;
-import abacus.gameobject.SceneLoader;
 import abacus.graphics.Renderer;
 import abacus.graphics.WorldRenderer;
 import abacus.sound.Sound;
@@ -16,6 +15,7 @@ import qfta.component.CharacterMovement;
 import qfta.component.HumanoidRenderer;
 import qfta.component.InputController;
 import qfta.component.SimpleAI;
+import qfta.component.WalkSound;
 
 /*
  * Main tile map play state. 
@@ -58,6 +58,10 @@ public class TileMapState extends GameState {
         gol.registerComponentType("HumanoidRenderer", new HumanoidRenderer(loader));
         gol.registerComponentType("SimpleAI", new SimpleAI());
         gol.registerComponentType("InputController", new InputController());
+        gol.registerComponentType("WalkSound", new WalkSound(loader));
+        
+        
+        //add component type for sound/movement
         
         gol.loadArchetypes("res/game_object_list.gameobject");
         

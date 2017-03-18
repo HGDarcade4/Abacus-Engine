@@ -18,6 +18,14 @@ public class Sound {
         this.name = name;
     }
     
+    public boolean isRunning() {
+    	return SoundManager.isPlaying(name);
+    }
+    
+    public void playIfNotRunning() {
+    	SoundManager.playSoundIfNotRunning(name, false);
+    }
+    
     // play a sound once, restarts the sound if it was playing
     public void play() {
         SoundManager.playSound(name, false);
