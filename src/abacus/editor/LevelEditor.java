@@ -1,24 +1,37 @@
 package abacus.editor;
 
-import java.util.ArrayList;
+import abacus.editor.gui.EditorWindow;
 
 public class LevelEditor {
 
     private EditorTileMap map;
-    private ArrayList<LevelListener> listeners;
+    private EditorWindow window;
+    private int curLayer;
     
-    public LevelEditor() {
-        listeners = new ArrayList<>();
+    public LevelEditor(EditorWindow window) {
+        curLayer = 0;
+        this.window = window;
     }
     
-    public void addListener(LevelListener ll) {
-        listeners.add(ll);
+    public EditorWindow getWindow() {
+        return window;
     }
     
     public void newMap(int width, int height) {
         map = new EditorTileMap(width, height);
-        
-        for (LevelListener ll : listeners) ll.onNewMap();
+        window.draw();
+    }
+    
+    public EditorTileMap getMap() {
+        return map;
+    }
+    
+    public void setCurLayer(int layer) {
+        curLayer = layer;
+    }
+    
+    public int getCurLayer() {
+        return curLayer;
     }
     
 }

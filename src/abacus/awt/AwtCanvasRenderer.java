@@ -57,6 +57,11 @@ public class AwtCanvasRenderer implements Renderer {
         screenCommands = new ArrayList<>();
     }
     
+    // set the current canvas
+    public void setCanvas(Canvas canvas) {
+        this.canvas = canvas;
+    }
+    
     // sets the virtual resolution
     public void setVirtualResolution(int width, int height) {
         this.width = width;

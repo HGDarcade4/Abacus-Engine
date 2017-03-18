@@ -1,5 +1,7 @@
 package abacus.editor;
 
+import abacus.tile.Tile;
+
 public class Layer {
 
     private Tile[] tiles;

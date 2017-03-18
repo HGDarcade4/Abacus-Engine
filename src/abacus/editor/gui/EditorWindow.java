@@ -3,20 +3,21 @@ package abacus.editor.gui;
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 
 import abacus.editor.LevelEditor;
-import abacus.editor.LevelListener;
+import abacus.editor.action.ExitAction;
+import abacus.editor.action.NewAction;
 
 /*
  * WORK IN PROGRESS DON'T MESS WITH THIS
  */
-public class EditorWindow implements LevelListener {
+public class EditorWindow {
 
     private static final String TITLE = "Tile Map Editor";
     
@@ -27,7 +28,7 @@ public class EditorWindow implements LevelListener {
     private static final int DEF_LAYER_HEIGHT = 200;
     
     private JFrame window;
-    private JLabel mapEditor, tileSelector, tilesetSelector, layerSelector, propsSelector;
+    private JPanel mapEditor, tileSelector, tilesetSelector, layerSelector, propsSelector;
     private JSplitPane mapTileSplit, mapLayerSplit, tileTilesetSplit, layerPropSplit;
     
     private JMenuBar menuBar;
@@ -44,8 +45,7 @@ public class EditorWindow implements LevelListener {
     }
     
     public EditorWindow() {
-        editor = new LevelEditor();
-        editor.addListener(this);
+        editor = new LevelEditor(this);
         
         window = new JFrame(TITLE);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -64,12 +64,16 @@ public class EditorWindow implements LevelListener {
         window.setTitle(TITLE + " - " + title);
     }
     
+    public void draw() {
+        window.repaint();
+    }
+    
     private void createPanels() {
-        mapEditor = new JLabel();
-        tileSelector = new JLabel();
-        layerSelector = new JLabel();
-        tilesetSelector = new JLabel();
-        propsSelector = new JLabel();
+        mapEditor = new TileMapPanel(editor);
+        tileSelector = new JPanel();
+        layerSelector = new JPanel();
+        tilesetSelector = new JPanel();
+        propsSelector = new JPanel();
 
         tileTilesetSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT, 
                 new JScrollPane(tilesetSelector, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER), 
@@ -114,7 +118,7 @@ public class EditorWindow implements LevelListener {
     private void createFileMenu() {
         fileMenu = new JMenu("File");
         
-        fileMenu.add(new JMenuItem("New"));
+        fileMenu.add(new JMenuItem(new NewAction(editor))).setText("New");
         fileMenu.add(new JMenuItem("Open"));
         fileMenu.addSeparator();
         fileMenu.add(new JMenuItem("Save"));
@@ -122,7 +126,7 @@ public class EditorWindow implements LevelListener {
         fileMenu.addSeparator();
         fileMenu.add(new JMenuItem("Preferences"));
         fileMenu.addSeparator();
-        fileMenu.add(new JMenuItem("Exit"));
+        fileMenu.add(new JMenuItem(new ExitAction())).setText("Exit");
         
         menuBar.add(fileMenu);
     }
@@ -136,9 +140,4 @@ public class EditorWindow implements LevelListener {
         menuBar.add(editMenu);
     }
 
-    @Override
-    public void onNewMap() {
-        setTitle("untitled");
-    }
-    
 }

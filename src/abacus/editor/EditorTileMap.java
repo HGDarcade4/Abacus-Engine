@@ -14,6 +14,20 @@ public class EditorTileMap {
         layers = new ArrayList<>();
     }
     
+    public Layer getLayer(int layer) {
+        return layers.get(layer);
+    }
+    
+    public void addLayers(int amt) {
+        for (int i = 0; i < amt; i++) {
+            layers.add(new Layer(width, height));
+        }
+    }
+    
+    public int getLayerCount() {
+        return layers.size();
+    }
+    
     public int getWidth() {
         return width;
     }
