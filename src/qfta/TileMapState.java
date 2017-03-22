@@ -2,12 +2,20 @@ package qfta;
 
 import abacus.GameState;
 import abacus.ResourceLoader;
+import abacus.gameobject.Collider;
+import abacus.gameobject.GameObject;
+import abacus.gameobject.GameObjectLoader;
+import abacus.gameobject.Scene;
 import abacus.graphics.Renderer;
 import abacus.graphics.WorldRenderer;
 import abacus.sound.Sound;
 import abacus.tile.TileMap;
-import abacus.tile.TilePhysics;
 import abacus.ui.Input;
+import qfta.component.CharacterMovement;
+import qfta.component.HumanoidRenderer;
+import qfta.component.InputController;
+import qfta.component.SimpleAI;
+import qfta.component.WalkSound;
 
 /*
  * Main tile map play state. 
@@ -22,8 +30,8 @@ public class TileMapState extends GameState {
     // hold the map and player
     // THIS WILL PROBABLY CHANGE A LOT
     private TileMap map;
-    private TilePhysics physics;
-    private Actor player;
+    private Scene scene;
+    private GameObject player;
     
     // sounds
     private Sound soundEffect;
@@ -36,25 +44,52 @@ public class TileMapState extends GameState {
         worldRender = new WorldRenderer(engine.getRenderer());
         worldRender.setScale(4);
         
-        // create tile map, normally you would just load a file instead
-        RandomTileMapGenerator mapGen = new RandomTileMapGenerator(loader, QuestForTheAbacus.TILE_SIZE);
-        map = mapGen.create(128, 128);
+//        scene = SceneLoader.read("res/sample.scene", loader, QuestForTheAbacus.TILE_SIZE);//new Scene(map);
         
-        physics = new TilePhysics(map);
+        map = new RandomTileMapGenerator(loader, 16).create(128, 128);//scene.getTileMap();
+        //scene.setTileMap(map);
+        scene = new Scene(map);
         
-        // create a temporary player
-        Actor.loadAnimations(loader);
-        player = new Actor();
+        map = scene.getTileMap();
+        
+        GameObjectLoader gol = new GameObjectLoader();
+        gol.registerComponentType("Collider", new Collider(1f, 1f));
+        gol.registerComponentType("CharacterMovement", new CharacterMovement(1f));
+        gol.registerComponentType("HumanoidRenderer", new HumanoidRenderer(loader));
+        gol.registerComponentType("SimpleAI", new SimpleAI());
+        gol.registerComponentType("InputController", new InputController());
+        gol.registerComponentType("WalkSound", new WalkSound(loader));
+        
+        
+        //add component type for sound/movement
+        
+        gol.loadArchetypes("res/game_object_list.gameobject");
+        
+        for (int i = 0; i < 500; i++) {
+            int x = -1, y = -1;
+            while (map.getCollision(x, y)) {
+                x = (int)(Math.random() * map.getWidth());
+                y = (int)(Math.random() * map.getHeight());
+            }
+            
+            float xpos = (float)(x + Math.random()) * 16;
+            float ypos = (float)(y + Math.random()) * 16;
+            
+            scene.spawnArchetype("villager", xpos, ypos);
+        }
+        
+        player = scene.spawnArchetype("player", 64 * 16, 64 * 16);
         
         // load sounds
         soundEffect = loader.loadSound("res/sound_effect.wav");
-        music = loader.loadSound("res/song_idea1.wav");
+        music = loader.loadSound("res/town idea 2.1.wav");
     }
 
     @Override
     public void enter() {
         // start theme associated with map when the game state is entered
         // we just don't have a theme for this yet
+        music.playAndLoop();
     }
 
     // update logic
@@ -62,8 +97,7 @@ public class TileMapState extends GameState {
     public void update(Input input) {
         // update game logic
         map.update();
-        player.update(map, input);
-        physics.update(player.getBody());
+        scene.update(input);
     }
 
     // render map and player
@@ -76,17 +110,17 @@ public class TileMapState extends GameState {
         renderer.clearScreen(0xCC, 0xEE, 0xFF);
         
         // center camera at the player
-        worldRender.setView(player.getX() + 0.5f, player.getY());
+        worldRender.setView(player.getTransform().x, player.getTransform().y);
         
         // player draw layer
         worldRender.setLayer(1);
-        player.render(worldRender);
+        scene.render(worldRender);
         
         // draw the map
         map.render(worldRender);
         
         engine.debugLine("");
-        engine.debugLine("(" + player.getX() + ", " + player.getY() + ")");
+        engine.debugLine("(" + player.getTransform().x + ", " + player.getTransform().y + ")");
     }
 
     @Override

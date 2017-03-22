@@ -50,14 +50,18 @@ public class TileBody {
     public void setMinX(float x) { this.x = x; }
     public void setMinY(float y) { this.y = y; }
     
+    public void setCenterX(float x) { this.x = x - width / 2; }
+    public void setCenterY(float y) { this.y = y - height / 2; }
+    
     public void setMaxX(float x) { this.x = x - width; }
     public void setMaxY(float y) { this.y = y - height; }
     
-    public void setWidth(float w) { width = w; }
-    public void setHeight(float h) { height = h; }
-    
     public void setVelX(float dx) { this.dx = dx; }
     public void setVelY(float dy) { this.dy = dy; }
+    
+    public void setWidth(float w) { width = w; }
+    public void setHeight(float h) { height = h; }
+    public void setSize(float w, float h) { width = w; height = h; }
     
     public void setCollideTiles(boolean ct) { collideTiles = ct; }
     

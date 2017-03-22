@@ -17,6 +17,8 @@ public interface ResourceLoader {
 	/* Function Definitions */
     Texture loadTexture(String filename);
     Texture createTexture(BufferedImage image);
+    Texture colorize(Texture tex, int[] replace);
+    
     Sound loadSound(String filename);
     FontCreator getFontCreator();
 }

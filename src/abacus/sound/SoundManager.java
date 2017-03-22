@@ -46,6 +46,32 @@ public final class SoundManager {
         return new Sound(name);
     }
     
+    public static boolean isPlaying(String name) {
+    	Clip sound = clips.get(name);
+    	
+    	if (sound != null && sound.isRunning()) {
+    		return true;
+    	}
+    	else {
+    		return false;
+    	}
+    }
+    
+    public static void playSoundIfNotRunning(String name, boolean loop) {
+        Clip sound = clips.get(name);
+        
+        if (sound != null && !sound.isRunning()) {
+            sound.setFramePosition(0);
+            if (loop) {
+                sound.loop(Clip.LOOP_CONTINUOUSLY);
+            }
+            else {
+                sound.loop(0);
+            }
+            sound.start();
+        }
+    }
+    
     // play sound with [name] id
     public static void playSound(String name, boolean loop) {
         Clip sound = clips.get(name);

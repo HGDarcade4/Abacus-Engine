@@ -1,0 +1,26 @@
+
+; basic villager archetype 
+object villager
+    attach Collider
+        set number width 10
+        set number height 5
+    attach CharacterMovement
+        set number moveSpeed 0.5
+        set bool randomDir true
+    attach HumanoidRenderer
+        set bool randomColor true
+    attach SimpleAI
+
+; basic player archetype 
+object player
+    attach Collider
+        set number width 10
+        set number height 5
+    attach CharacterMovement
+        set number moveSpeed 1
+        set bool randomDir false
+    attach HumanoidRenderer
+        set bool randomColor false
+    attach InputController
+    attach WalkSound
+    

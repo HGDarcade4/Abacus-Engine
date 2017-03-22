@@ -30,8 +30,6 @@ public class AwtCanvasRenderer implements Renderer {
 
     // canvas graphics
     protected Canvas canvas;
-    protected Graphics2D graphics;
-    protected BufferStrategy bs;
     
     // current layer (z-index) and transparency state
     protected float layer = 0.0f;
@@ -92,12 +90,12 @@ public class AwtCanvasRenderer implements Renderer {
         });
         
         try {
-            bs = canvas.getBufferStrategy();
-            if (bs == null) {
+            BufferStrategy bs = canvas.getBufferStrategy();
+            if (bs == null || bs.contentsLost()) {
                 canvas.createBufferStrategy(2);
                 return;
             }
-            graphics = (Graphics2D)bs.getDrawGraphics();
+            Graphics2D graphics = (Graphics2D)bs.getDrawGraphics();
             
             // set the screen to black
             graphics.setColor(Color.BLACK);
@@ -144,7 +142,10 @@ public class AwtCanvasRenderer implements Renderer {
         }
         catch (Exception e) {
             // should do something...
+            e.printStackTrace();
+            System.out.println("\n\n\n");
         }
+//        System.out.println("render");
     }
     
     // number of draw commands last frame
@@ -242,10 +243,31 @@ public class AwtCanvasRenderer implements Renderer {
 
     @Override
     public void drawRect(int col, float x, float y, float w, float h, float layer) {
+        float ratio = (float)width / height;
+        float sRatio = (float)canvas.getWidth() / canvas.getHeight();
+        float dx = 0f;
+        float dy = 0f;
+        
+        if (ratio > sRatio) {
+            ratio = (float)canvas.getWidth() / width;
+            dy = (canvas.getHeight() - height * ratio) / 2f;
+        }
+        else { 
+            ratio = (float)canvas.getHeight() / height;
+            dx = (canvas.getWidth() - width * ratio) / 2f;
+        }
+        
+        x *= ratio;
+        x += dx;
+        y *= ratio;
+        y += dy;
+        w *= ratio;
+        h *= ratio;
+        
         commands.add(new RectCommand(
                 false, col, 
                 (int)Math.floor(x), 
-                height - (int)Math.floor(y + h), 
+                canvas.getHeight() - (int)Math.floor(y + h), 
                 (int)Math.ceil(w), 
                 (int)Math.ceil(h), 
                 layer

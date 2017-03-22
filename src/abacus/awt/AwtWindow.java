@@ -1,9 +1,10 @@
 package abacus.awt;
 
 import java.awt.Canvas;
+import java.awt.DisplayMode;
 import java.awt.Frame;
+import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
@@ -23,7 +24,7 @@ import abacus.ui.Window;
 public class AwtWindow implements Window {
 
     // the window
-    private Frame frame;
+    public static Frame frame;
     // the display
     private Canvas canvas;
     private boolean isVisible;
@@ -91,18 +92,25 @@ public class AwtWindow implements Window {
     public void setFullscreen(boolean fs) {
         fullScreen = fs;
         
-        GraphicsDevice dev = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        GraphicsConfiguration gc = frame.getGraphicsConfiguration();
+        GraphicsDevice dev = gc.getDevice();
+        DisplayMode dm = dev.getDisplayMode();
         
         if (fullScreen) {
             frame.dispose();
-            frame.setExtendedState(Frame.MAXIMIZED_BOTH);
             frame.setVisible(false);
             frame.setUndecorated(true);
             frame.setResizable(false);
-            dev.setFullScreenWindow(frame);
+            frame.setSize(dm.getWidth(), dm.getHeight());
+            frame.setLocation(gc.getBounds().x, gc.getBounds().y);
+//            dev.setFullScreenWindow(frame);
+            
+            if (isVisible) {
+                show();
+            }
         }
         else {
-            dev.setFullScreenWindow(null);
+//            dev.setFullScreenWindow(null);
             frame.dispose();
             frame.setUndecorated(false);
             frame.setResizable(true);
@@ -130,7 +138,13 @@ public class AwtWindow implements Window {
         this.height = height;
         canvas.setSize(width, height);
         frame.pack();
-        frame.setLocationRelativeTo(null);
+        
+        GraphicsConfiguration gc = frame.getGraphicsConfiguration();
+        frame.setLocation(
+                (int)gc.getBounds().getCenterX() - frame.getWidth()/2, 
+                (int)gc.getBounds().getCenterY() - frame.getHeight()/2);
+        
+//        frame.setLocationRelativeTo(null);
     }
     
     // width of the display

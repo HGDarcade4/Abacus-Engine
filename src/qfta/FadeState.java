@@ -97,7 +97,7 @@ public class FadeState extends GameState {
         }
         
         // once a block is done fading, move to the next block
-        if (fade.isDone()) {
+        if (fade.isDone() || input.anyKeyJustDown()) {
         	line += numLines;
         	// if we have reached the end of the file, move on to the next state
         	if (line >= lines.size()) {
