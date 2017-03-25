@@ -99,7 +99,7 @@ public class TileMapState extends GameState {
         
         this.paused = false;
         
-        this.pauseMenu = new Menu(200, 30);
+        this.pauseMenu = new Menu(225, 30);
         this.pauseSettings = this.pauseMenu.addOption("Settings");
         this.pauseQuit = this.pauseMenu.addOption("Quit");
 
@@ -116,13 +116,34 @@ public class TileMapState extends GameState {
     @Override
     public void update(Input input) {
         // update game logic
-        if (input.getJustDownKey("p")) {
+        if (input.getJustDownKey("esc")) {
         	this.pause();
         }
 
         if (!paused) {
         	map.update();
         	scene.update(input);
+        }
+        else {
+        	this.pauseMenu.updateFadeTimer();
+        	
+        	if (this.pauseMenu.isDoneFadeTimer()) {
+        		this.pauseMenu.resetFadeTimer();
+        	}
+        	
+        	if (input.getJustDownKey("down_arrow")) {
+        		this.pauseMenu.moveSelectionDown();
+        	}
+        	if (input.getJustDownKey("up_arrow")) {
+        		this.pauseMenu.moveSelectionUp();
+        	}
+        	if (input.getJustDownKey("spacebar")) {
+        		int selection = this.pauseMenu.getCurrentSelection();
+        		
+        		if (selection == this.pauseQuit) {
+        			engine.stop();
+        		}
+        	}
         }
     }
 
@@ -151,6 +172,7 @@ public class TileMapState extends GameState {
         if (paused) {
         	String label = "PAUSED";
         	font.setSize(20);
+        	font.setAlpha(1f);
         	int x = (int) (renderer.getWidth()/2 - font.getWidth(label)/2);
         	int y = (int) (renderer.getHeight()/2);
         	font.draw(label, x, y);

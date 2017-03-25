@@ -70,7 +70,7 @@ public class GameEngine {
         // register default keys
         input.registerKey(KeyEvent.VK_F11, "fullscreen");
         input.registerKey(KeyEvent.VK_F3, "debug");
-        input.registerKey(KeyEvent.VK_ESCAPE, "exit");
+        input.registerKey(KeyEvent.VK_ESCAPE, "esc");
         input.registerKey(KeyEvent.VK_UP, "up_arrow");
         input.registerKey(KeyEvent.VK_DOWN, "down_arrow");
         input.registerKey(KeyEvent.VK_SPACE, "spacebar");
@@ -264,16 +264,11 @@ public class GameEngine {
         gsManager.getCurrentState().update(input);
         
         // checks if game should stop or if full screen should be toggled
-        if (input.getJustDownKey("exit")) {
-            stop();
+        if (input.getJustDownKey("debug")) {
+        	setDebug(!debug);
         }
-        else {
-            if (input.getJustDownKey("debug")) {
-                setDebug(!debug);
-            }
-            if (input.getJustDownKey("fullscreen")) {
-                window.setFullscreen(!window.isFullscreen());
-            }
+        if (input.getJustDownKey("fullscreen")) {
+            window.setFullscreen(!window.isFullscreen());
         }
         
         input.update();

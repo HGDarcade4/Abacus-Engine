@@ -69,13 +69,15 @@ public class Menu {
 	public void moveSelectionUp() {
 		if (this.currentSelectionIndex > 0) {
 			this.currentSelectionIndex--;
+			this.currentSelectionFader.reset();
 		}
 	}
 	
 	// moves the current selection in the menu down by one
 	public void moveSelectionDown() {
-		if (this.currentSelectionIndex < this.options.size()) {
+		if (this.currentSelectionIndex < this.options.size() - 1) {
 			this.currentSelectionIndex++;
+			this.currentSelectionFader.reset();
 		}
 	}
 	
