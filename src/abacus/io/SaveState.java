@@ -11,11 +11,14 @@ import java.util.Scanner;
 public class SaveState {
 	private Path path;
 	private int currentState;
+	private float playerX;
+	private float playerY;
 	
 	public SaveState(String fileName) {
 		this.path = Paths.get(fileName);
 		this.currentState = -1;
-		//this.playerX = 
+		this.playerX = 0;
+		this.playerY = 0;
 	}
 	
 	public boolean saveData() {

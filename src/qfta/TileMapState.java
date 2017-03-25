@@ -6,11 +6,13 @@ import abacus.gameobject.Collider;
 import abacus.gameobject.GameObject;
 import abacus.gameobject.GameObjectLoader;
 import abacus.gameobject.Scene;
+import abacus.graphics.GameFont;
 import abacus.graphics.Renderer;
 import abacus.graphics.WorldRenderer;
 import abacus.sound.Sound;
 import abacus.tile.TileMap;
 import abacus.ui.Input;
+import abacus.ui.Menu;
 import qfta.component.CharacterMovement;
 import qfta.component.HumanoidRenderer;
 import qfta.component.InputController;
@@ -36,6 +38,14 @@ public class TileMapState extends GameState {
     // sounds
     private Sound soundEffect;
     private Sound music;
+    
+    // fonts
+    private GameFont font;
+    
+    // pause variables
+    private boolean paused;
+    private Menu pauseMenu;
+    private int pauseQuit, pauseSettings;
     
     // initialize a bunch of stuff
     @Override
@@ -83,6 +93,16 @@ public class TileMapState extends GameState {
         // load sounds
         soundEffect = loader.loadSound("res/sound_effect.wav");
         music = loader.loadSound("res/town idea 2.1.wav");
+        
+        // load fonts
+        this.font = loader.getFontCreator().createBasicFont("res/font.png", 10, 12, 0xFFFFFF);
+        
+        this.paused = false;
+        
+        this.pauseMenu = new Menu(200, 30);
+        this.pauseSettings = this.pauseMenu.addOption("Settings");
+        this.pauseQuit = this.pauseMenu.addOption("Quit");
+
     }
 
     @Override
@@ -96,8 +116,14 @@ public class TileMapState extends GameState {
     @Override
     public void update(Input input) {
         // update game logic
-        map.update();
-        scene.update(input);
+        if (input.getJustDownKey("p")) {
+        	this.pause();
+        }
+
+        if (!paused) {
+        	map.update();
+        	scene.update(input);
+        }
     }
 
     // render map and player
@@ -118,13 +144,25 @@ public class TileMapState extends GameState {
         
         // draw the map
         map.render(worldRender);
-        
+
         engine.debugLine("");
         engine.debugLine("(" + player.getTransform().x + ", " + player.getTransform().y + ")");
+
+        if (paused) {
+        	String label = "PAUSED";
+        	font.setSize(20);
+        	int x = (int) (renderer.getWidth()/2 - font.getWidth(label)/2);
+        	int y = (int) (renderer.getHeight()/2);
+        	font.draw(label, x, y);
+        	
+        	this.pauseMenu.render(renderer, font);
+        }
     }
 
     @Override
-    public void pause() {}
+    public void pause() {
+    	this.paused = !this.paused;
+    }
 
     // stop music when exiting the game state
     @Override
