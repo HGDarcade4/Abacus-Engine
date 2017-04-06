@@ -4,6 +4,7 @@ import static abacus.tile.ConnectionTiles.getCode;
 
 import java.awt.image.BufferedImage;
 
+import abacus.editor.LevelEditor;
 import abacus.editor.SpriteSheet;
 import abacus.editor.Tile;
 import abacus.editor.TileMap;
@@ -104,7 +105,7 @@ public class ConnectedTileImageProvider implements TileImageProvider {
 
 	@Override
 	public int tilesWide() {
-		return sheet.tilesWide() / 4;
+		return sheet.tilesWide() / 4 / frames;
 	}
 
 	@Override
@@ -123,10 +124,12 @@ public class ConnectedTileImageProvider implements TileImageProvider {
 	}
 	
 	private void getConnectedTile(int tileX, int tileY, int tl, int tr, int bl, int br, BufferedImage[] images) {
-		images[0] = sheet.get(tileX*4 + offX[UP_LEFT][tl], tileY*6 + offY[UP_LEFT][tl]);
-		images[1] = sheet.get(tileX*4 + offX[UP_RIGHT][tr], tileY*6 + offY[UP_RIGHT][tr]);
-		images[2] = sheet.get(tileX*4 + offX[DOWN_LEFT][bl], tileY*6 + offY[DOWN_LEFT][bl]);
-		images[3] = sheet.get(tileX*4 + offX[DOWN_RIGHT][br], tileY*6 + offY[DOWN_RIGHT][br]);
+		int x = tileX*4*frames + (int)(LevelEditor.tick % frames)*frames;
+		
+		images[0] = sheet.get(x + offX[UP_LEFT][tl], tileY*6 + offY[UP_LEFT][tl]);
+		images[1] = sheet.get(x + offX[UP_RIGHT][tr], tileY*6 + offY[UP_RIGHT][tr]);
+		images[2] = sheet.get(x + offX[DOWN_LEFT][bl], tileY*6 + offY[DOWN_LEFT][bl]);
+		images[3] = sheet.get(x + offX[DOWN_RIGHT][br], tileY*6 + offY[DOWN_RIGHT][br]);
 	}
 	
 	public int getCode(Tile compare, TileMap map, int x, int y, int layer, int horizontal, int vertical) {
