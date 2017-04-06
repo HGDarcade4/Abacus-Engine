@@ -36,5 +36,11 @@ public class TileMap {
     public int getHeight() {
         return height;
     }
+
+	public boolean inBounds(int x, int y, int layer) {
+		return x >= 0 && x < width &&
+			   y >= 0 && y < height && 
+			   layer >= 0 && layer < layers.size();
+	}
     
 }

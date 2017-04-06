@@ -12,9 +12,15 @@ import abacus.editor.gui.Splitter;
 import abacus.editor.gui.TileChooser;
 import abacus.editor.gui.TileMapPanel;
 import abacus.editor.gui.Window;
+import abacus.editor.imageprovider.BasicTileImageProvider;
+import abacus.editor.imageprovider.ConnectedTileImageProvider;
+import abacus.editor.imageprovider.NullTileImageProvider;
+import abacus.editor.imageprovider.TileImageProvider;
 
 public class LevelEditor {
 
+	public static volatile long tick = 0;
+	
     public Window window;
     public TileMapPanel mapDisplay;
     public TileChooser chooser;
@@ -22,11 +28,15 @@ public class LevelEditor {
     public TileMap map = null;
     public TileImageProvider tileTypes[] = new TileImageProvider[256];
     
+    public int currentLayer = 0;
+    public int currentId = 1;
+    public int[][] currentMeta = new int[][] {{ 0 }};
+    
     private JMenuBar menuBar;
     
     public LevelEditor() {
         mapDisplay = new TileMapPanel(this);
-        chooser = new TileChooser();
+        chooser = new TileChooser(this);
         Splitter s1 = new Splitter(mapDisplay, chooser, false, true, Window.DEF_WIDTH - 256);
         
         menuBar = new JMenuBar();
@@ -47,6 +57,10 @@ public class LevelEditor {
     }
     
     public void newFile(int width, int height) {
+    	currentId = 2;
+    	currentLayer = 0;
+    	currentMeta = new int[][] {{ 0 }};
+    	
         map = new TileMap(width, height);
         mapDisplay.setMap(map);
         for (int i = 0; i < tileTypes.length; i++) {
@@ -54,13 +68,16 @@ public class LevelEditor {
         }
         
         try {
-            tileTypes[0] = new BasicTileImageProvider(new SpriteSheet("res/tileset_01.png", 8, 8));
-            tileTypes[1] = new BasicTileImageProvider(new SpriteSheet("res/tileset_02.png", 8, 8));
-            tileTypes[2] = new BasicTileImageProvider(new SpriteSheet("res/tileset_03.png", 8, 8));
-            tileTypes[3] = new BasicTileImageProvider(new SpriteSheet("res/tileset_04.png", 8, 8));
+        	tileTypes[0] = new NullTileImageProvider();
+            tileTypes[1] = new BasicTileImageProvider(new SpriteSheet("res/tileset_01.png", 8, 8));
+            tileTypes[2] = new ConnectedTileImageProvider(new SpriteSheet("res/tileset_02.png", 8, 8), 1);
+            tileTypes[3] = new BasicTileImageProvider(new SpriteSheet("res/tileset_03.png", 8, 8));
+            tileTypes[4] = new BasicTileImageProvider(new SpriteSheet("res/tileset_04.png", 8, 8));
         } catch (IOException e) {
             e.printStackTrace();
         }
+        
+        mapDisplay.fillAllLayerTiles();
     }
     
     public static void main(String args[]) {

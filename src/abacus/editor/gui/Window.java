@@ -4,13 +4,15 @@ import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.SwingUtilities;
 
+import abacus.editor.LevelEditor;
+
 public class Window {
 
     public static final String PREFIX = "Level Editor - ";
     public static final String UNTITLED = "untitled";
     
-    public static final int DEF_WIDTH = 1200;
-    public static final int DEF_HEIGHT = 900;
+    public static final int DEF_WIDTH = 800;
+    public static final int DEF_HEIGHT = 600;
     
     private JFrame frame;
     
@@ -31,6 +33,7 @@ public class Window {
                 while (true) {
                     SwingUtilities.invokeLater(new Runnable() {
                         public void run() {
+                        	LevelEditor.tick++;
                             frame.repaint();
                         }
                     });
