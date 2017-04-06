@@ -1,4 +1,4 @@
-package abacus.editor;
+package abacus.editorold;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 public class EditorTileMap {
 
     private int width, height;
-    private List<Layer> layers;
+    private List<EditorLayer> layers;
     
     public EditorTileMap(int width, int height) {
         this.width = width;
@@ -14,13 +14,13 @@ public class EditorTileMap {
         layers = new ArrayList<>();
     }
     
-    public Layer getLayer(int layer) {
+    public EditorLayer getLayer(int layer) {
         return layers.get(layer);
     }
     
     public void addLayers(int amt) {
         for (int i = 0; i < amt; i++) {
-            layers.add(new Layer(width, height));
+            layers.add(new EditorLayer(width, height));
         }
     }
     

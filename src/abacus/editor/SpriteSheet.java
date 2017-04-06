@@ -8,13 +8,13 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-public class EditorSpriteSheet {
+public class SpriteSheet {
 
     private int tileWidth, tileHeight;
     private int tilesWide, tilesHigh;
     private List<BufferedImage> images;
     
-    public EditorSpriteSheet(String filename, int tileWidth, int tileHeight) throws IOException {
+    public SpriteSheet(String filename, int tileWidth, int tileHeight) throws IOException {
         images = new ArrayList<>();
         this.tileHeight = tileHeight;
         this.tileWidth = tileWidth;

@@ -1,4 +1,4 @@
-package abacus.editor.gui;
+package abacus.editorold.gui;
 
 import java.awt.Dimension;
 
@@ -10,9 +10,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 
-import abacus.editor.LevelEditor;
-import abacus.editor.action.ExitAction;
-import abacus.editor.action.NewAction;
+import abacus.editorold.LevelEditor;
+import abacus.editorold.action.ExitAction;
+import abacus.editorold.action.NewAction;
 
 /*
  * WORK IN PROGRESS DON'T MESS WITH THIS
