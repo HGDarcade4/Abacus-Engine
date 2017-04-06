@@ -3,6 +3,7 @@ package abacus.editor.gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -39,7 +40,8 @@ public class TileMapPanel implements GuiComponent, MouseListener, MouseMotionLis
     
     public void draw(Graphics g) {
         g.setColor(BACKGROUND);
-        g.fillRect(0, 0, panel.getWidth(), panel.getHeight());
+        Rectangle visible = panel.getVisibleRect();
+        g.fillRect(visible.x, visible.y, visible.width, visible.height);
         
         if (map == null) return;
         
@@ -47,9 +49,14 @@ public class TileMapPanel implements GuiComponent, MouseListener, MouseMotionLis
         
         BufferedImage images[] = new BufferedImage[8];
         
+        int startX = Math.max(0, visible.x / tileSize);
+        int startY = Math.max(0, (panel.getHeight() - visible.y - visible.height) / tileSize);
+        int endX = Math.min(map.getWidth(), (visible.x + visible.width) / tileSize + 1);
+        int endY = Math.min(map.getHeight(), (panel.getHeight() - visible.y) / tileSize + 1);
+        
         for (int layer = 0; layer < map.getLayerCount(); layer++) {
-            for (int x = 0; x < map.getWidth(); x++) {
-                for (int y = map.getHeight() - 1; y >= 0; y--) {
+            for (int x = startX; x < endX; x++) {
+                for (int y = endY - 1; y >= startY; y--) {
                 	for (int i = 0; i < 8; i++) {
                 		images[i] = null;
                 	}
