@@ -16,6 +16,7 @@ import abacus.editor.imageprovider.BasicTileImageProvider;
 import abacus.editor.imageprovider.ConnectedTileImageProvider;
 import abacus.editor.imageprovider.NullTileImageProvider;
 import abacus.editor.imageprovider.TileImageProvider;
+import abacus.editor.imageprovider.WallTileImageProvider;
 
 public class LevelEditor {
 
@@ -57,7 +58,7 @@ public class LevelEditor {
     }
     
     public void newFile(int width, int height) {
-    	currentId = 3;
+    	currentId = 2;
     	currentLayer = 0;
     	currentMeta = new int[][] {{ 0 }};
     	
@@ -72,12 +73,15 @@ public class LevelEditor {
             tileTypes[1] = new BasicTileImageProvider(new SpriteSheet("res/tileset_01.png", 8, 8));
             tileTypes[2] = new ConnectedTileImageProvider(new SpriteSheet("res/tileset_02.png", 8, 8), 1);
             tileTypes[3] = new ConnectedTileImageProvider(new SpriteSheet("res/tileset_03.png", 8, 8), 4);
-            tileTypes[4] = new BasicTileImageProvider(new SpriteSheet("res/tileset_04.png", 8, 8));
+            tileTypes[4] = new WallTileImageProvider(new SpriteSheet("res/tileset_04.png", 8, 8), 1);
         } catch (IOException e) {
             e.printStackTrace();
         }
         
         mapDisplay.fillAllLayerTiles();
+        
+        currentId = 4;
+        chooser.updateCurrentTileSet();
     }
     
     public static void main(String args[]) {

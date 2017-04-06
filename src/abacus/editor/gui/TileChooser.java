@@ -45,7 +45,7 @@ public class TileChooser implements GuiComponent, MouseListener, MouseMotionList
         int id = editor.currentId;
     	if (editor.tileTypes[id] == null) return;
     	
-    	BufferedImage[] images = new BufferedImage[4];
+    	BufferedImage[] images = new BufferedImage[8];
     	
     	for (int x = 0; x < editor.tileTypes[id].tilesWide(); x++) {
     		for (int y = 0; y < editor.tileTypes[id].tilesHigh(); y++) {

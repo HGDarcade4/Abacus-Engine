@@ -45,11 +45,14 @@ public class TileMapPanel implements GuiComponent, MouseListener, MouseMotionLis
         
         int yStart = panel.getHeight() - tileSize;
         
-        BufferedImage images[] = new BufferedImage[4];
+        BufferedImage images[] = new BufferedImage[8];
         
         for (int layer = 0; layer < map.getLayerCount(); layer++) {
             for (int x = 0; x < map.getWidth(); x++) {
-                for (int y = 0; y < map.getHeight(); y++) {
+                for (int y = map.getHeight() - 1; y >= 0; y--) {
+                	for (int i = 0; i < 8; i++) {
+                		images[i] = null;
+                	}
                     Tile tile = map.getLayer(layer).getTile(x, y);
                     if (editor.tileTypes[tile.tileId] != null) {
                         editor.tileTypes[tile.tileId].getImages(map, x, y, layer, images);
@@ -65,7 +68,7 @@ public class TileMapPanel implements GuiComponent, MouseListener, MouseMotionLis
                                     images[1], 
                                     tileSize * x + tileSize/2,
                                     yStart - (tileSize * y), 
-                                    tileSize/2 - 1, 
+                                    tileSize/2 - 0, 
                                     tileSize/2, 
                                     panel);
                             g.drawImage(
@@ -73,14 +76,43 @@ public class TileMapPanel implements GuiComponent, MouseListener, MouseMotionLis
                                     tileSize * x,
                                     yStart - (tileSize * y) + tileSize/2, 
                                     tileSize/2, 
-                                    tileSize/2 - 1, 
+                                    tileSize/2 - 0, 
                                     panel);
                             g.drawImage(
                                     images[3], 
                                     tileSize * x + tileSize/2,
                                     yStart - (tileSize * y) + tileSize/2, 
-                                    tileSize/2 - 1, 
-                                    tileSize/2 - 1, 
+                                    tileSize/2 - 0, 
+                                    tileSize/2 - 0, 
+                                    panel);
+                            // for walls
+                            g.drawImage(
+                                    images[4], 
+                                    tileSize * x,
+                                    yStart - (tileSize * y) - tileSize, 
+                                    tileSize/2, 
+                                    tileSize/2, 
+                                    panel);
+                            g.drawImage(
+                                    images[5], 
+                                    tileSize * x + tileSize/2,
+                                    yStart - (tileSize * y) - tileSize, 
+                                    tileSize/2 - 0, 
+                                    tileSize/2, 
+                                    panel);
+                            g.drawImage(
+                                    images[6], 
+                                    tileSize * x,
+                                    yStart - (tileSize * y) + tileSize/2 - tileSize, 
+                                    tileSize/2, 
+                                    tileSize/2 - 0, 
+                                    panel);
+                            g.drawImage(
+                                    images[7], 
+                                    tileSize * x + tileSize/2,
+                                    yStart - (tileSize * y) + tileSize/2 - tileSize, 
+                                    tileSize/2 - 0, 
+                                    tileSize/2 - 0, 
                                     panel);
                         }
                     }
