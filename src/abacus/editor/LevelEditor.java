@@ -7,7 +7,10 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import abacus.editor.action.ExitAction;
+import abacus.editor.action.LayerAction;
 import abacus.editor.action.NewAction;
+import abacus.editor.action.TileSetAction;
+import abacus.editor.gui.InfoText;
 import abacus.editor.gui.Splitter;
 import abacus.editor.gui.TileChooser;
 import abacus.editor.gui.TileMapPanel;
@@ -22,9 +25,16 @@ public class LevelEditor {
 
 	public static volatile long tick = 0;
 	
+	public static String[] layerNames = new String[] {
+	        "Background", 
+	        "Main Tiles", 
+	        "Detail"
+	};
+	
     public Window window;
     public TileMapPanel mapDisplay;
     public TileChooser chooser;
+    public InfoText infoText;
     
     public TileMap map = null;
     public TileImageProvider tileTypes[] = new TileImageProvider[256];
@@ -38,6 +48,7 @@ public class LevelEditor {
     public LevelEditor() {
         mapDisplay = new TileMapPanel(this);
         chooser = new TileChooser(this);
+        infoText = new InfoText(this);
         Splitter s1 = new Splitter(mapDisplay, chooser, false, true, Window.DEF_WIDTH - 256);
         
         menuBar = new JMenuBar();
@@ -51,7 +62,23 @@ public class LevelEditor {
         fileMenu.addSeparator();
         fileMenu.add(new JMenuItem(new ExitAction())).setText("Exit");
         
+        JMenu tileMenu = new JMenu("Tileset");
+        
+        tileMenu.add(new JMenuItem(new TileSetAction(this, 1))).setText("Basic Tiles");
+        tileMenu.add(new JMenuItem(new TileSetAction(this, 2))).setText("Static Connected Tiles");
+        tileMenu.add(new JMenuItem(new TileSetAction(this, 3))).setText("Animated Connected Tiles");
+        tileMenu.add(new JMenuItem(new TileSetAction(this, 4))).setText("Wall Tiles");
+        
+        JMenu layerMenu = new JMenu("Layer");
+        
+        layerMenu.add(new JMenuItem(new LayerAction(this, 0))).setText(layerNames[0]);
+        layerMenu.add(new JMenuItem(new LayerAction(this, 1))).setText(layerNames[1]);
+        layerMenu.add(new JMenuItem(new LayerAction(this, 2))).setText(layerNames[2]);
+        
         menuBar.add(fileMenu);
+        menuBar.add(tileMenu);
+        menuBar.add(layerMenu);
+        menuBar.add(infoText.getComponent());
         
         window = new Window(menuBar, s1);
         window.animate();
@@ -63,6 +90,7 @@ public class LevelEditor {
     	currentMeta = new int[][] {{ 0 }};
     	
         map = new TileMap(width, height);
+        map.addLayers(3);
         mapDisplay.setMap(map);
         for (int i = 0; i < tileTypes.length; i++) {
             tileTypes[i] = null;

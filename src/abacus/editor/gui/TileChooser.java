@@ -109,6 +109,12 @@ public class TileChooser implements GuiComponent, MouseListener, MouseMotionList
     	panel.revalidate();
     }
     
+    public void resetSelection() {
+        startX = endX = 0;
+        startY = endY = 0;
+        panel.repaint();
+    }
+    
     public void updateSelection(int x, int y) {
     	endX = x;
     	endY = y;
