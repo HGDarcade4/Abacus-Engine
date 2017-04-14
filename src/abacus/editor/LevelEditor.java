@@ -10,6 +10,7 @@ import javax.swing.JMenuItem;
 import abacus.editor.action.ExitAction;
 import abacus.editor.action.LayerAction;
 import abacus.editor.action.NewAction;
+import abacus.editor.action.OpenAction;
 import abacus.editor.action.SaveAction;
 import abacus.editor.action.TileSetAction;
 import abacus.editor.gui.BrushSize;
@@ -45,6 +46,7 @@ public class LevelEditor {
     public int currentLayer = 0;
     public int currentId = 1;
     public int brushSize = 1;
+    public int cursorX, cursorY;
     public int[][] currentMeta = new int[][] {{ 0 }};
     
     private JMenuBar menuBar;
@@ -59,7 +61,7 @@ public class LevelEditor {
         JMenu fileMenu = new JMenu("File");
         
         fileMenu.add(new JMenuItem(new NewAction(this))).setText("New");
-//        fileMenu.add(new JMenuItem("Open"));
+        fileMenu.add(new JMenuItem(new OpenAction(this))).setText("Open");
         fileMenu.addSeparator();
         fileMenu.add(new JMenuItem(new SaveAction(this))).setText("Save");
 //        fileMenu.add(new JMenuItem("Save As"));

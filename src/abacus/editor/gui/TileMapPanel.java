@@ -213,11 +213,17 @@ public class TileMapPanel implements GuiComponent, MouseListener, MouseMotionLis
 		int x = e.getX() / tileSize;
 		int y = (panel.getHeight() - e.getY()) / tileSize;
 		paintTiles(x, y);
+		
+		editor.cursorX = e.getX() / tileSize;
+        editor.cursorY = (panel.getHeight() - e.getY()) / tileSize;
+        editor.infoText.refresh();
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		
+	    editor.cursorX = e.getX() / tileSize;
+        editor.cursorY = (panel.getHeight() - e.getY()) / tileSize;
+        editor.infoText.refresh();
 	}
 
 	@Override

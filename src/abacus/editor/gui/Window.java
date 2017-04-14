@@ -8,8 +8,7 @@ import abacus.editor.LevelEditor;
 
 public class Window {
 
-    public static final String PREFIX = "Level Editor - ";
-    public static final String UNTITLED = "untitled";
+    public static final String TITLE = "Level Editor";
     
     public static final int DEF_WIDTH = 800;
     public static final int DEF_HEIGHT = 600;
@@ -17,7 +16,7 @@ public class Window {
     private JFrame frame;
     
     public Window(JMenuBar menu, GuiComponent display) {
-        frame = new JFrame(PREFIX + UNTITLED);
+        frame = new JFrame(TITLE);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(DEF_WIDTH, DEF_HEIGHT);
         frame.setLocationRelativeTo(null);

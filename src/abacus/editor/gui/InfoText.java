@@ -17,7 +17,8 @@ public class InfoText implements GuiComponent {
     }
     
     public void refresh() {
-        label.setText("  |  Current Layer: " + LevelEditor.layerNames[editor.currentLayer]);
+        label.setText("  |  Current Layer: " + LevelEditor.layerNames[editor.currentLayer] + "  |  Cursor: (" + 
+                editor.cursorX + ", " + editor.cursorY + ")" );
     }
 
     @Override
