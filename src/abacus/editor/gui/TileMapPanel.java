@@ -50,7 +50,7 @@ public class TileMapPanel implements GuiComponent, MouseListener, MouseMotionLis
         BufferedImage images[] = new BufferedImage[8];
         
         int startX = Math.max(0, visible.x / tileSize);
-        int startY = Math.max(0, (panel.getHeight() - visible.y - visible.height) / tileSize);
+        int startY = Math.max(0, (panel.getHeight() - visible.y - visible.height) / tileSize - 1);
         int endX = Math.min(map.getWidth(), (visible.x + visible.width) / tileSize + 1);
         int endY = Math.min(map.getHeight(), (panel.getHeight() - visible.y) / tileSize + 1);
         
@@ -170,14 +170,18 @@ public class TileMapPanel implements GuiComponent, MouseListener, MouseMotionLis
     public void paintTiles(int x, int y) {
     	if (map == null) return;
     	
-    	for (int xx = 0; xx < editor.currentMeta.length; xx++) {
-    		for (int yy = 0; yy < editor.currentMeta[0].length; yy++) {
-    			if (map.inBounds(x + xx, y - yy, editor.currentLayer)) {
-    				Tile tile = map.getLayer(editor.currentLayer).getTile(x + xx, y - yy);
-    				tile.tileId = editor.currentId;
-    				tile.tileMeta = editor.currentMeta[xx][yy];
-    			}
-    		}
+    	for (int i = 0; i < editor.brushSize; i++) {
+    	    for (int j = 0; j < editor.brushSize; j++) {
+            	for (int xx = 0; xx < editor.currentMeta.length; xx++) {
+            		for (int yy = 0; yy < editor.currentMeta[0].length; yy++) {
+            			if (map.inBounds(x + xx + i, y - yy + j, editor.currentLayer)) {
+            				Tile tile = map.getLayer(editor.currentLayer).getTile(x + xx + i, y - yy + j);
+            				tile.tileId = editor.currentId;
+            				tile.tileMeta = editor.currentMeta[xx][yy];
+            			}
+            		}
+            	}
+    	    }
     	}
     	
     	panel.repaint();

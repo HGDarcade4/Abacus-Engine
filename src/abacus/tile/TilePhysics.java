@@ -3,6 +3,7 @@ package abacus.tile;
 public class TilePhysics {
 
     private TileMap map;
+    private String teleport = null;
     
     public TilePhysics(TileMap map) {
         this.map = map;
@@ -61,10 +62,18 @@ public class TilePhysics {
             depth[i] = Float.MAX_VALUE;
         }
         
-        if (!map.getCollision(x + 1, y)) depth[RIGHT] = maxX - body.getMinX();
-        if (!map.getCollision(x - 1, y)) depth[LEFT] = -minX + body.getMaxX();
-        if (!map.getCollision(x, y - 1)) depth[DOWN] = body.getMaxY() - minY;
-        if (!map.getCollision(x, y + 1)) depth[UP] = maxY - body.getMinY();
+        if (!map.getCollision(x + 1, y)) {
+            depth[RIGHT] = maxX - body.getMinX();
+        }
+        if (!map.getCollision(x - 1, y)) {
+            depth[LEFT] = -minX + body.getMaxX();
+        }
+        if (!map.getCollision(x, y - 1)) {
+            depth[DOWN] = body.getMaxY() - minY;
+        }
+        if (!map.getCollision(x, y + 1)) {
+            depth[UP] = maxY - body.getMinY();
+        }
         
         int smallestDepth = minGTZero(depth);
         

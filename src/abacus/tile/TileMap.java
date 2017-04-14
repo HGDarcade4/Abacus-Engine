@@ -10,6 +10,7 @@ public class TileMap {
     private int width, height;
     private List<TileMapLayer> layers;
     private boolean[] collision;
+    private String[] teleport;
     
     private TileRegistry tiles;
     
@@ -24,6 +25,7 @@ public class TileMap {
             TileMapLayer layer = new TileMapLayer(width, height, i);
             this.layers.add(layer);
         }
+        teleport = new String[width * height];
         collision = new boolean[width * height];
         tiles = new TileRegistry();
     }
@@ -140,6 +142,19 @@ public class TileMap {
     public void setCollision(int x, int y, boolean solid) {
         if (inBounds(x, y)) {
             collision[x + y * width] = solid;
+        }
+    }
+    
+    public String getTeleport(int x, int y) {
+        if (inBounds(x, y)) {
+            return teleport[x + y * width];
+        }
+        return null;
+    }
+    
+    public void setTeleport(int x, int y, String tp) {
+        if (inBounds(x, y)) {
+            teleport[x + y * width] = tp;
         }
     }
 }

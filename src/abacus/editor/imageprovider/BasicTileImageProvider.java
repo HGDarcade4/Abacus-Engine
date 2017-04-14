@@ -1,6 +1,7 @@
 package abacus.editor.imageprovider;
 
 import java.awt.image.BufferedImage;
+import java.io.PrintWriter;
 
 import abacus.editor.SpriteSheet;
 import abacus.editor.TileMap;
@@ -44,5 +45,10 @@ public class BasicTileImageProvider implements TileImageProvider {
 	public int getMeta(int tileX, int tileY) {
 		return tileX + tileY * tilesWide();
 	}
+
+    @Override
+    public void saveData(PrintWriter out) {
+        out.print("basic " + sheet.getFileName());
+    }
 
 }

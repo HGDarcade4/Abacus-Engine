@@ -1,13 +1,11 @@
 package abacus.gameobject;
 
 import java.io.FileInputStream;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 import abacus.ResourceLoader;
 import abacus.graphics.SpriteSheet;
+import abacus.tile.ConnectedTile;
 import abacus.tile.NullTile;
 import abacus.tile.SpriteSheetTile;
 import abacus.tile.TileMap;
@@ -22,45 +20,49 @@ public final class SceneLoader {
     public static Scene read(String filename, ResourceLoader loader, int tileSize) {
         try {
             Scanner in = new Scanner(new FileInputStream(filename));
-            Map<Integer, SpriteSheet> tilesets = new HashMap<>();
             TileRegistry tiles = new TileRegistry();
             
-            int numSets = in.nextInt();
-//            System.out.println("# Tilesets: " + numSets);
-            in.nextLine();
-            for (int i = 0; i < numSets; i++) {
-                loadTileset(tilesets, in, loader);
-            }
-            
             int numTiles = in.nextInt();
-//            System.out.print("# Tiletypes: " + numTiles);
-            in.nextLine();
             for (int i = 0; i < numTiles; i++) {
-                loadTile(tiles, tilesets, in, loader);
+                loadTile(tiles, in, loader);
             }
             
-//            System.out.println("Loading TileMap");
             TileMap map = loadTileMap(tiles, in, tileSize);
             
-//            System.out.println("Done with map: " + map);
-            
             Scene scene = new Scene(map);
+            
+            while (in.hasNext()) {
+                String command = in.next();
+                if (command.equals("music")) {
+                    scene.setMusicFileName(in.next());
+                }
+                else if (command.equals("start")) {
+                    int x = in.nextInt();
+                    int y = in.nextInt();
+                    scene.setStartPos(x, y);
+                }
+                else if (command.equals("tp")) {
+                    int x = in.nextInt();
+                    int y = in.nextInt();
+                    String tp = in.next();
+                    map.setTeleport(x, y, tp);
+                }
+            }
             
             in.close();
             return scene;
         } catch (Exception e) {
-            System.out.println("Problem reading scene from " + filename);
+            System.out.println("Problem reading scene from " + filename + "\n");
+            e.printStackTrace();
             return null;
         }
     }
     
     private static TileMap loadTileMap(TileRegistry tiles, Scanner in, int tileSize) {
+        int layers = in.nextInt();
         int width = in.nextInt();
         int height = in.nextInt();
-        int layers = in.nextInt();
         in.nextLine();
-        
-//        System.out.println(width + " " + height + " " + layers);
         
         TileMap map = new TileMap(width, height, layers, tileSize);
         map.setTileRegistry(tiles);
@@ -71,85 +73,57 @@ public final class SceneLoader {
                     int id = in.nextInt();
                     int meta = in.nextInt();
                     map.setTile(x, y, layer, id, meta);
+                    
+                    if (id == 4) {
+                        map.setCollision(x, y, true);
+                    }
+                    else if (id == 3 && meta == 0) {
+                        map.setCollision(x, y, true);
+                    }
+                    else if (id == 1) {
+                        map.setCollision(x, y, false);
+                    }
                 }
-                in.nextLine();
             }
-        }
-        
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                boolean solid = in.nextInt() != 0;
-                map.setCollision(x, y, solid);
-            }
-            in.nextLine();
         }
         
         return map;
     }
-
-    private static void loadTileset(Map<Integer, SpriteSheet> tilesets, Scanner in, ResourceLoader loader) {
-        int id = in.nextInt();
-        String file = "res/" + in.next() + ".png";
-        int width = in.nextInt();
-        int height = in.nextInt();
-        in.nextLine();
-        
-//        System.out.println(id + " " + file + " " + width + " " + height);
-        
-        tilesets.put(id, new SpriteSheet(loader.loadTexture(file), width, height));
-    }
     
-    private static void loadTile(TileRegistry tiles, Map<Integer, SpriteSheet> tilesets, Scanner in, ResourceLoader loader) {
+    private static void loadTile(TileRegistry tiles, Scanner in, ResourceLoader loader) {
         int id = in.nextInt();
         String type = in.next();
         
-//        System.out.println(id + " " + type);
-        
-        int tileset;
+        String tileset;
         SpriteSheet sheet;
         int delay;
-        int[] anim;
+        int frames;
         
         switch (type) {
-        case "Empty":
+        case "null":
             tiles.register(id, new NullTile());
             break;
-        case "TileSet":
-            tileset = in.nextInt();
-            sheet = tilesets.get(tileset);
+        case "basic":
+            tileset = in.next();
+            sheet = new SpriteSheet(loader.loadTexture(tileset), 16, 16);
             
             tiles.register(id, new SpriteSheetTile(sheet));
             break;
-        case "Connected":
-            tileset = in.nextInt();
-            sheet = tilesets.get(tileset);
-            
-            anim = new int[in.nextInt() * 2];
+        case "connect":
+            tileset = in.next();
+            sheet = new SpriteSheet(loader.loadTexture(tileset), 8, 8);
+            frames = in.nextInt();
             delay = in.nextInt();
-            for (int i = 0; i < anim.length; i++) {
-                anim[i] = in.nextInt();
-            }
             
-            System.out.println(anim.length + " " + delay + " " + Arrays.toString(anim));
-            
-//            tiles.register(id, new ConnectedTile(sheet, delay, anim));
+            tiles.register(id, new ConnectedTile(sheet, delay, frames));
             break;
-        case "Wall":
-            // TODO animated wall tiles
-            tileset = in.nextInt();
-            sheet = tilesets.get(tileset);
-            
-            anim = new int[in.nextInt() * 2];
+        case "wall":
+            tileset = in.next();
+            sheet = new SpriteSheet(loader.loadTexture(tileset), 8, 8);
+            frames = in.nextInt();
             delay = in.nextInt();
-//            System.out.println(anim.length + " " + delay + " start");
             
-            for (int i = 0; i < anim.length; i++) {
-                anim[i] = in.nextInt();
-            }
-            
-            System.out.println(anim.length + " " + delay + " " + Arrays.toString(anim));
-            
-//            tiles.register(id, new WallTile(sheet, anim[0] + 4, anim[1], anim[0], anim[1]));
+            tiles.register(id, new WallTile(sheet, delay, frames));
             break;
         }
         

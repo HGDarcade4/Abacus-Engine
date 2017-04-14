@@ -107,6 +107,23 @@ public class WorldRenderer {
         dr.getSprite().draw(drawX + half, drawY, half, half, alpha, layer);
     }
     
+    public void drawTileSprite(Renderable ul, Renderable ur, Renderable dl, Renderable dr, float tileSize, float x, float y, float extraLayer) {
+        x *= tileSize;
+        y *= tileSize;
+        
+        int drawX = halfWidth + (int)Math.floor((x) * scale) - (int)(camX * scale);
+        int drawY = halfHeight + (int)Math.floor((y) * scale) - (int)(camY * scale);
+        
+        int half = (int) (tileSize * scale / 2);
+        
+        float layer = this.layer + yAmt(y) + extraLayer;
+        
+        ul.getSprite().draw(drawX, drawY + half, half, half, alpha, layer);
+        ur.getSprite().draw(drawX + half, drawY + half, half, half, alpha, layer);
+        dl.getSprite().draw(drawX, drawY, half, half, alpha, layer);
+        dr.getSprite().draw(drawX + half, drawY, half, half, alpha, layer);
+    }
+    
     public void drawDebugRect(int col, float x, float y, float w, float h) {
         int drawX = halfWidth + (int)Math.floor((x) * scale) - (int)(camX * scale);
         int drawY = halfHeight + (int)Math.floor((y) * scale) - (int)(camY * scale);

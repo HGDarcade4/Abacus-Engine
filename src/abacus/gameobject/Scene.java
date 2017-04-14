@@ -14,6 +14,8 @@ public class Scene {
     private TileMap map;
     private TilePhysics physics;
     private List<GameObject> gameObjects;
+    private String music;
+    private int startX, startY;
     
     public Scene(TileMap map) {
         this.map = map;
@@ -24,6 +26,14 @@ public class Scene {
     
     protected Scene() {
         this(null);
+    }
+    
+    public void setMusicFileName(String filename) {
+        music = filename;
+    }
+    
+    public String getMusicFileName() {
+        return music;
     }
     
     public void addGameObject(GameObject go) {
@@ -72,6 +82,19 @@ public class Scene {
     public void setTileMap(TileMap map) {
         this.map = map;
         physics = new TilePhysics(map);
+    }
+
+    public void setStartPos(int x, int y) {
+        startX = x;
+        startY = y;
+    }
+    
+    public int getStartX() {
+        return startX;
+    }
+    
+    public int getStartY() {
+        return startY;
     }
     
 }

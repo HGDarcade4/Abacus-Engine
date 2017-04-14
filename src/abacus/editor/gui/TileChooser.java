@@ -132,6 +132,11 @@ public class TileChooser implements GuiComponent, MouseListener, MouseMotionList
 			startY = endY;
 			endY = tmp;
 		}
+		
+		startX = Math.min(editor.tileTypes[editor.currentId].tilesWide() - 1, Math.max(0, startX));
+		startY = Math.min(editor.tileTypes[editor.currentId].tilesHigh() - 1, Math.max(0, startY));
+		endX = Math.min(editor.tileTypes[editor.currentId].tilesWide() - 1, Math.max(0, endX));
+		endY = Math.min(editor.tileTypes[editor.currentId].tilesHigh() - 1, Math.max(0, endY));
     	
 		editor.currentMeta = new int[endX - startX + 1][endY - startY + 1];
 		for (int xx = 0; xx < editor.currentMeta.length; xx++) {

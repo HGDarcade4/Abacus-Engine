@@ -34,24 +34,19 @@ public class TileMapState extends GameState {
     private GameObject player;
     
     // sounds
-    private Sound soundEffect;
     private Sound music;
+    
+    private ResourceLoader loader;
     
     // initialize a bunch of stuff
     @Override
     public void init(ResourceLoader loader) {
+        this.loader = loader;
+        
         // create a world renderer
         worldRender = new WorldRenderer(engine.getRenderer());
         worldRender.setScale(4);
-        
-//        scene = SceneLoader.read("res/sample.scene", loader, QuestForTheAbacus.TILE_SIZE);//new Scene(map);
-        
-        map = new RandomTileMapGenerator(loader, 16).create(128, 128);//scene.getTileMap();
-        //scene.setTileMap(map);
-        scene = new Scene(map);
-        
-        map = scene.getTileMap();
-        
+
         GameObjectLoader gol = new GameObjectLoader();
         gol.registerComponentType("Collider", new Collider(1f, 1f));
         gol.registerComponentType("CharacterMovement", new CharacterMovement(1f));
@@ -61,31 +56,16 @@ public class TileMapState extends GameState {
         
         gol.loadArchetypes("res/game_object_list.gameobject");
         
-        for (int i = 0; i < 500; i++) {
-            int x = -1, y = -1;
-            while (map.getCollision(x, y)) {
-                x = (int)(Math.random() * map.getWidth());
-                y = (int)(Math.random() * map.getHeight());
-            }
-            
-            float xpos = (float)(x + Math.random()) * 16;
-            float ypos = (float)(y + Math.random()) * 16;
-            
-            scene.spawnArchetype("villager", xpos, ypos);
-        }
-        
-        player = scene.spawnArchetype("player", 64 * 16, 64 * 16);
+        player = GameObject.spawnArchetype("player", 0 * 16, 0 * 16);
         
         // load sounds
-        soundEffect = loader.loadSound("res/sound_effect.wav");
         music = loader.loadSound("res/town idea 2.1.wav");
+        
+        loadScene("res/test4.scene");
     }
 
     @Override
     public void enter() {
-        // start theme associated with map when the game state is entered
-        // we just don't have a theme for this yet
-        music.playAndLoop();
     }
 
     // update logic
@@ -94,6 +74,11 @@ public class TileMapState extends GameState {
         // update game logic
         map.update();
         scene.update(input);
+        
+        String tp = map.getTeleport((int)(player.getTransform().x/16), (int)(player.getTransform().y/16));
+        if (tp != null) {
+            loadScene(tp);
+        }
     }
 
     // render map and player
@@ -109,7 +94,7 @@ public class TileMapState extends GameState {
         worldRender.setView(player.getTransform().x, player.getTransform().y);
         
         // player draw layer
-        worldRender.setLayer(1);
+        worldRender.setLayer(3);
         scene.render(worldRender);
         
         // draw the map
@@ -125,11 +110,43 @@ public class TileMapState extends GameState {
     // stop music when exiting the game state
     @Override
     public void exit() {
-        soundEffect.stop();
         music.stop();
     }
 
     @Override
     public void end() {}
+    
+    private void loadScene(String filename) {
+        music.stop();
+        
+        scene = SceneLoader.read(filename, loader, QuestForTheAbacus.TILE_SIZE);
+        
+        map = scene.getTileMap();
+        
+        for (int i = 0; i < 100; i++) {
+            int x = -1, y = -1;
+            while (map.getCollision(x, y)) {
+                x = (int)(Math.random() * map.getWidth());
+                y = (int)(Math.random() * map.getHeight());
+            }
+            
+            float xpos = (float)(x + Math.random()) * 16;
+            float ypos = (float)(y + Math.random()) * 16;
+            
+            scene.spawnArchetype("villager", xpos, ypos);
+        }
+        
+        player.getTransform().x = scene.getStartX() * 16;
+        player.getTransform().y = scene.getStartY() * 16;
+        scene.addGameObject(player);
+        
+        if (scene.getMusicFileName() != null) {
+            music = loader.loadSound(scene.getMusicFileName());
+        }
+        else {
+            music = loader.loadSound("res/town idea 2.1.wav");
+        }
+        music.playAndLoop();
+    }
     
 }

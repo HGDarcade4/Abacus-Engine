@@ -1,6 +1,7 @@
 package abacus.editor.imageprovider;
 
 import java.awt.image.BufferedImage;
+import java.io.PrintWriter;
 
 import abacus.editor.TileMap;
 
@@ -36,5 +37,10 @@ public class NullTileImageProvider implements TileImageProvider {
 	public int getMeta(int tileX, int tileY) {
 		return 0;
 	}
+	
+	@Override
+    public void saveData(PrintWriter out) {
+        out.print("null");
+    }
 
 }

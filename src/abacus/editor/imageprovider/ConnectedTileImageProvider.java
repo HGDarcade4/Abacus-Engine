@@ -1,8 +1,7 @@
 package abacus.editor.imageprovider;
 
-import static abacus.tile.ConnectionTiles.getCode;
-
 import java.awt.image.BufferedImage;
+import java.io.PrintWriter;
 
 import abacus.editor.LevelEditor;
 import abacus.editor.SpriteSheet;
@@ -154,4 +153,9 @@ public class ConnectedTileImageProvider implements TileImageProvider {
         return flags;
     }
 
+	@Override
+    public void saveData(PrintWriter out) {
+        out.print("connect " + sheet.getFileName() + " " + frames + " 10 ");
+    }
+	
 }

@@ -10,15 +10,21 @@ import javax.imageio.ImageIO;
 
 public class SpriteSheet {
 
+    private String filename;
     private int tileWidth, tileHeight;
     private int tilesWide, tilesHigh;
     private List<BufferedImage> images;
     
     public SpriteSheet(String filename, int tileWidth, int tileHeight) throws IOException {
+        this.filename = filename;
         images = new ArrayList<>();
         this.tileHeight = tileHeight;
         this.tileWidth = tileWidth;
         genSprites(filename);
+    }
+    
+    public String getFileName() {
+        return filename;
     }
     
     public BufferedImage get(int i) {

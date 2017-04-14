@@ -19,8 +19,8 @@ public class NewAction extends AbstractAction {
     public void actionPerformed(ActionEvent e) {
         // TODO ask for map size
         int width, height;
-        width = 100;
-        height = 100;
+        width = 32;
+        height = 32;
         
         editor.newFile(width, height);
     }

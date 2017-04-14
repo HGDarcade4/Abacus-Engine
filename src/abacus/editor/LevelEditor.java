@@ -2,6 +2,7 @@ package abacus.editor;
 
 import java.io.IOException;
 
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -9,7 +10,9 @@ import javax.swing.JMenuItem;
 import abacus.editor.action.ExitAction;
 import abacus.editor.action.LayerAction;
 import abacus.editor.action.NewAction;
+import abacus.editor.action.SaveAction;
 import abacus.editor.action.TileSetAction;
+import abacus.editor.gui.BrushSize;
 import abacus.editor.gui.InfoText;
 import abacus.editor.gui.Splitter;
 import abacus.editor.gui.TileChooser;
@@ -37,10 +40,11 @@ public class LevelEditor {
     public InfoText infoText;
     
     public TileMap map = null;
-    public TileImageProvider tileTypes[] = new TileImageProvider[256];
+    public TileImageProvider tileTypes[] = new TileImageProvider[8];
     
     public int currentLayer = 0;
     public int currentId = 1;
+    public int brushSize = 1;
     public int[][] currentMeta = new int[][] {{ 0 }};
     
     private JMenuBar menuBar;
@@ -57,8 +61,8 @@ public class LevelEditor {
         fileMenu.add(new JMenuItem(new NewAction(this))).setText("New");
         fileMenu.add(new JMenuItem("Open"));
         fileMenu.addSeparator();
-        fileMenu.add(new JMenuItem("Save"));
-        fileMenu.add(new JMenuItem("Save As"));
+        fileMenu.add(new JMenuItem(new SaveAction(this))).setText("Save");
+//        fileMenu.add(new JMenuItem("Save As"));
         fileMenu.addSeparator();
         fileMenu.add(new JMenuItem(new ExitAction())).setText("Exit");
         
@@ -79,6 +83,8 @@ public class LevelEditor {
         menuBar.add(tileMenu);
         menuBar.add(layerMenu);
         menuBar.add(infoText.getComponent());
+        menuBar.add(new JLabel("  |  Brush Size: "));
+        menuBar.add(new BrushSize(this).getComponent());
         
         window = new Window(menuBar, s1);
         window.animate();
@@ -93,7 +99,7 @@ public class LevelEditor {
         map.addLayers(3);
         mapDisplay.setMap(map);
         for (int i = 0; i < tileTypes.length; i++) {
-            tileTypes[i] = null;
+            tileTypes[i] = new NullTileImageProvider();
         }
         
         try {

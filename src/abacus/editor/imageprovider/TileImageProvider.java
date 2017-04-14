@@ -1,6 +1,7 @@
 package abacus.editor.imageprovider;
 
 import java.awt.image.BufferedImage;
+import java.io.PrintWriter;
 
 import abacus.editor.TileMap;
 
@@ -13,4 +14,6 @@ public interface TileImageProvider {
     int getMeta(int tileX, int tileY);
     
     void getDisplayImages(int tileX, int tileY, BufferedImage images[]);
+    
+    void saveData(PrintWriter out);
 }
