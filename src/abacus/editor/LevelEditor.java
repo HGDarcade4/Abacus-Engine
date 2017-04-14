@@ -25,6 +25,32 @@ import abacus.editor.imageprovider.NullTileImageProvider;
 import abacus.editor.imageprovider.TileImageProvider;
 import abacus.editor.imageprovider.WallTileImageProvider;
 
+/*
+ * Level Editor class
+ * 
+ * First create a new map by going File -> New
+ * 
+ * Main area is the tile map. Normal click will paint tiles,
+ * Right click will erase tiles, Middle click will create a 
+ * teleport spot (to move to another scene)
+ * 
+ * To the right is the tile selector, click on the tile you want
+ * to paint with
+ * 
+ * Change layer and tile set in the menu
+ * 
+ * Background Layer should be for grass, dirt, water, etc. 
+ * Main Layer should be for walls
+ * Detail Layer should be for anything that should be rendered
+ *      above the other two layers
+ *      
+ * When saving, it will ask for a filename, player start x and y, and music file name
+ * you can find a good x and y start position by hovering over the area you want
+ * the player to spawn, and at the top there should be a label that says "Cursor: (x, y)"
+ * you would then use the x and y for the start position
+ * 
+ * REMEMBER TO PREFIX FILES WITH "res/"
+ */
 public class LevelEditor {
 
 	public static volatile long tick = 0;
