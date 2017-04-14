@@ -24,6 +24,8 @@ import qfta.component.SimpleAI;
  */
 public class TileMapState extends GameState {
 
+    private static final String DEFAULT_SONG = "res/town idea 2.1.wav";
+    
     // instance of world renderer
     private WorldRenderer worldRender;
     
@@ -59,13 +61,14 @@ public class TileMapState extends GameState {
         player = GameObject.spawnArchetype("player", 0 * 16, 0 * 16);
         
         // load sounds
-        music = loader.loadSound("res/town idea 2.1.wav");
+        music = loader.loadSound(DEFAULT_SONG);
         
-        loadScene("res/test4.scene");
+        loadScene("res/practice.scene");
     }
 
     @Override
     public void enter() {
+        music.playAndLoop();
     }
 
     // update logic
@@ -78,6 +81,7 @@ public class TileMapState extends GameState {
         String tp = map.getTeleport((int)(player.getTransform().x/16), (int)(player.getTransform().y/16));
         if (tp != null) {
             loadScene(tp);
+            music.playAndLoop();
         }
     }
 
@@ -105,7 +109,8 @@ public class TileMapState extends GameState {
     }
 
     @Override
-    public void pause() {}
+    public void pause() {
+    }
 
     // stop music when exiting the game state
     @Override
@@ -123,7 +128,7 @@ public class TileMapState extends GameState {
         
         map = scene.getTileMap();
         
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 30; i++) {
             int x = -1, y = -1;
             while (map.getCollision(x, y)) {
                 x = (int)(Math.random() * map.getWidth());
@@ -144,9 +149,8 @@ public class TileMapState extends GameState {
             music = loader.loadSound(scene.getMusicFileName());
         }
         else {
-            music = loader.loadSound("res/town idea 2.1.wav");
+            music = loader.loadSound(DEFAULT_SONG);
         }
-        music.playAndLoop();
     }
     
 }

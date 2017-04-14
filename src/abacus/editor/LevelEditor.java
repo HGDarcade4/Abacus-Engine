@@ -59,7 +59,7 @@ public class LevelEditor {
         JMenu fileMenu = new JMenu("File");
         
         fileMenu.add(new JMenuItem(new NewAction(this))).setText("New");
-        fileMenu.add(new JMenuItem("Open"));
+//        fileMenu.add(new JMenuItem("Open"));
         fileMenu.addSeparator();
         fileMenu.add(new JMenuItem(new SaveAction(this))).setText("Save");
 //        fileMenu.add(new JMenuItem("Save As"));

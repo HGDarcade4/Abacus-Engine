@@ -10,6 +10,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import abacus.editor.LevelEditor;
@@ -20,10 +21,16 @@ public class TileMapPanel implements GuiComponent, MouseListener, MouseMotionLis
 
     public static final Color BACKGROUND = new Color(0xDDDDDD);
     
+    public static final int PAINT_MODE = 0;
+    public static final int ERASE_MODE = 1;
+    public static final int TP_MODE = 2;
+    
     private LevelEditor editor;
     private JPanel panel;
     private TileMap map = null;
     private int tileSize = 32;
+    
+    private int mode = PAINT_MODE;
     
     @SuppressWarnings("serial")
     public TileMapPanel(LevelEditor editor) {
@@ -170,14 +177,28 @@ public class TileMapPanel implements GuiComponent, MouseListener, MouseMotionLis
     public void paintTiles(int x, int y) {
     	if (map == null) return;
     	
+    	String tp = null;
+    	if (mode == TP_MODE) {
+    	    tp = JOptionPane.showInputDialog(null, "Teleport scene file name: ", "Teleport", JOptionPane.OK_CANCEL_OPTION);
+    	}
+    	
     	for (int i = 0; i < editor.brushSize; i++) {
     	    for (int j = 0; j < editor.brushSize; j++) {
             	for (int xx = 0; xx < editor.currentMeta.length; xx++) {
             		for (int yy = 0; yy < editor.currentMeta[0].length; yy++) {
             			if (map.inBounds(x + xx + i, y - yy + j, editor.currentLayer)) {
             				Tile tile = map.getLayer(editor.currentLayer).getTile(x + xx + i, y - yy + j);
-            				tile.tileId = editor.currentId;
-            				tile.tileMeta = editor.currentMeta[xx][yy];
+            				if (mode == PAINT_MODE) {
+            				    tile.tileId = editor.currentId;
+                                tile.tileMeta = editor.currentMeta[xx][yy];
+            				}
+            				else if (mode == ERASE_MODE) {
+            				    tile.tileId = 0;
+                                tile.tileMeta = 0;
+            				}
+            				else if (mode == TP_MODE) {
+            				    tile.tp = tp;
+            				}
             			}
             		}
             	}
@@ -216,6 +237,16 @@ public class TileMapPanel implements GuiComponent, MouseListener, MouseMotionLis
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+	    if (e.getButton() == MouseEvent.BUTTON1) {
+	        mode = PAINT_MODE;
+	    }
+	    else if (e.getButton() == MouseEvent.BUTTON2) {
+	        mode = TP_MODE;
+	    }
+	    else if (e.getButton() == MouseEvent.BUTTON3) {
+	        mode = ERASE_MODE;
+	    }
+	    
 		int x = e.getX() / tileSize;
 		int y = (panel.getHeight() - e.getY()) / tileSize;
 		paintTiles(x, y);

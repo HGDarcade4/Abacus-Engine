@@ -25,11 +25,6 @@ public class QuestForTheAbacus {
         System.out.println("Hardware Acceleration: " + System.getProperty("sun.java2d.opengl"));
         ImageFactory.volatileImages = true;
         
-//        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-//        GraphicsDevice gd = ge.getDefaultScreenDevice();
-//        GraphicsConfiguration gc = gd.getDefaultConfiguration();
-//        BufferCapabilities bc = gc.getBufferCapabilities();
-        
         // set up engine
         GameEngine engine = GameEngine.create(GameEngine.Type.JAVA2D_FRAMEBUFFER);
         engine.setUpdateGoal(60);
@@ -40,7 +35,7 @@ public class QuestForTheAbacus {
         gsm.registerState(ID_TITLE, new TitleState(ID_INTRO));
         gsm.registerState(ID_INTRO, new FadeState("res/intro.txt", ID_PLAY));
         gsm.registerState(ID_PLAY, new TileMapState());
-        gsm.registerState(ID_SPLASH, new SplashState(ID_INTRO));
+        gsm.registerState(ID_SPLASH, new SplashState(ID_TITLE));
         
         // start engine
         Window window = engine.getWindow();

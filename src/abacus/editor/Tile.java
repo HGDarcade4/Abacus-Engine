@@ -9,6 +9,7 @@ public class Tile {
     public Collision solid;
     public int tileId;
     public int tileMeta;
+    public String tp = null;
     
     public Tile() 
     {
