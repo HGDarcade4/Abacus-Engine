@@ -15,6 +15,8 @@ public class FadeTimer {
     private long time;
     private float alpha;
     
+    private boolean disableUpdate;
+    
     // argument units are in updates
     public FadeTimer(int wait, int fadeIn, int pause, int fadeOut, int done) {
         time = 0;
@@ -43,6 +45,10 @@ public class FadeTimer {
     // update time
     // TODO make this like animations, not needing update() ? 
     public void update() {
+    	if (this.disableUpdate) {
+    		return;
+    	}
+    	
         time++;
         
         if (time <= atWait) {
@@ -67,6 +73,12 @@ public class FadeTimer {
         return alpha;
     }
     
+    public void forceOn() {
+    	this.time = this.atDone;
+    	this.alpha = 1f;
+    	this.disableUpdate = true;
+    }
+    
     // is the fade finished
     public boolean isDone() {
         return time >= atDone;
@@ -76,6 +88,7 @@ public class FadeTimer {
     public void reset() {
         time = 0;
         alpha = 0;
+        this.disableUpdate = false;
     }
     
 }

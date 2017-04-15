@@ -10,16 +10,19 @@ import abacus.gameobject.GameObject;
 import abacus.gameobject.GameObjectLoader;
 import abacus.gameobject.Scene;
 import abacus.gameobject.SceneLoader;
+import abacus.graphics.GameFont;
 import abacus.graphics.Renderer;
 import abacus.graphics.WorldRenderer;
 import abacus.sound.Sound;
 import abacus.tile.TileMap;
 import abacus.ui.Input;
 import qfta.component.BatRenderer;
+import abacus.ui.Menu;
 import qfta.component.CharacterMovement;
 import qfta.component.HumanoidRenderer;
 import qfta.component.InputController;
 import qfta.component.SimpleAI;
+import qfta.component.WalkSound;
 
 /*
  * Main tile map play state. 
@@ -45,6 +48,13 @@ public class TileMapState extends GameState {
     private ResourceLoader loader;
     
     private Map<String, PlayerPosition> scenePositions;
+    // fonts
+    private GameFont font;
+    
+    // pause variables
+    private boolean paused;
+    private Menu pauseMenu;
+    private int pauseQuit, pauseSettings;
     
     // initialize a bunch of stuff
     @Override
@@ -64,6 +74,7 @@ public class TileMapState extends GameState {
         gol.registerComponentType("SimpleAI", new SimpleAI());
         gol.registerComponentType("InputController", new InputController());
         gol.registerComponentType("BatRenderer", new BatRenderer(loader));
+        gol.registerComponentType("WalkSound", new WalkSound(loader));
         
         gol.loadArchetypes("res/game_object_list.gameobject");
         
@@ -72,7 +83,17 @@ public class TileMapState extends GameState {
         // load sounds
         music = loader.loadSound(DEFAULT_SONG);
         
+        // load scene
         loadScene("res/start.scene");
+        
+        // load fonts
+        this.font = loader.getFontCreator().createBasicFont("res/font.png", 10, 12, 0xFFFFFF);
+        
+        this.paused = false;
+        
+        this.pauseMenu = new Menu(200, 30);
+        this.pauseSettings = this.pauseMenu.addOption("Settings");
+        this.pauseQuit = this.pauseMenu.addOption("Quit");
     }
 
     @Override
@@ -84,13 +105,19 @@ public class TileMapState extends GameState {
     @Override
     public void update(Input input) {
         // update game logic
-        map.update();
-        scene.update(input);
-        
-        String tp = map.getTeleport((int)(player.getTransform().x/16), (int)(player.getTransform().y/16));
-        if (tp != null) {
-            loadScene(tp);
-            music.playAndLoop();
+        if (input.getJustDownKey("p")) {
+        	this.pause();
+        }
+
+        if (!paused) {
+        	map.update();
+        	scene.update(input);
+        	
+            String tp = map.getTeleport((int)(player.getTransform().x/16), (int)(player.getTransform().y/16));
+            if (tp != null) {
+                loadScene(tp);
+                music.playAndLoop();
+            }
         }
     }
 
@@ -112,13 +139,24 @@ public class TileMapState extends GameState {
         
         // draw the map
         map.render(worldRender);
-        
+
         engine.debugLine("");
         engine.debugLine("(" + player.getTransform().x + ", " + player.getTransform().y + ")");
+
+        if (paused) {
+        	String label = "PAUSED";
+        	font.setSize(20);
+        	int x = (int) (renderer.getWidth()/2 - font.getWidth(label)/2);
+        	int y = (int) (renderer.getHeight()/2);
+        	font.draw(label, x, y);
+        	
+        	this.pauseMenu.render(renderer, font);
+        }
     }
 
     @Override
     public void pause() {
+    	this.paused = !this.paused;
     }
 
     // stop music when exiting the game state

@@ -2,8 +2,11 @@
 
 bin/
 .classpath
+<<<<<<< HEAD
 .project
 .settings/
+=======
+>>>>>>> master
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/

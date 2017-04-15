@@ -74,6 +74,7 @@ public class GameEngine {
         input.registerKey(KeyEvent.VK_UP, "up_arrow");
         input.registerKey(KeyEvent.VK_DOWN, "down_arrow");
         input.registerKey(KeyEvent.VK_SPACE, "spacebar");
+        input.registerKey(KeyEvent.VK_P, "p");
     }
     
     // use this method to create the game engine

@@ -22,6 +22,7 @@ object player
     attach HumanoidRenderer
         set bool randomColor false
     attach InputController
+    attach WalkSound
 
 ; bat archetype
 object bat
@@ -33,5 +34,3 @@ object bat
         set bool randomDir true
     attach BatRenderer
     attach SimpleAI
-    
-    
