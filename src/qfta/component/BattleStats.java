@@ -27,10 +27,9 @@ public class BattleStats extends GameComponent {
     public void render(WorldRenderer wr) {
         float x, y;
         
-        x = gameObject.getTransform().x;
-        y = gameObject.getTransform().y;
         if (isBattling) {
-        
+            x = gameObject.getTransform().x;
+            y = gameObject.getTransform().y;
             wr.drawText(font, "HP: " + health + " / " + maxHealth, x, y - 8);
         }
     }

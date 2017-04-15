@@ -523,7 +523,7 @@
 tp 53 13 res/start.scene 
 tp 37 98 res/boss1.scene 
 start 53 14
-music res/town_gloomy.wav
-spawn bat 30
-spawn skeleton 20
-spawn slime 100 
+music res/dungeon.wav
+spawn bat 20
+spawn skeleton 10
+spawn slime 20 

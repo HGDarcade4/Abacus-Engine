@@ -177,7 +177,7 @@ public class TileMapState extends GameState {
     public void end() {}
     
     private void checkPlayerEnemyCollision() {
-        BattleStats pStats = player.get(BattleStats.class);
+//        BattleStats pStats = player.get(BattleStats.class);
         Collider pCol = player.get(Collider.class);
         
         for (int i = 0; i < scene.numGameObjects(); i++) {

@@ -6,7 +6,7 @@ package abacus.graphics;
 public class BasicFont extends GameFont {
 
     // this is how all BasicFont's must be set up
-    private static final String LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.!?,()[]+-*/: ";
+    private static final String LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.!?,()[]+-*/:><' ";
     
     // sprites for characters
     private Sprite[] regions;

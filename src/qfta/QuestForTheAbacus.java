@@ -46,7 +46,7 @@ public class QuestForTheAbacus {
         window.setFullscreen(false);
         window.setVirtualResolution(480 * 2, 270 * 2);
         window.show();
-        engine.start(ID_PLAY);
+        engine.start(ID_TITLE);
     }
     
 }
