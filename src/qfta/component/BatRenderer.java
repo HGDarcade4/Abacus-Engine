@@ -41,7 +41,7 @@ public class BatRenderer extends GameComponent {
         Transform tfm = gameObject.getTransform();
         
         anim.play();
-        r.drawCharacterSprite(anim, tfm.x, tfm.y - 4f, 24f, 16f);
+        r.drawCharacterSprite(anim, tfm.x, tfm.y + 6f, 24f, 16f);
     }
     
     @Override

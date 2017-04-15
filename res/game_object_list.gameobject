@@ -23,14 +23,52 @@ object player
         set bool randomColor false
     attach InputController
     attach WalkSound
+    attach BattleStats
+        set bool player true
+        set number health 30
+        set number maxHealth 30
 
 ; bat archetype
 object bat
     attach Collider
-        set number width 20
-        set number height 10
+        set number width 10
+        set number height 6
     attach CharacterMovement
         set number modeSpeed 2
         set bool randomDir true
     attach BatRenderer
     attach SimpleAI
+    attach BattleStats
+        set bool player false
+        set number health 10
+        set number maxHealth 10
+
+; skeleton archetype 
+object skeleton
+    attach Collider
+        set number width 10
+        set number height 5
+    attach CharacterMovement
+        set number moveSpeed 0.5
+        set bool randomDir true
+    attach SkeletonRenderer
+    attach SimpleAI
+    attach BattleStats
+        set bool player false
+        set number health 10
+        set number maxHealth 10
+    
+; slime archetype 
+object slime
+    attach Collider
+        set number width 10
+        set number height 8
+    attach CharacterMovement
+        set number moveSpeed 0.5
+        set bool randomDir true
+    attach SlimeRenderer
+    attach SimpleAI
+    attach BattleStats
+        set bool player false
+        set number health 10
+        set number maxHealth 10

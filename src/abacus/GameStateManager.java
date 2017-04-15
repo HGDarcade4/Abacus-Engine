@@ -22,6 +22,11 @@ public class GameStateManager {
         active = new Stack<>();
     }
     
+    // Get game state by id
+    public GameState getGameStateById(int id) {
+        return stateMap.get(id);
+    }
+    
 	// Puts the given state into the state map
     public void registerState(int key, GameState state) {
         stateMap.put(key, state);

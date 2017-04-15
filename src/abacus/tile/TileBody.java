@@ -22,6 +22,14 @@ public class TileBody {
         y += dy;
     }
     
+    public boolean isColliding(TileBody body) {
+        if (x > body.x + body.width) return false;
+        if (x + width < body.x) return false;
+        if (y > body.y + body.height) return false;
+        if (y + height < body.y) return false;
+        return true;
+    }
+    
     // Getters
     public float getX() { return x; }
     public float getY() { return y; }

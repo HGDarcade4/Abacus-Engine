@@ -34,6 +34,8 @@ public class Collider extends GameComponent {
     }
     
     public void update(Scene scene, Input input) {
+        if (scene == null) return;
+        
         tileBody.setCenterX(transform.x);
         tileBody.setMinY(transform.y);
         
@@ -41,6 +43,8 @@ public class Collider extends GameComponent {
     }
     
     public void postUpdate(Scene scene, Input input) {
+        if (scene == null) return;
+        
         Transform tfm = gameObject.getTransform();
         
         // set position to bottom center

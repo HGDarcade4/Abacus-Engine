@@ -16,12 +16,15 @@ import abacus.graphics.WorldRenderer;
 import abacus.sound.Sound;
 import abacus.tile.TileMap;
 import abacus.ui.Input;
-import qfta.component.BatRenderer;
 import abacus.ui.Menu;
+import qfta.component.BatRenderer;
+import qfta.component.BattleStats;
 import qfta.component.CharacterMovement;
 import qfta.component.HumanoidRenderer;
 import qfta.component.InputController;
 import qfta.component.SimpleAI;
+import qfta.component.SkeletonRenderer;
+import qfta.component.SlimeRenderer;
 import qfta.component.WalkSound;
 
 /*
@@ -75,6 +78,9 @@ public class TileMapState extends GameState {
         gol.registerComponentType("InputController", new InputController());
         gol.registerComponentType("BatRenderer", new BatRenderer(loader));
         gol.registerComponentType("WalkSound", new WalkSound(loader));
+        gol.registerComponentType("SkeletonRenderer", new SkeletonRenderer(loader));
+        gol.registerComponentType("SlimeRenderer", new SlimeRenderer(loader));
+        gol.registerComponentType("BattleStats", new BattleStats(loader));
         
         gol.loadArchetypes("res/game_object_list.gameobject");
         
@@ -118,6 +124,8 @@ public class TileMapState extends GameState {
                 loadScene(tp);
                 music.playAndLoop();
             }
+            
+            checkPlayerEnemyCollision();
         }
     }
 
@@ -168,6 +176,29 @@ public class TileMapState extends GameState {
     @Override
     public void end() {}
     
+    private void checkPlayerEnemyCollision() {
+        BattleStats pStats = player.get(BattleStats.class);
+        Collider pCol = player.get(Collider.class);
+        
+        for (int i = 0; i < scene.numGameObjects(); i++) {
+            GameObject go = scene.getGameObjectByIndex(i);
+            
+            if (go.has(BattleStats.class) && go.has(Collider.class)) {
+                BattleStats stats = go.get(BattleStats.class);
+                Collider col = go.get(Collider.class);
+                
+                if (!stats.isPlayer) {
+                    if (col.tileBody.isColliding(pCol.tileBody)) {
+                        BattleState state = (BattleState) engine.getGameStateManager()
+                                .getGameStateById(QuestForTheAbacus.ID_BATTLE);
+                        state.setGameObjects(player.copy(0, 0), go.copy(0, 0));
+                        swapState(QuestForTheAbacus.ID_BATTLE);
+                    }
+                }
+            }
+        }
+    }
+    
     private void loadScene(String filename) {
         music.stop();
         
@@ -177,8 +208,8 @@ public class TileMapState extends GameState {
                 pos = new PlayerPosition();
                 scenePositions.put(scene.getFileName(), pos);
             }
-            pos.x = player.getTransform().x;
-            pos.y = player.getTransform().y;
+            pos.x = player.getTransform().x - player.get(Collider.class).tileBody.getVelX() * 10;
+            pos.y = player.getTransform().y - player.get(Collider.class).tileBody.getVelY() * 10;
         }
         
         scene = SceneLoader.read(filename, loader, QuestForTheAbacus.TILE_SIZE);

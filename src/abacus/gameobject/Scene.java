@@ -27,6 +27,14 @@ public class Scene {
         gameObjects = new ArrayList<>();
     }
     
+    public int numGameObjects() {
+        return gameObjects.size();
+    }
+    
+    public GameObject getGameObjectByIndex(int i) {
+        return gameObjects.get(i);
+    }
+    
     public String getFileName() {
         return file;
     }

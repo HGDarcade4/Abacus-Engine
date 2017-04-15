@@ -158,6 +158,28 @@ public class WorldRenderer {
     }
     
     /*
+     * draws a character, such as a NPC, enemy, etc. at the location (x, y) in world space
+     * 
+     * the center of the character's feet (bottom of the sprite) will be drawn at that position. 
+     * 
+     * this can be used to draw characters in the center of a tile
+     */
+    public void drawCharacterSprite(Renderable image, float x, float y, float w, float h, float layer) {
+        Sprite sprite = image.getSprite();
+        
+        int drawX = halfWidth + (int)Math.floor((x - w/2) * scale) - (int)(camX * scale);
+        int drawY = halfHeight + (int)Math.floor((y) * scale) - (int)(camY * scale);
+        
+        if (drawX < renderer.getWidth() &&
+            drawX + scale * w > 0 &&
+            drawY < renderer.getHeight() &&
+            drawY + scale * h > 0) {
+        
+            sprite.draw(drawX, drawY, scale * w, scale * h, alpha, layer);
+        }
+    }
+    
+    /*
      *  draw text at the location (x, y) on the world world, putting the center bottom of the text
      * at that location
      * 

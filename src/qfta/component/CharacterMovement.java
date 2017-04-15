@@ -9,10 +9,10 @@ import abacus.ui.Input;
 
 public class CharacterMovement extends GameComponent {
 
-    private static final int DIR_UP = 1;
-    private static final int DIR_DOWN = 0;
-    private static final int DIR_LEFT = 2;
-    private static final int DIR_RIGHT = 3;
+    public static final int DIR_UP = 1;
+    public static final int DIR_DOWN = 0;
+    public static final int DIR_LEFT = 2;
+    public static final int DIR_RIGHT = 3;
     
     public boolean randomDir = false;
     public float moveSpeed = 1f;
