@@ -17,11 +17,12 @@ public class QuestForTheAbacus {
     public static final int ID_INTRO = 1;
     public static final int ID_PLAY = 2;
     public static final int ID_SPLASH = 3;
+    public static final int ID_DIALOGUE = 5;
     
     // main method
     public static void main(String[] args) {
         // enable hardware acceleration
-        System.setProperty("sun.java2d.opengl", "False");
+        System.setProperty("sun.java2d.opengl", "True");
         System.out.println("Hardware Acceleration: " + System.getProperty("sun.java2d.opengl"));
         ImageFactory.volatileImages = true;
         
@@ -32,10 +33,12 @@ public class QuestForTheAbacus {
         
         // register game states
         GameStateManager gsm = engine.getGameStateManager();
+        TileMapState tms = new TileMapState();
         gsm.registerState(ID_TITLE, new TitleState(ID_INTRO));
         gsm.registerState(ID_INTRO, new FadeState("res/intro.txt", ID_PLAY));
-        gsm.registerState(ID_PLAY, new TileMapState());
+        gsm.registerState(ID_PLAY, tms);
         gsm.registerState(ID_SPLASH, new SplashState(ID_TITLE));
+        gsm.registerState(ID_DIALOGUE, new DialogueState(tms));
         
         // start engine
         Window window = engine.getWindow();

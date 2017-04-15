@@ -10,6 +10,7 @@ object villager
     attach HumanoidRenderer
         set bool randomColor true
     attach SimpleAI
+    attach Dialogue
 
 ; basic player archetype 
 object player
