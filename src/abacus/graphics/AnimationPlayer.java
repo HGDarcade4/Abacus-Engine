@@ -80,5 +80,10 @@ public class AnimationPlayer implements Renderable {
         
         return data.getFrame(frame);
     }
+
+    public void setFrame(int frame) {
+        start = (int)(Time.getTicks() - frame);
+        this.frame = frame;
+    }
     
 }

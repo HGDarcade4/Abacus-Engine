@@ -16,16 +16,19 @@ public class Scene {
     private List<GameObject> gameObjects;
     private String music;
     private int startX, startY;
+    private String file;
     
-    public Scene(TileMap map) {
+    public Scene(TileMap map, String file) {
         this.map = map;
         physics = new TilePhysics(map);
+        
+        this.file = file;
         
         gameObjects = new ArrayList<>();
     }
     
-    protected Scene() {
-        this(null);
+    public String getFileName() {
+        return file;
     }
     
     public void setMusicFileName(String filename) {

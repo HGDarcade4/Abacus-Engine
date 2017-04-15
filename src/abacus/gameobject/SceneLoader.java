@@ -29,7 +29,7 @@ public final class SceneLoader {
             
             TileMap map = loadTileMap(tiles, in, tileSize);
             
-            Scene scene = new Scene(map);
+            Scene scene = new Scene(map, filename);
             
             while (in.hasNext()) {
                 String command = in.next();
@@ -47,6 +47,11 @@ public final class SceneLoader {
                     String tp = in.next();
                     map.setTeleport(x, y, tp);
                 }
+                else if (command.equals("spawn")) {
+                    String archetype = in.next();
+                    int amt = in.nextInt();
+                    spawn(scene, archetype, amt);
+                }
             }
             
             in.close();
@@ -58,6 +63,22 @@ public final class SceneLoader {
         }
     }
     
+    private static void spawn(Scene scene, String archetype, int amt) {
+        for (int i = 0; i < amt; i++) {
+            int x = -1, y = -1;
+            TileMap map = scene.getTileMap();
+            while (map.getCollision(x, y)) {
+                x = (int)(Math.random() * map.getWidth());
+                y = (int)(Math.random() * map.getHeight());
+            }
+            
+            float xpos = (float)(x + Math.random()) * 16;
+            float ypos = (float)(y + Math.random()) * 16;
+            
+            scene.spawnArchetype(archetype, xpos, ypos);
+        }
+    }
+
     private static TileMap loadTileMap(TileRegistry tiles, Scanner in, int tileSize) {
         int layers = in.nextInt();
         int width = in.nextInt();

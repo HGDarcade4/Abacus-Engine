@@ -22,4 +22,16 @@ object player
     attach HumanoidRenderer
         set bool randomColor false
     attach InputController
+
+; bat archetype
+object bat
+    attach Collider
+        set number width 20
+        set number height 10
+    attach CharacterMovement
+        set number modeSpeed 2
+        set bool randomDir true
+    attach BatRenderer
+    attach SimpleAI
+    
     

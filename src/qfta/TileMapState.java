@@ -1,5 +1,8 @@
 package qfta;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import abacus.GameState;
 import abacus.ResourceLoader;
 import abacus.gameobject.Collider;
@@ -12,6 +15,7 @@ import abacus.graphics.WorldRenderer;
 import abacus.sound.Sound;
 import abacus.tile.TileMap;
 import abacus.ui.Input;
+import qfta.component.BatRenderer;
 import qfta.component.CharacterMovement;
 import qfta.component.HumanoidRenderer;
 import qfta.component.InputController;
@@ -24,7 +28,7 @@ import qfta.component.SimpleAI;
  */
 public class TileMapState extends GameState {
 
-    private static final String DEFAULT_SONG = "res/town idea 2.1.wav";
+    private static final String DEFAULT_SONG = "res/town.wav";
     
     // instance of world renderer
     private WorldRenderer worldRender;
@@ -40,9 +44,13 @@ public class TileMapState extends GameState {
     
     private ResourceLoader loader;
     
+    private Map<String, PlayerPosition> scenePositions;
+    
     // initialize a bunch of stuff
     @Override
     public void init(ResourceLoader loader) {
+        scenePositions = new HashMap<>();
+        
         this.loader = loader;
         
         // create a world renderer
@@ -55,6 +63,7 @@ public class TileMapState extends GameState {
         gol.registerComponentType("HumanoidRenderer", new HumanoidRenderer(loader));
         gol.registerComponentType("SimpleAI", new SimpleAI());
         gol.registerComponentType("InputController", new InputController());
+        gol.registerComponentType("BatRenderer", new BatRenderer(loader));
         
         gol.loadArchetypes("res/game_object_list.gameobject");
         
@@ -63,7 +72,7 @@ public class TileMapState extends GameState {
         // load sounds
         music = loader.loadSound(DEFAULT_SONG);
         
-        loadScene("res/practice.scene");
+        loadScene("res/start.scene");
     }
 
     @Override
@@ -124,25 +133,30 @@ public class TileMapState extends GameState {
     private void loadScene(String filename) {
         music.stop();
         
+        if (scene != null) {
+            PlayerPosition pos = scenePositions.get(scene.getFileName());
+            if (pos == null) {
+                pos = new PlayerPosition();
+                scenePositions.put(scene.getFileName(), pos);
+            }
+            pos.x = player.getTransform().x;
+            pos.y = player.getTransform().y;
+        }
+        
         scene = SceneLoader.read(filename, loader, QuestForTheAbacus.TILE_SIZE);
         
         map = scene.getTileMap();
         
-        for (int i = 0; i < 30; i++) {
-            int x = -1, y = -1;
-            while (map.getCollision(x, y)) {
-                x = (int)(Math.random() * map.getWidth());
-                y = (int)(Math.random() * map.getHeight());
-            }
-            
-            float xpos = (float)(x + Math.random()) * 16;
-            float ypos = (float)(y + Math.random()) * 16;
-            
-            scene.spawnArchetype("villager", xpos, ypos);
+        PlayerPosition pos = scenePositions.get(scene.getFileName());
+        if (pos == null) {
+            player.getTransform().x = scene.getStartX() * 16;
+            player.getTransform().y = scene.getStartY() * 16;
+        }
+        else {
+            player.getTransform().x = pos.x;
+            player.getTransform().y = pos.y;
         }
         
-        player.getTransform().x = scene.getStartX() * 16;
-        player.getTransform().y = scene.getStartY() * 16;
         scene.addGameObject(player);
         
         if (scene.getMusicFileName() != null) {
