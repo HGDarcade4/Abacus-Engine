@@ -26,6 +26,10 @@ public class Sound {
     	SoundManager.playSoundIfNotRunning(name, false);
     }
     
+    public void playAndLoopIfNotRunning() {
+    	SoundManager.playSoundIfNotRunning(name, true);
+    }
+    
     // play a sound once, restarts the sound if it was playing
     public void play() {
         SoundManager.playSound(name, false);

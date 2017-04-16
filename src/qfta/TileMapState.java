@@ -107,7 +107,7 @@ public class TileMapState extends GameState {
 
     @Override
     public void enter() {
-        music.playAndLoop();
+        music.playAndLoopIfNotRunning();
     	this.goToDialogue = false;
     	this.talker = null;
     }

@@ -24,6 +24,7 @@ public class Dialogue extends GameComponent {
 	private float entityY;
 	
 	private DialogueGraph dGraph;
+	private PremadeDialogues graphs;
 	
 	public Dialogue(ResourceLoader loader, TileMapState state) {
 		this.loader = loader;
@@ -37,12 +38,20 @@ public class Dialogue extends GameComponent {
 		this.entityX = 0.0f;
 		this.entityY = 0.0f;
 		this.inRange = false;
+		this.graphs = new PremadeDialogues();
 	}
 	
 	@Override
 	public void attach() {
 		if (Math.random() < 0.2) {
 			this.talks = true;
+			
+			//if (Math.random() < 0.8) {
+				this.dGraph = this.graphs.getRandomSimpleDialogue();
+			//}
+			//else {
+				//this.dGraph = this.graphs.getRandomComplexDialogue();
+			//}
 		}
 	}
 
@@ -96,5 +105,41 @@ public class Dialogue extends GameComponent {
 	public void setTalks(boolean val) {
 		this.talks = val;
 	}
+	
+	public DialogueGraph getDialogue() {
+		return this.dGraph;
+	}
 
+}
+
+class PremadeDialogues {
+	
+	private DialogueGraph[] simpleDialogues = new DialogueGraph[10];
+	private DialogueGraph[] complexDialogues = new DialogueGraph[10];
+	
+	public PremadeDialogues() {
+		for (int index = 0; index < 10; index++) {
+			simpleDialogues[index] = new DialogueGraph();
+		}
+		
+		simpleDialogues[0].addNewNode(new DialogueNode("WUBBA LUBBA DUB DUB!"));
+		simpleDialogues[1].addNewNode(new DialogueNode("Be careful in the caves. There's a lot of dangerous things in there!"));
+		simpleDialogues[2].addNewNode(new DialogueNode("Ohh yeah, you gotta get Schwifty"));
+		simpleDialogues[3].addNewNode(new DialogueNode("I like standing by the water. It's just so peaceful"));
+		simpleDialogues[4].addNewNode(new DialogueNode("I heard some creepy sounds in the cave. Be careful if you go in there!"));
+		simpleDialogues[5].addNewNode(new DialogueNode("It's dangerous to go alone... But I already gave a sword to the last hero that came by. Sorry"));
+		simpleDialogues[6].addNewNode(new DialogueNode("Nothing is true. Everything is permitted"));
+		simpleDialogues[7].addNewNode(new DialogueNode("You ever wonder why we're here?"));
+		simpleDialogues[8].addNewNode(new DialogueNode("History is written by the victor"));
+		simpleDialogues[9].addNewNode(new DialogueNode("A hero need not speak. When he is gone, the world will speak for him"));
+	}
+	
+	public DialogueGraph getRandomSimpleDialogue() {
+		return simpleDialogues[(int) (Math.random() * 10)];
+	}
+
+	public DialogueGraph getRandomComplexDialogue() {
+		return null;
+	}
+	
 }
