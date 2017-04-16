@@ -49,8 +49,8 @@ public class DialogueState extends GameState {
 		
 		String current = "";
 		for (int index = 0; index < words.length; index++) {
-			if (font.getWidth(current + words[index]) > renderer.getWidth() - 70) {
-				font.draw(current, 50, renderer.getHeight() / 2 - y);
+			if (font.getWidth(current + words[index]) > renderer.getWidth() - 200) {
+				font.draw((current + words[index]), 50, renderer.getHeight() / 2 - y);
 				current = "";
 				y += 20;
 			}
