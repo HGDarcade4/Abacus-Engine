@@ -26,7 +26,7 @@ public class QuestForTheAbacus {
         // enable hardware acceleration
         System.setProperty("sun.java2d.opengl", "True");
         System.out.println("Hardware Acceleration: " + System.getProperty("sun.java2d.opengl"));
-        ImageFactory.volatileImages = true;
+        ImageFactory.volatileImages = false;
         
         // set up engine
         GameEngine engine = GameEngine.create(GameEngine.Type.JAVA2D_FRAMEBUFFER);

@@ -9,7 +9,7 @@ bin/
 .mtj.tmp/
 
 # Package Files #
-*.jar
+# *.jar # we need the jar file for the exe
 *.war
 *.ear
 
