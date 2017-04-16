@@ -26,8 +26,8 @@ object player
     attach WalkSound
     attach BattleStats
         set bool player true
-        set number health 70
-        set number maxHealth 80
+        set number health 1000
+        set number maxHealth 1000
         set word name You
         set number level 1
 
@@ -101,10 +101,10 @@ object boss
         set number height 100
     attach BattleStats
         set bool player false
-        set number health 500
-        set number maxHealth 500
+        set number health 400
+        set number maxHealth 400
         set word name Orc_Lord
-        set number level 10
+        set number level 8
         set number potions 15
         set word music res/boss.wav
     attach OrcRenderer

@@ -305,7 +305,7 @@ public class BattleState extends GameState {
                 text = current.name + " could not drink a potion!";
             }
             else {
-                int hp = 15;
+                int hp = 25;
                 current.potions--;
                 current.health += hp;
                 if (current.health > current.maxHealth) {

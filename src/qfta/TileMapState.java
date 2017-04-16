@@ -55,6 +55,7 @@ public class TileMapState extends GameState {
     private ResourceLoader loader;
     
     private Map<String, PlayerPosition> scenePositions;
+    private Map<String, Scene> scenes;
     // fonts
     private GameFont font;
     
@@ -71,6 +72,7 @@ public class TileMapState extends GameState {
     @Override
     public void init(ResourceLoader loader) {
         scenePositions = new HashMap<>();
+        scenes = new HashMap<>();
         
         this.loader = loader;
         
@@ -101,8 +103,8 @@ public class TileMapState extends GameState {
         // load sounds
         music = loader.loadSound(DEFAULT_SONG);
         music.setVolume(0.8f);
-        potion = loader.loadSound("res/jump.wav");
-        potion.setVolume(0.7f);
+        potion = loader.loadSound("res/potion.wav");
+        potion.setVolume(0.95f);
         
         // load scene
         scene = null;
@@ -245,6 +247,8 @@ public class TileMapState extends GameState {
         if (music != null) music.stop();
         
         if (scene != null) {
+            scenes.put(scene.getFileName(), scene);
+            
             PlayerPosition pos = scenePositions.get(scene.getFileName());
             if (pos == null) {
                 pos = new PlayerPosition();
@@ -254,7 +258,12 @@ public class TileMapState extends GameState {
             pos.y = player.getTransform().y - player.get(Collider.class).tileBody.getVelY() * 10;
         }
         
-        scene = SceneLoader.read(filename, loader, QuestForTheAbacus.TILE_SIZE);
+        if (scenes.containsKey(filename)) {
+            scene = scenes.get(filename);
+        } else {
+            scene = SceneLoader.read(filename, loader, QuestForTheAbacus.TILE_SIZE);
+            scene.addGameObject(player);
+        }
         
         map = scene.getTileMap();
         
@@ -268,7 +277,8 @@ public class TileMapState extends GameState {
             player.getTransform().y = pos.y;
         }
         
-        scene.addGameObject(player);
+        player.get(Collider.class).tileBody.setVelX(0);
+        player.get(Collider.class).tileBody.setVelY(0);
         
         if (scene.getMusicFileName() != null) {
             String mFile = scene.getMusicFileName();
