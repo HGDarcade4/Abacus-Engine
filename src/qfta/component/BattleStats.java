@@ -16,6 +16,7 @@ public class BattleStats extends GameComponent {
     public boolean blocking = false;
     public int level = 1;
     public int potions = 0;
+    public String music = "";
     
     private static GameFont font = null;
     
@@ -35,6 +36,7 @@ public class BattleStats extends GameComponent {
         level = b.level;
         potions = b.potions;
         name = b.name;
+        music = b.music;
     }
     
     private BattleStats() {}
@@ -71,13 +73,16 @@ public class BattleStats extends GameComponent {
             stats.maxHealth = (int)props.getNumber("maxHealth");
         }
         if (props.containsString("name")) {
-            stats.name = props.getString("name");
+            stats.name = props.getString("name").replace("_", " ");
         }
         if (props.containsNumber("level")) {
             stats.level = (int)props.getNumber("level");
         }
         if (props.containsNumber("potions")) {
             stats.potions = (int)props.getNumber("potions");
+        }
+        if (props.containsString("music")) {
+            stats.music = props.getString("music");
         }
         return stats;
     }

@@ -91,3 +91,21 @@ object slime
         set word name Slime
         set number level 1
         set number potions 1
+        
+; boss archetype
+object boss
+    attach CharacterMovement
+        set number moveSpeed 0.0
+    attach Collider
+        set number width 100
+        set number height 100
+    attach BattleStats
+        set bool player false
+        set number health 500
+        set number maxHealth 500
+        set word name Orc_Lord
+        set number level 10
+        set number potions 15
+        set word music res/boss.wav
+    attach OrcRenderer
+    

@@ -170,10 +170,10 @@ public class WorldRenderer {
         int drawX = halfWidth + (int)Math.floor((x - w/2) * scale) - (int)(camX * scale);
         int drawY = halfHeight + (int)Math.floor((y) * scale) - (int)(camY * scale);
         
-        if (drawX < renderer.getWidth() &&
-            drawX + scale * w > 0 &&
-            drawY < renderer.getHeight() &&
-            drawY + scale * h > 0) {
+        if (drawX < renderer.getWidth() + 320 &&
+            drawX + scale * w > -320 &&
+            drawY < renderer.getHeight() + 320 &&
+            drawY + scale * h > -320) {
         
             sprite.draw(drawX, drawY, scale * w, scale * h, alpha, layer);
         }

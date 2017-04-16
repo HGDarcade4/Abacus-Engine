@@ -23,6 +23,7 @@ import qfta.component.CharacterMovement;
 import qfta.component.Dialogue;
 import qfta.component.HumanoidRenderer;
 import qfta.component.InputController;
+import qfta.component.OrcRenderer;
 import qfta.component.Potion;
 import qfta.component.PotionRenderer;
 import qfta.component.SimpleAI;
@@ -91,6 +92,7 @@ public class TileMapState extends GameState {
         gol.registerComponentType("PotionRenderer", new PotionRenderer(loader));
         gol.registerComponentType("Potion", new Potion());
         gol.registerComponentType("Dialogue", new Dialogue(loader, this));
+        gol.registerComponentType("OrcRenderer", new OrcRenderer(loader));
         
         gol.loadArchetypes("res/game_object_list.gameobject");
         
@@ -121,7 +123,7 @@ public class TileMapState extends GameState {
 
     @Override
     public void enter() {
-        music.playAndLoopIfNotRunning();
+        if (music != null) music.playAndLoopIfNotRunning();
     	this.goToDialogue = false;
     	this.talker = null;
     }
