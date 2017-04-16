@@ -75,6 +75,11 @@ public class BattleState extends GameState {
         pStats = player.get(BattleStats.class);
         eStats = enemy.get(BattleStats.class);
         
+        if (eStats.music != null) {
+            music = engine.getResourceLoader().loadSound(eStats.music);
+            music.setVolume(0.8f);
+        }
+        
         infoText = eStats.name + " has appeared!";
         enemyText = "";
         

@@ -67,7 +67,7 @@ public final class SceneLoader {
         for (int i = 0; i < amt; i++) {
             int x = -1, y = -1;
             TileMap map = scene.getTileMap();
-            while (map.getCollision(x, y)) {
+            while (map.getCollision(x, y) || archetype.equals("boss") && y < 20) {
                 x = (int)(Math.random() * map.getWidth());
                 y = (int)(Math.random() * map.getHeight());
             }

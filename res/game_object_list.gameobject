@@ -97,7 +97,7 @@ object boss
     attach CharacterMovement
         set number moveSpeed 0.0
     attach Collider
-        set number width 100
+        set number width 50
         set number height 100
     attach BattleStats
         set bool player false

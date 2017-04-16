@@ -19,8 +19,6 @@ public class OrcRenderer extends GameComponent {
         
         SpriteSheet sheet = new SpriteSheet(loader.loadTexture("res/orc.png"), 32, 48);
         
-        System.out.println(sheet.tilesWide());
-        
         AnimationData data = new AnimationData();
         for (int i = 0; i < 4; i++) {
             data.addFrame(sheet.getSprite(i), 10);
