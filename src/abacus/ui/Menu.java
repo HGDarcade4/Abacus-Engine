@@ -69,6 +69,7 @@ public class Menu {
 	public void moveSelectionUp() {
 		if (this.currentSelectionIndex > 0) {
 			this.currentSelectionIndex--;
+			this.resetFadeTimer();
 		}
 	}
 	
@@ -76,6 +77,7 @@ public class Menu {
 	public void moveSelectionDown() {
 		if (this.currentSelectionIndex < this.options.size()) {
 			this.currentSelectionIndex++;
+			this.resetFadeTimer();
 		}
 	}
 	

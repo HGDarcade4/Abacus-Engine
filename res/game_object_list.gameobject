@@ -10,6 +10,7 @@ object villager
     attach HumanoidRenderer
         set bool randomColor true
     attach SimpleAI
+    attach Dialogue
 
 ; basic player archetype 
 object player
@@ -25,7 +26,7 @@ object player
     attach WalkSound
     attach BattleStats
         set bool player true
-        set number health 0
+        set number health 70
         set number maxHealth 80
         set word name You
         set number level 1

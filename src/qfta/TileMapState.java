@@ -20,6 +20,7 @@ import abacus.ui.Menu;
 import qfta.component.BatRenderer;
 import qfta.component.BattleStats;
 import qfta.component.CharacterMovement;
+import qfta.component.Dialogue;
 import qfta.component.HumanoidRenderer;
 import qfta.component.InputController;
 import qfta.component.Potion;
@@ -61,6 +62,10 @@ public class TileMapState extends GameState {
     private Menu pauseMenu;
     private int pauseQuit, pauseSettings;
     
+    // for dialogue
+    private boolean goToDialogue;
+    private GameObject talker;
+    
     // initialize a bunch of stuff
     @Override
     public void init(ResourceLoader loader) {
@@ -85,6 +90,7 @@ public class TileMapState extends GameState {
         gol.registerComponentType("BattleStats", new BattleStats(loader));
         gol.registerComponentType("PotionRenderer", new PotionRenderer(loader));
         gol.registerComponentType("Potion", new Potion());
+        gol.registerComponentType("Dialogue", new Dialogue(loader, this));
         
         gol.loadArchetypes("res/game_object_list.gameobject");
         
@@ -108,16 +114,25 @@ public class TileMapState extends GameState {
         this.pauseMenu = new Menu(200, 30);
         this.pauseSettings = this.pauseMenu.addOption("Settings");
         this.pauseQuit = this.pauseMenu.addOption("Quit");
+        
+        this.goToDialogue = false;
+        this.talker = null;
     }
 
     @Override
     public void enter() {
-        music.playAndLoop();
+        music.playAndLoopIfNotRunning();
+    	this.goToDialogue = false;
+    	this.talker = null;
     }
 
     // update logic
     @Override
     public void update(Input input) {
+    	if (this.goToDialogue) {
+    		this.pushState(QuestForTheAbacus.ID_DIALOGUE);
+    	}
+    	
         // update game logic
         if (input.getJustDownKey("p")) {
         	this.pause();
@@ -172,7 +187,9 @@ public class TileMapState extends GameState {
 
     @Override
     public void pause() {
-    	this.paused = !this.paused;
+    	if (!this.goToDialogue) {
+    		this.paused = !this.paused;
+    	}
     }
 
     // stop music when exiting the game state
@@ -271,6 +288,19 @@ public class TileMapState extends GameState {
         else {
             music = null;
         }
+    }
+    
+    public GameObject getPlayer() {
+    	return this.player;
+    }
+    
+    public void dialogueReady(GameObject talker) {
+    	this.talker = talker;
+    	this.goToDialogue = true;
+    }
+    
+    public GameObject getTalker() {
+    	return this.talker;
     }
     
 }
