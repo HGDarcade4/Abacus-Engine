@@ -41,4 +41,8 @@ public class Sound {
         SoundManager.stopSound(name);
     }
     
+    public void setVolume(float amt) {
+        SoundManager.volumeChange(name, amt);
+    }
+    
 }

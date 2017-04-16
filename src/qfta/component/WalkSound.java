@@ -16,18 +16,9 @@ public class WalkSound extends GameComponent {
 	
 	public WalkSound(ResourceLoader loader) {
 		this.loader = loader;
-//		sounds.add(loader.loadSound("res/Jump.wav"));
-//		sounds.add(loader.loadSound("res/sound_effect.wav"));
-//		sounds.add(loader.loadSound("res/Angryslime.wav"));
-//		sounds.add(loader.loadSound("res/Bowshot.wav"));
-//		sounds.add(loader.loadSound("res/Button select.wav"));
-//		sounds.add(loader.loadSound("res/button_select.wav"));
-//		sounds.add(loader.loadSound("res/Dying.wav"));
-//		sounds.add(loader.loadSound("res/Dying2.wav"));
-//		sounds.add(loader.loadSound("res/Dying3.wav"));
-//		sounds.add(loader.loadSound("res/falling.wav"));
-//		sounds.add(loader.loadSound("res/pitfall.wav"));
-		sounds.add(loader.loadSound("res/walk.wav"));
+		Sound s = loader.loadSound("res/walk.wav");
+		s.setVolume(1.0f);
+		sounds.add(s);
 	}
 	
 

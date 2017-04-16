@@ -141,3 +141,5 @@ tp 22 26 res/cave1.scene
 start 2 29
 music res/overworld.wav
 spawn villager 30
+spawn potion 4
+spawn slime 3

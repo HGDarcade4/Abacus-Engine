@@ -140,3 +140,4 @@ tp 16 14 res/start.scene
 start 16 15
 music res/home_town.wav
 spawn villager 3
+spawn potion 5

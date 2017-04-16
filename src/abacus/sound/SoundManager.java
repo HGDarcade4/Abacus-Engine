@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
@@ -44,6 +45,17 @@ public final class SoundManager {
         }
         
         return new Sound(name);
+    }
+    
+    public static void volumeChange(String name, float amt) {
+        Clip sound = clips.get(name);
+        
+        if (sound != null) {
+            FloatControl volume = (FloatControl) sound.getControl(FloatControl.Type.MASTER_GAIN);
+            float range = volume.getMaximum() - volume.getMinimum();
+            float gain = (range * amt) + volume.getMinimum();
+            volume.setValue(gain);
+        }
     }
     
     public static boolean isPlaying(String name) {

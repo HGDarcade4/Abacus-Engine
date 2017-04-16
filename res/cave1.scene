@@ -525,5 +525,6 @@ tp 37 98 res/boss1.scene
 start 53 14
 music res/dungeon.wav
 spawn bat 20
-spawn skeleton 10
-spawn slime 20 
+spawn skeleton 5
+spawn slime 10 
+spawn potion 10

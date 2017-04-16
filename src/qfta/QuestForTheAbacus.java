@@ -18,6 +18,7 @@ public class QuestForTheAbacus {
     public static final int ID_PLAY = 2;
     public static final int ID_SPLASH = 3;
     public static final int ID_BATTLE = 4;
+    public static final int ID_DEATH = 5;
     
     // main method
     public static void main(String[] args) {
@@ -38,6 +39,7 @@ public class QuestForTheAbacus {
         gsm.registerState(ID_PLAY, new TileMapState());
         gsm.registerState(ID_SPLASH, new SplashState(ID_TITLE));
         gsm.registerState(ID_BATTLE, new BattleState());
+        gsm.registerState(ID_DEATH, new DeathState());
         
         // start engine
         Window window = engine.getWindow();

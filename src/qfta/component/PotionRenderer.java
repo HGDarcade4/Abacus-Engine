@@ -9,26 +9,27 @@ import abacus.graphics.AnimationPlayer;
 import abacus.graphics.SpriteSheet;
 import abacus.graphics.WorldRenderer;
 
-public class BatRenderer extends GameComponent {
+public class PotionRenderer extends GameComponent {
 
     private ResourceLoader loader;
     private AnimationPlayer anim;
     
-    public BatRenderer(ResourceLoader loader) {
+    public PotionRenderer(ResourceLoader loader) {
         this.loader = loader;
         
-        SpriteSheet sheet = new SpriteSheet(loader.loadTexture("res/enemy_bat.png"), 24, 16);
+        SpriteSheet sheet = new SpriteSheet(loader.loadTexture("res/potion.png"), 16, 16);
         
         AnimationData data = new AnimationData();
-        for (int i = 0; i < 6; i++) {
-            data.addFrame(sheet.getSprite(i), 10);
-        }
+        data.addFrame(sheet.getSprite(0), 10);
+        data.addFrame(sheet.getSprite(1), 10);
+        data.addFrame(sheet.getSprite(2), 10);
+        data.addFrame(sheet.getSprite(1), 10);
         
         anim = new AnimationPlayer(data);
         anim.setFrame((int)(Math.random() * data.numFrames()));
     }
     
-    private BatRenderer(BatRenderer r) {
+    private PotionRenderer(PotionRenderer r) {
         this.loader = r.loader;
         this.anim = new AnimationPlayer(r.anim.getAnimationData());
         this.anim.setFrame((int)(Math.random() * r.anim.getAnimationData().numFrames()));
@@ -39,12 +40,12 @@ public class BatRenderer extends GameComponent {
         Transform tfm = gameObject.getTransform();
         
         anim.play();
-        r.drawCharacterSprite(anim, tfm.x, tfm.y + 6f, 24f, 16f);
+        r.drawCharacterSprite(anim, tfm.x, tfm.y, 16f, 16f);
     }
     
     @Override
     public GameComponent copy() {
-        return new BatRenderer(this);
+        return new PotionRenderer(this);
     }
 
     @Override

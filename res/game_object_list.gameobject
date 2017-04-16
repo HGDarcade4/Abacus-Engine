@@ -25,9 +25,19 @@ object player
     attach WalkSound
     attach BattleStats
         set bool player true
-        set number health 30
-        set number maxHealth 30
+        set number health 0
+        set number maxHealth 80
+        set word name You
+        set number level 1
 
+; potion archetype
+object potion
+    attach Collider 
+        set number width 8
+        set number height 8
+    attach PotionRenderer
+    attach Potion
+        
 ; bat archetype
 object bat
     attach Collider
@@ -42,6 +52,8 @@ object bat
         set bool player false
         set number health 10
         set number maxHealth 10
+        set word name Bat
+        set number level 1
 
 ; skeleton archetype 
 object skeleton
@@ -55,8 +67,11 @@ object skeleton
     attach SimpleAI
     attach BattleStats
         set bool player false
-        set number health 10
-        set number maxHealth 10
+        set number health 50
+        set number maxHealth 50
+        set word name Skeleton
+        set number level 5
+        set number potions 5
     
 ; slime archetype 
 object slime
@@ -70,5 +85,8 @@ object slime
     attach SimpleAI
     attach BattleStats
         set bool player false
-        set number health 10
-        set number maxHealth 10
+        set number health 20
+        set number maxHealth 20
+        set word name Slime
+        set number level 1
+        set number potions 1

@@ -22,6 +22,8 @@ import qfta.component.BattleStats;
 import qfta.component.CharacterMovement;
 import qfta.component.HumanoidRenderer;
 import qfta.component.InputController;
+import qfta.component.Potion;
+import qfta.component.PotionRenderer;
 import qfta.component.SimpleAI;
 import qfta.component.SkeletonRenderer;
 import qfta.component.SlimeRenderer;
@@ -40,13 +42,13 @@ public class TileMapState extends GameState {
     private WorldRenderer worldRender;
     
     // hold the map and player
-    // THIS WILL PROBABLY CHANGE A LOT
     private TileMap map;
     private Scene scene;
     private GameObject player;
     
     // sounds
     private Sound music;
+    private Sound potion;
     
     private ResourceLoader loader;
     
@@ -81,6 +83,8 @@ public class TileMapState extends GameState {
         gol.registerComponentType("SkeletonRenderer", new SkeletonRenderer(loader));
         gol.registerComponentType("SlimeRenderer", new SlimeRenderer(loader));
         gol.registerComponentType("BattleStats", new BattleStats(loader));
+        gol.registerComponentType("PotionRenderer", new PotionRenderer(loader));
+        gol.registerComponentType("Potion", new Potion());
         
         gol.loadArchetypes("res/game_object_list.gameobject");
         
@@ -88,8 +92,12 @@ public class TileMapState extends GameState {
         
         // load sounds
         music = loader.loadSound(DEFAULT_SONG);
+        music.setVolume(0.8f);
+        potion = loader.loadSound("res/jump.wav");
+        potion.setVolume(0.7f);
         
         // load scene
+        scene = null;
         loadScene("res/start.scene");
         
         // load fonts
@@ -122,7 +130,7 @@ public class TileMapState extends GameState {
             String tp = map.getTeleport((int)(player.getTransform().x/16), (int)(player.getTransform().y/16));
             if (tp != null) {
                 loadScene(tp);
-                music.playAndLoop();
+                if (music != null) music.playAndLoop();
             }
             
             checkPlayerEnemyCollision();
@@ -170,37 +178,52 @@ public class TileMapState extends GameState {
     // stop music when exiting the game state
     @Override
     public void exit() {
-        music.stop();
+        if (music != null) music.stop();
     }
 
     @Override
     public void end() {}
     
+    public void downWithBattle(BattleStats stats) {
+        player.get(BattleStats.class).set(stats);
+    }
+
     private void checkPlayerEnemyCollision() {
-//        BattleStats pStats = player.get(BattleStats.class);
+        // BattleStats pStats = player.get(BattleStats.class);
         Collider pCol = player.get(Collider.class);
-        
+
         for (int i = 0; i < scene.numGameObjects(); i++) {
             GameObject go = scene.getGameObjectByIndex(i);
-            
-            if (go.has(BattleStats.class) && go.has(Collider.class)) {
-                BattleStats stats = go.get(BattleStats.class);
-                Collider col = go.get(Collider.class);
-                
-                if (!stats.isPlayer) {
-                    if (col.tileBody.isColliding(pCol.tileBody)) {
-                        BattleState state = (BattleState) engine.getGameStateManager()
-                                .getGameStateById(QuestForTheAbacus.ID_BATTLE);
+            Collider col = go.get(Collider.class);
+
+            if (col.tileBody.isColliding(pCol.tileBody)) {
+                if (go.has(BattleStats.class) && go.has(Collider.class)) {
+                    BattleStats stats = go.get(BattleStats.class);
+
+                    if (!stats.isPlayer) {
+                        BattleState state = (BattleState) engine.getGameStateManager().getGameStateById(QuestForTheAbacus.ID_BATTLE);
+                        if (scene.getFileName().contains("start")) {
+                            state.setBackground("res/outside.png");
+                        }
+                        else {
+                            state.setBackground("res/cave.png");
+                        }
                         state.setGameObjects(player.copy(0, 0), go.copy(0, 0));
                         swapState(QuestForTheAbacus.ID_BATTLE);
+
+                        go.flagForRemoval();
                     }
+                } else if (go.has(Potion.class) && go.has(Collider.class)) {
+                    player.get(BattleStats.class).potions++;
+                    go.flagForRemoval();
+                    potion.play();
                 }
             }
         }
     }
-    
+
     private void loadScene(String filename) {
-        music.stop();
+        if (music != null) music.stop();
         
         if (scene != null) {
             PlayerPosition pos = scenePositions.get(scene.getFileName());
@@ -229,10 +252,24 @@ public class TileMapState extends GameState {
         scene.addGameObject(player);
         
         if (scene.getMusicFileName() != null) {
-            music = loader.loadSound(scene.getMusicFileName());
+            String mFile = scene.getMusicFileName();
+            music = loader.loadSound(mFile);
+            switch (mFile.toLowerCase()) {
+            case "res/home_town.wav":
+                music.setVolume(0.8f);
+                break;
+            case "res/overworld.wav":
+                music.setVolume(0.85f);
+                break;
+            case "res/dungeon.wav":
+                music.setVolume(0.9f);
+                break;
+            case "res/boss.wav":
+                music.setVolume(0.95f);
+            }
         }
         else {
-            music = loader.loadSound(DEFAULT_SONG);
+            music = null;
         }
     }
     

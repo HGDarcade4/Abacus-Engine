@@ -82,7 +82,14 @@ public class TitleState extends GameState {
         
         
         music = loader.loadSound("res/song_idea1.wav");
+        music.setVolume(0.9f);
         click = loader.loadSound("res/button_select.wav");
+        click.setVolume(0.8f);
+        
+        displayMainMenu = false;
+        displayQuitMenu = false;
+        displayNewMenu = false;
+        displayLoadMenu = false;
     }
 
     // play music and reset fading text

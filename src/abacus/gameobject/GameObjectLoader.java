@@ -36,8 +36,6 @@ public class GameObjectLoader {
         name = token.next();
         go = new GameObject();
         
-//        System.out.println("Loading GO " + name);
-        
         while (token.peek().equals("attach")) {
             loadComponents(token, go);
         }
@@ -77,6 +75,10 @@ public class GameObjectLoader {
 //                System.out.print(b);
                 props.setBoolean(word, b);
                 break;
+            case "word":
+                word = token.next();
+                String val = token.next();
+                props.setString(word, val);
             }
 //            System.out.println(" " + word);
         }

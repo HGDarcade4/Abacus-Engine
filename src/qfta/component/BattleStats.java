@@ -12,6 +12,10 @@ public class BattleStats extends GameComponent {
     public int health = 1;
     public boolean isPlayer = false;
     public boolean isBattling = false;
+    public String name = "Unnamed Entity";
+    public boolean blocking = false;
+    public int level = 1;
+    public int potions = 0;
     
     private static GameFont font = null;
     
@@ -22,6 +26,17 @@ public class BattleStats extends GameComponent {
         }
     }
     
+    public void set(BattleStats b) {
+        maxHealth = b.maxHealth;
+        health = b.health;
+        isBattling = b.isBattling;
+        isPlayer = b.isPlayer;
+        blocking = b.blocking;
+        level = b.level;
+        potions = b.potions;
+        name = b.name;
+    }
+    
     private BattleStats() {}
     
     public void render(WorldRenderer wr) {
@@ -30,17 +45,16 @@ public class BattleStats extends GameComponent {
         if (isBattling) {
             x = gameObject.getTransform().x;
             y = gameObject.getTransform().y;
-            wr.drawText(font, "HP: " + health + " / " + maxHealth, x, y - 8);
+            wr.drawText(font, "HP " + health + " / " + maxHealth, x, y - 8);
+            wr.drawText(font, "Potions " + potions, x, y - 16);
+            wr.drawText(font, "LVL " + level, x, y - 24);
         }
     }
     
     @Override
     public GameComponent copy() {
         BattleStats copy = new BattleStats();
-        copy.health = health;
-        copy.maxHealth = maxHealth;
-        copy.isPlayer = isPlayer;
-        copy.isBattling = isBattling;
+        copy.set(this);
         return copy;
     }
 
@@ -55,6 +69,15 @@ public class BattleStats extends GameComponent {
         }
         if (props.containsNumber("maxHealth")) {
             stats.maxHealth = (int)props.getNumber("maxHealth");
+        }
+        if (props.containsString("name")) {
+            stats.name = props.getString("name");
+        }
+        if (props.containsNumber("level")) {
+            stats.level = (int)props.getNumber("level");
+        }
+        if (props.containsNumber("potions")) {
+            stats.potions = (int)props.getNumber("potions");
         }
         return stats;
     }
