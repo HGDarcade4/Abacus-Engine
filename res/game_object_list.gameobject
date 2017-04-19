@@ -26,8 +26,8 @@ object player
     attach WalkSound
     attach BattleStats
         set bool player true
-        set number health 1000
-        set number maxHealth 1000
+        set number health 100
+        set number maxHealth 100
         set word name You
         set number level 1
 

@@ -79,6 +79,10 @@ public class BattleState extends GameState {
             music = engine.getResourceLoader().loadSound(eStats.music);
             music.setVolume(0.8f);
         }
+        else {
+            music = engine.getResourceLoader().loadSound("res/battle_music.wav");
+            music.setVolume(0.75f);
+        }
         
         infoText = eStats.name + " has appeared!";
         enemyText = "";
